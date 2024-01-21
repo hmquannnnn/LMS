@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 
 const baseURL = process.env.BACKEND_URL;
 console.log(baseURL);
 
 const instance = axios.create({
-    baseURL: "http://172.22.0.0/api/v1",
+    baseURL: 'http://172.22.0.0/api/v1',
 });
 
 // Add a request interceptor
@@ -19,25 +19,27 @@ instance.interceptors.request.use(
     }
 );
 
-instance.defaults.headers.common = {
-    // Auth: `${localStorage.getItem("token")}`,
-    // "Content-Type": "application/json",
-};
-
 // Add a response interceptor
 instance.interceptors.response.use(
     function (response) {
-        // Any status code that lie within the range of 2xx cause this function to trigger
+        // Any status code that lies within the range of 2xx cause this function to trigger
         // Do something with response data
-        // console.log(">>>Response: ", response)
         return response && response.data ? response.data : response;
     },
     function (error) {
-        // Any status codes that falls outside the range of 2xx cause this function to trigger
+        // Any status codes that fall outside the range of 2xx cause this function to trigger
         // Do something with response error
-        console.log(">>>Có lỗi", error);
+        console.log('>>>Có lỗi', error);
         return error?.response?.data ?? Promise.reject(error);
     }
 );
+
+// Check if running on the client side before accessing localStorage
+if (typeof window !== 'undefined') {
+    instance.defaults.headers.common = {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        "Content-Type": "application/json",
+    };
+}
 
 export default instance;

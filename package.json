@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.1",
     "@reduxjs/toolkit": "^2.0.1",
     "@zeit/next-css": "^1.0.1",
+    "antd": "^5.13.0",
     "axios": "^1.6.5",
     "dotenv": "^16.3.1",
     "i18next": "^23.7.16",
@@ -18,8 +20,10 @@
     "postcss-import": "^16.0.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.49.3",
     "react-i18next": "^14.0.0",
     "react-icons": "^5.0.1",
+    "react-redux": "^9.1.0",
     "sass": "^1.69.7"
   },
   "devDependencies": {
