@@ -1,9 +1,10 @@
 "use client"
 
-import {callFetchUser} from "@/apis/userAPI";
-import {doGetAccountAction} from "@/redux/slices/accountSlice";
-import {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import { callFetchUser } from "@/apis/userAPI";
+import { doGetAccountAction } from "@/redux/slices/accountSlice";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 
 export default function Home() {
     const dispatch = useDispatch();
