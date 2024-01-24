@@ -1,10 +1,11 @@
 "use client"
 
-import {createAssigment, createNotification, getAssigment, getClass} from "@/apis/classAPI";
+import {createAssigment, createNotification, getAssigment, getClass, submitAssignment} from "@/apis/classAPI";
 import {useDispatch, useSelector} from "react-redux";
 import {getAssignmentsAction, getCurrentClassAction} from "@/redux/slices/classSlice";
 import {useEffect, useState} from "react";
 import {Col, Modal, Row} from "antd";
+import instance from "@/utils/axiosCustomize";
 
 const ClassAssignment = (props: any) => {
     const classId = props.params.classId;
@@ -20,7 +21,7 @@ const ClassAssignment = (props: any) => {
         if (classInfo?.id) {
             dispatch(getCurrentClassAction(classInfo));
             const assignmentList = await getAssigment(classInfo.id);
-            console.log(">>>check assignments: ", assignmentsList);
+            // console.log(">>>check assignments: ", assignmentsList);
             dispatch(getAssignmentsAction(assignmentList));
             setUpdateFlag(true);
         }
@@ -36,10 +37,12 @@ const ClassAssignment = (props: any) => {
         const assignmentReq = {
             title: title,
             content: content,
-            dueDateTime: dueDateTime
+            dueDateTime: dueDateTime,
+            isForGroup: true
         }
         const res = await createAssigment(classId, assignmentReq);
         setUpdateFlag(false);
+        setIsModalOpen(false);
         const notificationContent = `ASSIGNMENT: ${title} - ${content}`;
         await createNotification(classId, notificationContent);
     }
@@ -54,6 +57,48 @@ const ClassAssignment = (props: any) => {
 
     const handleCancel = () => {
         setIsModalOpen(false);
+    };
+
+    const handleSubmit = async(e: React.FormEvent<HTMLFormElement>, assignmentId: number) => {
+        console.log("ok");
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const files = formData.get("files") as unknown;
+        const caption = formData.get("caption") as string;
+        const orientation = formData.get("orientation") as string;
+        const req = {
+            files: files,
+            caption: caption,
+            orientation: orientation
+        }
+        console.log(">>> check req: ", req);
+        instance.defaults.headers.common = {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            "Content-Type": "multipart/form-data",
+        };
+        const res = await submitAssignment(assignmentId, req);
+        // console.log(">>> check submit: ", res);
+        // console.log(file);
+        // const file = e.target.elements.files.files;
+        // console.log(file[0]);
+    }
+
+    const readFileContents = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const fileContents = event.target.result as string;
+                resolve(fileContents);
+            };
+
+            reader.onerror = function (error) {
+                reject(error);
+            };
+
+            // Read the file as a data URL (string)
+            reader.readAsDataURL(file);
+        });
     };
 
     return (
@@ -90,10 +135,28 @@ const ClassAssignment = (props: any) => {
                     </Col>
                     <Col span={19}>
                         {assignmentsList.map(assignment => (
-                            <div className={"border-[1px] mb-5 rounded-xl w-full px-5 py-3"}>
-                                <p className={"font-bold"}>Title: {assignment.title}</p>
-                                <p>Content: {assignment.content}</p>
-                            </div>
+                            <>
+                                <div className={"border-[1px] mb-5 rounded-xl w-full px-5 py-3"}>
+                                    <p className={"font-bold"}>Title: {assignment.title}</p>
+                                    <p>Content: {assignment.content}</p>
+                                </div>
+                                <div>
+                                    <form onSubmit={(e) => handleSubmit(e, assignment.id)}>
+                                        <input name="files" type="file" multiple />
+                                        <input name="caption" type="text" className="border-[1px]" placeholder="caption"/>
+                                        <select name="orientation" id="orientation">
+                                            <option value="TECHNIQUE">TECHNIQUE</option>
+                                            <option value="MAJOR">MAJOR</option>
+                                            <option value="RESEARCH">RESEARCH</option>
+                                            <option value="SOCIAL">SOCIAL</option>
+                                            <option value="MANAGEMENT">MANAGEMENT</option>
+                                            <option value="ART"> ART</option>
+                                        </select>
+                                        <button type="submit" className="border-[1px]">Submit</button>
+                                    </form>
+                                </div>
+                            </>
+                            
                         ))}
                     </Col>
                 </Row>

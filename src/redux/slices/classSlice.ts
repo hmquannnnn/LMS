@@ -38,6 +38,10 @@ const initialState = {
             assignmentsList: [],
         },
         members: [],
+        appendingPosts: {
+            total: 0,
+            postsList: [],
+        }
     }
 };
 
@@ -60,12 +64,16 @@ export const classSlice = createSlice({
         },
         getMembersAction: (state, action) => {
             state.currentClass.members = action.payload;
+        },
+        getAppendingPostsAction: (state, action) => {
+            state.currentClass.appendingPosts.total = action.payload.length;
+            state.currentClass.appendingPosts.postsList = action.payload;
         }
     },
     extraReducers: (builder) => {
     },
 });
 
-export const {getAllClassAction, getCurrentClassAction, getAssignmentsAction, getMembersAction, getNotificationsAction} = classSlice.actions;
+export const {getAllClassAction, getCurrentClassAction, getAssignmentsAction, getMembersAction, getNotificationsAction, getAppendingPostsAction} = classSlice.actions;
 
 export default classSlice.reducer;

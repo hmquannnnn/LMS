@@ -10,7 +10,8 @@ const paths: Paths = {
     classroomNotifications: "notifications",
     classroomAssignments: "assignments",
     classroomMembers: "members",
-    classroomOrientations: "orientations"
+    classroomOrientations: "orientations",
+    appendingPosts: "appending-posts",
 }
 
 export default paths;

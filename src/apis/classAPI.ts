@@ -31,15 +31,28 @@ export const getStudentsList = (classId: string) => {
     return instance.get(`${classUrl}/${classId}/students`);
 }
 
-export const searchClass = (classCode: string) => {
+export const searchClass = (classCode: number) => {
     return instance.get(`${classUrl}`, classCode);
 }
 
 export const createAssigment = (classId: string, req: object) => {
-    console.log("check req: ", req);
+    // console.log("check req: ", req);
     return instance.post(`${classUrl}/${classId}/assignments`, req);
 }
 
 export const getAssigment = (classId: string) => {
     return instance.get(`${classUrl}/${classId}/assignments`);
+}
+
+export const submitAssignment = (assignmentId: number, req: object) => {
+    console.log(">>> check api: ", req);
+    return instance.post(`assignments/${assignmentId}/post`, req);
+}
+
+export const getAllPosts = (classId: number) => {
+    return instance.get(`${classUrl}/${classId}/posts`);
+}
+
+export const handleAppendingPost = (postId: number, action: string) => {
+    return instance.put(`posts/${postId}/action/${action}`);
 }

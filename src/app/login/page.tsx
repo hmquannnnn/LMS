@@ -27,6 +27,9 @@ const LogIn = () => {
         const username = formData.get('username') as string;
         const password = formData.get('password') as string;
         // await localStorage.clear();
+        instance.defaults.headers.common = {
+            "Content-Type": "application/json",
+        };
         const res = await callLogin(username, password);
         if (res?.id) {
             console.log(res);

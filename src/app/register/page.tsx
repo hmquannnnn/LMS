@@ -3,9 +3,13 @@ import React from 'react';
 import Link from "next/link";
 import paths from "@/app/paths";
 import {callRegister} from "@/apis/authAPI";
+import instance from '@/utils/axiosCustomize';
+import { useRouter } from 'next/navigation';
 // const baseURL: string = process.env.BACKEND_URL;
 // console.log(baseURL);
 const Register = () => {
+    const router = useRouter();
+
     const handleLogIn = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -17,8 +21,13 @@ const Register = () => {
         const password = formData.get('password') as string;
         const DoB = formData.get('dateOfBirth') as string;
         const role = formData.get('role') as string;
-
+        instance.defaults.headers.common = {
+            "Content-Type": "application/json",
+        };
         const res = await callRegister(firstname, username, lastname, password, DoB, role);
+        if(res?.id) {
+            router.push(paths.logIn);
+        }
         console.log(">>>check res: ", res);
     };
 

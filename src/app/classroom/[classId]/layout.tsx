@@ -36,20 +36,20 @@ const ClassroomLayout = ({children}: { children: ReactNode }) => {
                 </Col>
                 <Col md={21}>
                     <Row className={"border-b-[1px]"} justify="space-around" align="middle">
-                        <Col className={""} span={4}>
-                            <Link
-                                href={`${paths.classroom}/${classId}/${paths.classroomNotifications}`}>Notifications</Link>
+                        <Col className={""} span={3}>
+                            <Link href={`${paths.classroom}/${classId}/${paths.classroomNotifications}`}>Notifications</Link>
                         </Col>
-                        <Col span={4}>
-                            <Link
-                                href={`${paths.classroom}/${classId}/${paths.classroomAssignments}`}>Assignments</Link>
+                        <Col span={3}>
+                            <Link href={`${paths.classroom}/${classId}/${paths.classroomAssignments}`}>Assignments</Link>
                         </Col>
-                        <Col span={4}>
+                        <Col span={3}>
                             <Link href={`${paths.classroom}/${classId}/${paths.classroomMembers}`}>Members</Link>
                         </Col>
-                        <Col span={4}>
-                            <Link
-                                href={`${paths.classroom}/${classId}/${paths.classroomOrientations}`}>Orientations</Link>
+                        <Col span={3}>
+                            <Link href={`${paths.classroom}/${classId}/${paths.appendingPosts}`}>Appending Posts</Link>
+                        </Col>
+                        <Col span={3}>
+                            <Link href={`${paths.classroom}/${classId}/${paths.classroomOrientations}`}>Orientations</Link>
                         </Col>
                     </Row>
                     {children}
