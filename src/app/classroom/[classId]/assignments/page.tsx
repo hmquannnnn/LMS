@@ -83,23 +83,6 @@ const ClassAssignment = (props: any) => {
         // console.log(file[0]);
     }
 
-    const readFileContents = (file: File): Promise<string> => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-
-            reader.onload = function (event) {
-                const fileContents = event.target.result as string;
-                resolve(fileContents);
-            };
-
-            reader.onerror = function (error) {
-                reject(error);
-            };
-
-            // Read the file as a data URL (string)
-            reader.readAsDataURL(file);
-        });
-    };
 
     return (
         <>
