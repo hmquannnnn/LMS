@@ -1,23 +1,32 @@
 "use client"
 
-
+import { UserOutlined } from '@ant-design/icons';
 import {createNotification, getClass, getNotification} from "@/apis/classAPI";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getCurrentClassAction, getNotificationsAction} from "@/redux/slices/classSlice";
-import {Col, Divider, Row} from "antd";
+import {Avatar, Col, Divider, Row} from "antd";
 import {FormatDate} from "@/utils/formatDate";
 import { replyNotification } from "@/apis/commentsAPI";
+
+type CommentInputs = {
+    [key: number]: string;
+};
+type ShowComments = {
+    [key: number]: boolean;
+}
 
 const ClassNotification = (props: any) => {
     const dispatch = useDispatch();
     const classId = props.params.classId;
     const [notification, setNotification] = useState("");
-    const [comment, setComment] = useState("");
+    const [comment, setComment] = useState<CommentInputs>({});
+    const [showAllComments, setShowAllComments] = useState<ShowComments>({});
     const [isUpdate, setIsUpdate] = useState(true);
     const classInfo = useSelector(state => state.classes?.currentClass?.classInfo || {});
     const notificationsList = useSelector(state => state.classes?.currentClass?.notifications || []);
     const user = useSelector(state => state.account.user);
+    console.log(user);
     const userRole = user.role;
     const getClassDetail = async () => {
         const res = await getClass(classId);
@@ -41,10 +50,13 @@ const ClassNotification = (props: any) => {
         // console.log("check state: ", notification);
     }
 
-    const handleChangeComment = (e) => {
+    const handleChangeComment = (e, notificationId: number) => {
         const message = e.target.value;
-        setComment(message);
-    }
+        setComment((prevInputs) => ({
+            ...prevInputs,
+            [notificationId]: message,
+        }));
+    };
 
     const handleEnter = async () => {
         const res = await createNotification(classId, notification);
@@ -52,11 +64,17 @@ const ClassNotification = (props: any) => {
         setNotification("");
     }
 
-    const handleEnterReply = async(notificationId: number) => {
-        const content = comment;
-        const res = await replyNotification(notificationId, content);
-        setIsUpdate(true);
-    }
+    const handleEnterReply = async (notificationId: number) => {
+        const content = comment[notificationId];
+        if (content.trim() !== '') {
+            const res = await replyNotification(notificationId, content);
+            setIsUpdate(true);
+            setComment((prevInputs) => ({
+                ...prevInputs,
+                [notificationId]: '',
+            }));
+        }
+    };
     
     return (
         <>
@@ -84,30 +102,50 @@ const ClassNotification = (props: any) => {
                             <>
                                 <div key={notification.id} className={"border-[1px] mt-5 rounded-xl w-full py-3"}>
                                     <div className="px-5">
-                                        <p className={"font-semibold text-lg"}>{classInfo.teacherLastName + " " + classInfo.teacherFirstName}</p>
-                                        <p className={"text-gray-500"}>{FormatDate(notification.postTime)}</p>
-                                        <p className={"mt-2"}>{notification.content}</p>
+                                        <Row >
+                                            <Avatar 
+                                                size={48} 
+                                                icon={<UserOutlined />} 
+                                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${user.avatarId}`} 
+                                                className='mr-3'
+                                            />
+                                            <Col>
+                                                <p className={"font-semibold text-lg"}>{classInfo.teacherLastName + " " + classInfo.teacherFirstName}</p>
+                                                <p className={"text-gray-500"}>{FormatDate(notification.postTime)}</p>
+                                            </Col>
+                                            
+                                        </Row>
+                                        <p className={"mt-5"}>{notification.content}</p>
                                     </div>
-                                    <Divider className="w-full"/>
+                                    <Divider className="w-full mt-3"/>
                                     <div className="px-5">
                                         {notification.lastComment?.id ? <>
-                                        <div>
-                                            <Row>
-                                                <p className="font-semibold text-base text-gray-800">{notification.lastComment.userLastName + " " + notification.lastComment.userFirstName}</p>
-                                                <p className="inline-block align-middle">{notification.lastComment.postTime.slice(11, 16)}</p>
-                                            </Row>
-                                            <p>{notification.lastComment.content}</p>
-                                        </div>
+                                            <div className='mx-3'>
+                                                <Row>
+                                                    <Avatar 
+                                                        size={42} 
+                                                        icon={<UserOutlined />} 
+                                                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${notification.lastComment.userAvatarId}`} 
+                                                        className='mr-2.5'
+                                                    />
+                                                    <Col>
+                                                        <p className="font-semibold text-base text-gray-800">{notification.lastComment.userLastName + " " + notification.lastComment.userFirstName}</p>
+                                                        <p className="text-gray-500">{FormatDate(notification.lastComment.postTime)}</p>
+                                                    </Col>
+                                                    
+                                                </Row>
+                                                <p className={"mt-3"}>{notification.lastComment.content}</p>
+                                            </div>
+                                        
+                                        </> : null}
                                         <input 
                                             placeholder="Add comment"
                                             type="text" 
-                                            value={comment} 
-                                            onChange={handleChangeComment} 
+                                            value={comment[notification.id]} 
+                                            onChange={(e) => handleChangeComment(e, notification.id)} 
                                             onKeyPress={(e) => e.key === "Enter" && handleEnterReply(notification.id)} 
-                                            className={"border-[1px] w-full rounded-3xl px-5 py-3"}
+                                            className={"border-[1px] w-full rounded-3xl px-5 py-3 mt-3"}
                                         />
-                                        </> : null}
-                                        
                                     </div>
                                 </div>
                             </> 

@@ -10,6 +10,7 @@ interface Paths {
     classroomMembers: string;
     classroomOrientations: string;
     appendingPosts: string;
+    post: string;
 }
 
 export default Paths;

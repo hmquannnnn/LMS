@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const baseURL = process.env.BACKEND_URL;
+const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 console.log(baseURL);
 
 const instance = axios.create({
-    baseURL: 'http://172.22.0.0/api/v1',
+    baseURL: baseURL,
 });
 
 // Add a request interceptor

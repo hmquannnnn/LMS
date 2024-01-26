@@ -12,6 +12,7 @@ const paths: Paths = {
     classroomMembers: "members",
     classroomOrientations: "orientations",
     appendingPosts: "appending-posts",
+    post: "post",
 }
 
 export default paths;
