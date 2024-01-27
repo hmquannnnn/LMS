@@ -1,6 +1,6 @@
 "use client"
 
-import {ReactNode} from "react";
+import {ReactNode, useEffect} from "react";
 import {Col, Row} from "antd";
 import Link from "next/link";
 import paths from "@/app/paths";
@@ -26,6 +26,9 @@ const ClassroomLayout = ({children}: { children: ReactNode }) => {
             dispatch(getCurrentClassAction(res));
         }
     }
+    useEffect(() => {
+        getClassDetails();
+    }, []);
     const currentClass = useSelector(state => state.classes.currentClass.classInfo);
     return (
         <>

@@ -26,8 +26,7 @@ export default function Home() {
     useEffect(() => {
         getAccount();
     }, []);
-    console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
-    // console.log("account: ", user);
+    
     return (
         <>
             <img src={`${process.env.BACKEND_URL}`} />

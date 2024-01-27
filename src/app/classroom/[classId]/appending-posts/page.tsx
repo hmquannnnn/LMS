@@ -1,13 +1,16 @@
 "use client"
 
 import { getAllPosts, handleAppendingPost } from "@/apis/classAPI";
+import paths from "@/app/paths";
 import { getAppendingPostsAction } from "@/redux/slices/classSlice";
 import { Col, Row } from "antd";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const AppendingPosts = (props: any) => {
     const classId = props.params.classId;
+    const router = useRouter();
     const dispatch = useDispatch();
     const appendingLists = useSelector(state => state?.classes?.currentClass?.appendingPosts?.postsList || []);
     const [isUpdate, setIsUpdate] = useState(true)
@@ -34,9 +37,11 @@ const AppendingPosts = (props: any) => {
                 <>
                     <Col>
                         <Row>
-                            {post.id}
-                            <button className="bg-grey border-[1px] border-black" onClick={() => handlePost(post.id, "approve")}>Approve</button>
+                            <div>{post.id}</div>
+                            
+                            <button className="bg-grey border-[1px] border-black" onClick={() => handlePost(post.id, "approve")} >Approve</button>
                             <button className="bg-grey border-[1px] border-black" onClick={() => handlePost(post.id, "reject")}>Reject</button>
+                            <button className="bg-grey border-[1px] border-black" onClick={() => router.push(`${paths.classroom}/${classId}/${paths.post}/${post.id}`)}>Details</button>
                         </Row>
                     </Col>
                 </>

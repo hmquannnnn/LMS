@@ -45,7 +45,10 @@ export const getAssigment = (classId: string) => {
 }
 
 export const submitAssignment = (assignmentId: number, req: object) => {
-    console.log(">>> check api: ", req);
+    instance.defaults.headers.common = {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        "Content-Type": "multipart/form-data",
+    };
     return instance.post(`assignments/${assignmentId}/post`, req);
 }
 
@@ -55,4 +58,8 @@ export const getAllPosts = (classId: number) => {
 
 export const handleAppendingPost = (postId: number, action: string) => {
     return instance.put(`posts/${postId}/action/${action}`);
+}
+
+export const callGetPost = (postId: number) => {
+    return instance.get(`posts/${postId}`);
 }
