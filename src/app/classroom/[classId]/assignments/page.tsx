@@ -59,7 +59,7 @@ const ClassAssignment = (props: any) => {
       title: title,
       content: content,
       dueDateTime: dueDateTime,
-      isForGroup: true,
+      isForGroup: false,
     };
     const res = await callCreateAssigment(classId, assignmentReq);
     setUpdateFlag(false);
@@ -105,6 +105,7 @@ const ClassAssignment = (props: any) => {
       files: files,
       caption: editorRef.current.getContent(),
       orientation: orientation,
+      id: user.id,
     };
     // console.log(">>> check req: ", req);
     const res = await callSubmitAssignment(assignmentId, req);

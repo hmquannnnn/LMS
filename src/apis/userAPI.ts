@@ -10,3 +10,7 @@ export const callChangeAvatar = (file: File) => {
   };
   return instance.post(`/user`, file);
 };
+
+export const callFetchUserById = (userId: number) => {
+  return instance.get(`/users/${userId}`);
+};
