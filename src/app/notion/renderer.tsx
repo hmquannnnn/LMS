@@ -41,7 +41,8 @@ export const NotionPage = ({
 
   return (
     <div className="notion__container">
-      <NotionRenderer
+      {JSON.stringify(recordMap)}
+      {/* <NotionRenderer
         recordMap={recordMap}
         fullPage={true}
         darkMode={false}
@@ -56,7 +57,7 @@ export const NotionPage = ({
           Equation,
           Modal
         }}
-      />
+      /> */}
     </div>
   );
 };

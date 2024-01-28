@@ -10,10 +10,9 @@ async function getData(rootPageId: string) {
 
 const Library = async () => {
     const data = await getData(rootPageId);
-    console.log(data)
+    console.log(await notion.getPage(rootPageId))
     return (
         <>
-
             <NotionPage recordMap={data} rootPageId={rootPageId} />
         </>
     );
