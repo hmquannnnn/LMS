@@ -1,15 +1,18 @@
-import instance from "@/utils/axiosCustomize"
+import instance from "@/utils/axiosCustomize";
 
-const commentUrl = "/comments"
+const commentUrl = "/comments";
 
-export const replyNotification = (notificationId: number, content: string) => {
-    return instance.post(`${commentUrl}/notification/${notificationId}`, content);
-}
+export const callReplyNotification = (
+  notificationId: number,
+  content: string,
+) => {
+  return instance.post(`${commentUrl}/notification/${notificationId}`, content);
+};
 
-export const getComment = (commentId: number) => {
-    return instance.get(`${commentUrl}/${commentId}`);
-}
+export const callGetComment = (commentId: number) => {
+  return instance.get(`${commentUrl}/${commentId}`);
+};
 
-const getAllCommentNotification = (notificationId: number) => {
-    return instance.get(`notifications/${notificationId}/${commentUrl}`)
-}
+const callGetAllCommentNotification = (notificationId: number) => {
+  return instance.get(`notifications/${notificationId}/${commentUrl}`);
+};

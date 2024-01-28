@@ -1,65 +1,65 @@
 import instance from "@/utils/axiosCustomize";
 
-const classUrl = "/classrooms"
+const classUrl = "/classrooms";
 
-export const createNewClass = (className: string) => {
-    return instance.post(`${classUrl}`, className);
-}
+export const callCreaterNewClass = (className: string) => {
+  return instance.post(`${classUrl}`, className);
+};
 
-export const joinClass = (classCode: string) => {
-    // console.log(`/classrooms/join?code=${classCode}`);
-    return instance.post(`${classUrl}/join?code=${classCode}`);
-}
+export const callJoinClass = (classCode: string) => {
+  // console.log(`/classrooms/join?code=${classCode}`);
+  return instance.post(`${classUrl}/join?code=${classCode}`);
+};
 
-export const getAllClass = () => {
-    return instance.get(`${classUrl}/all`);
-}
+export const callGetAllClass = () => {
+  return instance.get(`${classUrl}/all`);
+};
 
-export const getClass = (classId: string) => {
-    return instance.get(`${classUrl}/${classId}`);
-}
+export const callGetClass = (classId: string) => {
+  return instance.get(`${classUrl}/${classId}`);
+};
 
-export const createNotification = (classId: string, content: string) => {
-    return instance.post(`${classUrl}/${classId}/notifications`, content);
-}
+export const callCreateNotification = (classId: string, content: string) => {
+  return instance.post(`${classUrl}/${classId}/notifications`, content);
+};
 
-export const getNotification = (classId: string) => {
-    return instance.get(`${classUrl}/${classId}/notifications`);
-}
+export const callGetNotification = (classId: string) => {
+  return instance.get(`${classUrl}/${classId}/notifications`);
+};
 
-export const getStudentsList = (classId: string) => {
-    return instance.get(`${classUrl}/${classId}/students`);
-}
+export const callGetStudentsList = (classId: string) => {
+  return instance.get(`${classUrl}/${classId}/students`);
+};
 
-export const searchClass = (classCode: number) => {
-    return instance.get(`${classUrl}`, classCode);
-}
+export const callSearchClass = (classCode: number) => {
+  return instance.get(`${classUrl}`, classCode);
+};
 
-export const createAssigment = (classId: string, req: object) => {
-    // console.log("check req: ", req);
-    return instance.post(`${classUrl}/${classId}/assignments`, req);
-}
+export const callCreateAssigment = (classId: string, req: object) => {
+  // console.log("check req: ", req);
+  return instance.post(`${classUrl}/${classId}/assignments`, req);
+};
 
-export const getAssigment = (classId: string) => {
-    return instance.get(`${classUrl}/${classId}/assignments`);
-}
+export const callGetAssigment = (classId: string) => {
+  return instance.get(`${classUrl}/${classId}/assignments`);
+};
 
-export const submitAssignment = (assignmentId: number, req: object) => {
-    instance.defaults.headers.common = {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-        "Content-Type": "multipart/form-data",
-    };
-    return instance.post(`assignments/${assignmentId}/post`, req);
-}
+export const callSubmitAssignment = (assignmentId: number, req: object) => {
+  instance.defaults.headers.common = {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    "Content-Type": "multipart/form-data",
+  };
+  return instance.post(`assignments/${assignmentId}/post`, req);
+};
 
-export const getAllPosts = (classId: number) => {
-    return instance.get(`${classUrl}/${classId}/posts`);
-}
+export const callGetAllPosts = (classId: number) => {
+  return instance.get(`${classUrl}/${classId}/posts`);
+};
 
-export const handleAppendingPost = (postId: number, action: string) => {
-    return instance.put(`posts/${postId}/action/${action}`);
-}
+export const callHandleAppendingPost = (postId: number, action: string) => {
+  return instance.put(`posts/${postId}/action/${action}`);
+};
 
 export const callGetPost = (postId: number) => {
-    return instance.get(`posts/${postId}`);
-}
+  return instance.get(`posts/${postId}`);
+};

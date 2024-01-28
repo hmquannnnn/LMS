@@ -1,7 +1,11 @@
 "use client";
 
 import { UserOutlined } from "@ant-design/icons";
-import { createNotification, getClass, getNotification } from "@/apis/classAPI";
+import {
+  callCreateNotification,
+  callGetClass,
+  callGetNotification,
+} from "@/apis/classAPI";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -10,7 +14,7 @@ import {
 } from "@/redux/slices/classSlice";
 import { Avatar, Col, Divider, Row } from "antd";
 import { FormatDate } from "@/utils/formatDate";
-import { replyNotification } from "@/apis/commentsAPI";
+import { callReplyNotification } from "@/apis/commentsAPI";
 
 type CommentInputs = {
   [key: number]: string;
@@ -36,10 +40,10 @@ const ClassNotification = (props: any) => {
   console.log(user);
   const userRole = user.role;
   const getClassDetail = async () => {
-    const res = await getClass(classId);
+    const res = await callGetClass(classId);
     if (res?.id) {
       dispatch(getCurrentClassAction(res));
-      const notificationList = await getNotification(res.id);
+      const notificationList = await callGetNotification(res.id);
       notificationList.sort((a: object, b: object) => {
         return new Date(b.postTime) - new Date(a.postTime);
       });
@@ -66,7 +70,7 @@ const ClassNotification = (props: any) => {
   };
 
   const handleEnter = async () => {
-    const res = await createNotification(classId, notification);
+    const res = await callCreateNotification(classId, notification);
     setIsUpdate(true);
     setNotification("");
   };
@@ -74,7 +78,7 @@ const ClassNotification = (props: any) => {
   const handleEnterReply = async (notificationId: number) => {
     const content = comment[notificationId];
     if (content.trim() !== "") {
-      const res = await replyNotification(notificationId, content);
+      const res = await callReplyNotification(notificationId, content);
       setIsUpdate(true);
       setComment((prevInputs) => ({
         ...prevInputs,

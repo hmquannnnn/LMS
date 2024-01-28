@@ -1,11 +1,11 @@
 "use client";
 
 import {
-  createAssigment,
-  createNotification,
-  getAssigment,
-  getClass,
-  submitAssignment,
+  callCreateAssigment,
+  callCreateNotification,
+  callGetAssigment,
+  callGetClass,
+  callSubmitAssignment,
 } from "@/apis/classAPI";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -35,10 +35,10 @@ const ClassAssignment = (props: any) => {
   const [showSubmitForm, setShowSubmitForm] = useState(false);
   // const [newAssignment, setNewAssignment] = useState(false);
   const getClassDetail = async () => {
-    const classInfo = await getClass(classId);
+    const classInfo = await callGetClass(classId);
     if (classInfo?.id) {
       dispatch(getCurrentClassAction(classInfo));
-      const assignmentList = await getAssigment(classInfo.id);
+      const assignmentList = await callGetAssigment(classInfo.id);
       // console.log(">>>check assignments: ", assignmentsList);
       dispatch(getAssignmentsAction(assignmentList));
       setUpdateFlag(true);
@@ -61,11 +61,11 @@ const ClassAssignment = (props: any) => {
       dueDateTime: dueDateTime,
       isForGroup: true,
     };
-    const res = await createAssigment(classId, assignmentReq);
+    const res = await callCreateAssigment(classId, assignmentReq);
     setUpdateFlag(false);
     setIsModalOpen(false);
     const notificationContent = `ASSIGNMENT: ${title} - ${content}`;
-    await createNotification(classId, notificationContent);
+    await callCreateNotification(classId, notificationContent);
   };
 
   const showModal = () => {
@@ -95,17 +95,19 @@ const ClassAssignment = (props: any) => {
     // console.log("ok");
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const files = formData.get("files") as unknown;
+    const title = formData.get("title") as string;
+    const files = formData.get("files") as File;
     const caption = formData.get("caption") as string;
     console.log("this is caption: ", caption);
     const orientation = formData.get("orientation") as string;
     const req = {
+      title: title,
       files: files,
       caption: editorRef.current.getContent(),
       orientation: orientation,
     };
     // console.log(">>> check req: ", req);
-    const res = await submitAssignment(assignmentId, req);
+    const res = await callSubmitAssignment(assignmentId, req);
   };
 
   const editorRef = useRef(null);
@@ -242,23 +244,30 @@ const ClassAssignment = (props: any) => {
                   <div>
                     <form onSubmit={(e) => handleSubmit(e, assignment.id)}>
                       <Col>
-                        <input name="files" type="file" multiple />
                         <div className={"my-2"}>
-                          <label htmlFor="orientation">
-                            Select orientation
-                          </label>
-                          <select
-                            name="orientation"
-                            id="orientation"
-                            className={"border-[1px] px-2 p-0.5 rounded ml-2"}
-                          >
-                            <option value="TECHNIQUE">TECHNIQUE</option>
-                            <option value="MAJOR">MAJOR</option>
-                            <option value="RESEARCH">RESEARCH</option>
-                            <option value="SOCIAL">SOCIAL</option>
-                            <option value="MANAGEMENT">MANAGEMENT</option>
-                            <option value="ART"> ART</option>
-                          </select>
+                          <input
+                            name={"title"}
+                            type={"text"}
+                            placeholder={"Title"}
+                            className={"mb-2 rounded border-[1px]"}
+                          />
+                          <div>
+                            <label htmlFor="orientation">
+                              Select orientation
+                            </label>
+                            <select
+                              name="orientation"
+                              id="orientation"
+                              className={"border-[1px] px-2 p-0.5 rounded ml-2"}
+                            >
+                              <option value="TECHNIQUE">TECHNIQUE</option>
+                              <option value="MAJOR">MAJOR</option>
+                              <option value="RESEARCH">RESEARCH</option>
+                              <option value="SOCIAL">SOCIAL</option>
+                              <option value="MANAGEMENT">MANAGEMENT</option>
+                              <option value="ART"> ART</option>
+                            </select>
+                          </div>
                         </div>
 
                         <Editor
@@ -299,6 +308,12 @@ const ClassAssignment = (props: any) => {
                           }}
                         />
                         {/* <button onClick={log}>Log editor content</button> */}
+                        <input
+                          name="files"
+                          type="file"
+                          multiple
+                          className={"mt-2"}
+                        />
 
                         <button
                           type="submit"
