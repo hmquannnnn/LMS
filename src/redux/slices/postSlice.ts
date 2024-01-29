@@ -1,31 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  username: string;
-  role: string;
-  token: string;
-  dateOfBirth: string;
-}
-
-export interface AccountState {
-  isAuthenticated: boolean;
-  user: User;
-}
-
-const initialState: AccountState = {};
+const initialState = {
+  currentPost: {},
+};
 
 export const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
-    getCurrentPostAction: (state, action) => {},
+    getCurrentPostAction: (state, action) => {
+      state.currentPost = action.payload;
+    },
   },
   extraReducers: (builder) => {},
 });
 
-export const {} = postSlice.actions;
+export const { getCurrentPostAction } = postSlice.actions;
 
 export default postSlice.reducer;

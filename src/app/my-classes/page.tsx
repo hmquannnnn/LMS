@@ -14,7 +14,7 @@ const MyClasses = () => {
   const userRole = useSelector((state) => state.account.user.role);
   const dispatch = useDispatch();
   const router = useRouter();
-  const allClass = async () => {
+  const getAllClass = async () => {
     const res = await callGetAllClass();
     // console.log(res);
     if (res.length) {
@@ -22,10 +22,10 @@ const MyClasses = () => {
     }
   };
   const handleUpdate = () => {
-    allClass();
+    getAllClass();
   };
   useEffect(() => {
-    allClass();
+    getAllClass();
     // console.log(">>>check classes list: ", classesList);
   }, [dispatch]);
   const classesList = useSelector((state) => state.classes.classesList);

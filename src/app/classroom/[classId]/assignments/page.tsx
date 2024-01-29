@@ -92,23 +92,23 @@ const ClassAssignment = (props: any) => {
     e: React.FormEvent<HTMLFormElement>,
     assignmentId: number,
   ) => {
-    // console.log("ok");
     e.preventDefault();
+
     const formData = new FormData(e.currentTarget);
     const title = formData.get("title") as string;
-    const files = formData.get("files") as File;
+    const files = formData.getAll("files") as FileList;
     const caption = formData.get("caption") as string;
-    console.log("this is caption: ", caption);
     const orientation = formData.get("orientation") as string;
-    const req = {
-      title: title,
-      files: files,
-      caption: editorRef.current.getContent(),
-      orientation: orientation,
-      id: user.id,
-    };
-    // console.log(">>> check req: ", req);
-    const res = await callSubmitAssignment(assignmentId, req);
+
+    const formDataWithFiles = new FormData();
+    formDataWithFiles.append("title", title);
+    formDataWithFiles.append("caption", caption);
+    formDataWithFiles.append("orientation", orientation);
+    for (let i = 0; i < files.length; i++) {
+      formDataWithFiles.append("files", files[i]);
+    }
+
+    const res = await callSubmitAssignment(assignmentId, formDataWithFiles);
   };
 
   const editorRef = useRef(null);
