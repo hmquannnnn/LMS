@@ -49,7 +49,7 @@
 
 // pages/index.js
 "use client"
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 // import { NotionPage } from "@/app/notion";
 // import { NotionAPI } from 'notion-client'
 // import { notion } from "@/notion";
@@ -67,12 +67,15 @@ import { NotionRenderer } from "react-notion";
 const Index = () => {
     const [inputValue, setInputValue] = useState('');
     const [data, setData] = useState();
-
+    const documentTitle = useRef('');
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch(`https://notion-api.splitbee.io/v1/page/${inputValue}`);
                 const data = await response.json();
+                documentTitle.current = data[Object.keys(data)[0]]["value"]["properties"]["title"][0][0]
+                let veryFirstText = data[Object.keys(data)[1]]["value"]["properties"]["title"][0][0]
+                console.log(veryFirstText)
                 setData(data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -92,6 +95,7 @@ const Index = () => {
         setInputValue(e.target.value);
     };
 
+
     return (
         <div>
             <input
@@ -103,13 +107,14 @@ const Index = () => {
             {data && (
                 <div>
                     <h2>Results:</h2>
+                    Title: {documentTitle.current}
                     {/* <ul>
                         {data.map((item, index) => (
                             <li key={index}>{item.name}</li>
                         ))}
                     </ul> */}
-                    hello
-                    {/* hi{JSON.stringify(data)}hi */}
+                    {/* hello
+                    hi{ }hi */}
                     <NotionRenderer blockMap={data} fullPage={true} />
 
                     {/* <NotionPage recordMap={data} rootPageId={"rootPageId"} /> */}
