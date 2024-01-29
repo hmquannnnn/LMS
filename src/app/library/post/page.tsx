@@ -50,37 +50,41 @@
 // pages/index.js
 "use client"
 import { useEffect, useState } from 'react';
-import { NotionPage } from "@/app/notion";
-import { NotionAPI } from 'notion-client'
+// import { NotionPage } from "@/app/notion";
+// import { NotionAPI } from 'notion-client'
 // import { notion } from "@/notion";
+import "react-notion/src/styles.css";
+import "prismjs/themes/prism-tomorrow.css";
 
-const notion = new NotionAPI();
 
-async function getData(rootPageId: string) {
-    return await notion.getPage(rootPageId);
-}
+import { NotionRenderer } from "react-notion";
+// const notion = new NotionAPI();
+
+// async function getData(rootPageId: string) {
+//     return await notion.getPage(rootPageId);
+// }
 
 const Index = () => {
     const [inputValue, setInputValue] = useState('');
     const [data, setData] = useState();
 
     useEffect(() => {
-        // const fetchData = async () => {
-        //     try {
-        //         const response = await fetch(`https://notion-api.splitbee.io/v1/page/${inputValue}`);
-        //         const data = await response.json();
-        //         setData(data);
-        //     } catch (error) {
-        //         console.error('Error fetching data:', error);
-        //     }
-        // };
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`https://notion-api.splitbee.io/v1/page/${inputValue}`);
+                const data = await response.json();
+                setData(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
 
         // getData(inputValue).then((data) => setData(data));
 
         // Make sure to fetch data only on the client-side
         if (inputValue !== '') {
             // getData(inputValue).then((data) => setData(data));
-            // fetchData();
+            fetchData();
         }
     }, [inputValue]);
 
@@ -105,8 +109,10 @@ const Index = () => {
                         ))}
                     </ul> */}
                     hello
-                    hi{JSON.stringify(data)}hi
-                    <NotionPage recordMap={data} rootPageId={"rootPageId"} />
+                    {/* hi{JSON.stringify(data)}hi */}
+                    <NotionRenderer blockMap={data} fullPage={true} />
+
+                    {/* <NotionPage recordMap={data} rootPageId={"rootPageId"} /> */}
                 </div>
             )}
         </div>
