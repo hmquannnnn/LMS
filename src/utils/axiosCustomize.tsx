@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
-console.log(baseURL);
 
 const instance = axios.create({
     baseURL: baseURL,
@@ -34,7 +33,6 @@ instance.interceptors.response.use(
     }
 );
 
-// Check if running on the client side before accessing localStorage
 if (typeof window !== 'undefined') {
     instance.defaults.headers.common = {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
