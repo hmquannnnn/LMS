@@ -44,14 +44,7 @@ const AppendingPosts = (props: any) => {
   };
   console.log(">>> check length: ", appendingList.length);
   return (
-    <div className={"w-3/5 mx-auto"}>
-      <div
-        className={
-          "bg-gradient-to-r from-red-500 w-full h-56 flex items-end p-5 my-5 rounded-xl"
-        }
-      >
-        <p className={"text-3xl font-bold text-white"}>Appending Posts</p>
-      </div>
+    <div className={"w-4/5 mx-auto"}>
       {appendingList.length ? (
         <table className={"w-full border-collapse border border-slate-400"}>
           <thead>

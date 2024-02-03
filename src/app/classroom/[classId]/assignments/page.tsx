@@ -15,6 +15,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Modal, Row } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
+import { colors, ROLE_STUDENT } from "@/utils/constant";
 
 const ClassAssignment = (props: any) => {
   const classId = props.params.classId;
@@ -51,20 +52,22 @@ const ClassAssignment = (props: any) => {
 
   const handleCreateAssignment = async (e) => {
     e.preventDefault();
-    const title = e.target.elements.title.value;
+    const title = `ASSIGNMENT ${assignmentsList.length + 1}: ${e.target.elements.title.value}`;
     // const content = e.target.elements.content.value;
     const content = editorRef.current.getContent();
     const dueDateTime = e.target.elements.dueDateTime.value;
+    const isForGroup = false;
     const assignmentReq = {
       title: title,
       content: content,
       dueDateTime: dueDateTime,
-      isForGroup: false,
+      isForGroup: isForGroup,
     };
     const res = await callCreateAssigment(classId, assignmentReq);
     setUpdateFlag(false);
     setIsModalOpen(false);
-    const notificationContent = `ASSIGNMENT: ${title} - ${content}`;
+
+    const notificationContent = `ASSIGNMENT ${assignmentsList.length + 1}: ${title} - ${content}`;
     await callCreateNotification(classId, notificationContent);
   };
 
@@ -97,7 +100,7 @@ const ClassAssignment = (props: any) => {
     const formData = new FormData(e.currentTarget);
     const title = formData.get("title") as string;
     const files = formData.getAll("files") as FileList;
-    const caption = formData.get("caption") as string;
+    const caption = editorRef.current.getContent();
     const orientation = formData.get("orientation") as string;
 
     const formDataWithFiles = new FormData();
@@ -212,19 +215,28 @@ const ClassAssignment = (props: any) => {
               <>
                 <Row
                   className={"border-[1px] mb-5 rounded-xl w-full px-5 py-3"}
+                  style={{ backgroundColor: `${colors.blue_6}` }}
                   span={18}
                 >
                   <Col span={21}>
-                    <p className={"font-bold"}>Title: {assignment.title}</p>
+                    <p
+                      className={"font-bold"}
+                      style={{
+                        color: `${colors.blue_7}`,
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {assignment.title}
+                    </p>
                     <p>
-                      Content:{" "}
+                      {/*Content:{" "}*/}
                       <div
                         dangerouslySetInnerHTML={{ __html: assignment.content }}
                       />
                     </p>
                   </Col>
                   <Col span={3}>
-                    {user.role === "ROLE_STUDENT" && (
+                    {user.role === ROLE_STUDENT && (
                       <button
                         className={
                           "text-white font-semibold bg-green-500 rounded py-1 px-4 text-base"

@@ -12,6 +12,7 @@ import {
 } from "@/redux/slices/classSlice";
 import { useEffect } from "react";
 import { Col, Divider, Row } from "antd";
+import { ROLE_STUDENT } from "@/utils/constant";
 
 const ClassMember = (props: any) => {
   const classId = props.params.classId;
@@ -56,7 +57,7 @@ const ClassMember = (props: any) => {
             </div>
           </Col>
           <Col span={19}>
-            {userRole === "ROLE_STUDENT"
+            {userRole === ROLE_STUDENT
               ? membersList.map((member: object, index: number) => (
                   <>
                     <p>{member.username}</p>
