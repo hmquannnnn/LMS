@@ -37,7 +37,12 @@ const initialState = {
       total: 0,
       assignmentsList: [],
     },
-    members: [],
+    members: [
+      {
+        studentInfo: {},
+        assignmentStatus: [],
+      },
+    ],
     appendingPosts: {
       total: 0,
       postsList: [],

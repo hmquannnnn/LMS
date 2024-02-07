@@ -9,10 +9,10 @@ export const callReplyNotification = (
   return instance.post(`${commentUrl}/notification/${notificationId}`, content);
 };
 
-export const callGetComment = (commentId: number) => {
+export const callGetCommentById = (commentId: number) => {
   return instance.get(`${commentUrl}/${commentId}`);
 };
 
-const callGetAllCommentNotification = (notificationId: number) => {
+const callGetAllNotificationComments = (notificationId: number) => {
   return instance.get(`notifications/${notificationId}/${commentUrl}`);
 };

@@ -27,7 +27,7 @@ type ShowComments = {
 const ClassNotification = (props: any) => {
   const dispatch = useDispatch();
   // const classId = props.params.classId;
-  console.log("check params: ", props.params);
+  // console.log("check params: ", props.params);
   const [classId, setClassId] = useState(props.params.classId);
   const [notification, setNotification] = useState("");
   const [comment, setComment] = useState<CommentInputs>({});
@@ -39,18 +39,18 @@ const ClassNotification = (props: any) => {
   const notificationList = useSelector(
     (state) => state.classes?.currentClass?.notifications || null,
   );
-  console.log("check noti: ", notificationList);
+  // console.log("check noti: ", notificationList);
   const user = useSelector((state) => state.account.user);
   // console.log(user);
   const userRole = user.role;
   const getClassDetail = async () => {
     setClassId(props.params.classId);
     const res = await callGetClass(classId);
-    console.log(">>>check res: ", res);
+    // console.log(">>>check res: ", res);
     if (res) {
       dispatch(getCurrentClassAction(res));
       const notificationList = await callGetNotification(classId);
-      console.log("check noti list: ", notificationList);
+      // console.log("check noti list: ", notificationList);
       notificationList.sort((a: object, b: object) => {
         return new Date(b.postTime) - new Date(a.postTime);
       });
