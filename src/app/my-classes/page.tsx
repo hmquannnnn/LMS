@@ -9,12 +9,13 @@ import { useEffect } from "react";
 import { getAllClassAction } from "@/redux/slices/classSlice";
 import { useRouter } from "next/navigation";
 import paths from "@/app/paths";
+import { colors, ROLE_TEACHER } from "@/utils/constant";
 
 const MyClasses = () => {
   const userRole = useSelector((state) => state.account.user.role);
   const dispatch = useDispatch();
   const router = useRouter();
-  const allClass = async () => {
+  const getAllClass = async () => {
     const res = await callGetAllClass();
     // console.log(res);
     if (res.length) {
@@ -22,10 +23,10 @@ const MyClasses = () => {
     }
   };
   const handleUpdate = () => {
-    allClass();
+    getAllClass();
   };
   useEffect(() => {
-    allClass();
+    getAllClass();
     // console.log(">>>check classes list: ", classesList);
   }, [dispatch]);
   const classesList = useSelector((state) => state.classes.classesList);
@@ -34,9 +35,12 @@ const MyClasses = () => {
       <Row className={"min-h-[78vh]"}>
         <Col
           md={4}
-          className={"border-[1px] bg-gray-50 border-amber-500 px-5 py-3"}
+          className={`border-[1px] border-amber-500 px-5 py-3 bg-gradient-to-br from-${colors.pink_1} to-${colors.yellow_1}`}
+          style={{
+            backgroundImage: `linear-gradient(to bottom right, ${colors.pink_1}, ${colors.yellow_1})`,
+          }}
         >
-          {userRole === "ROLE_TEACHER" ? (
+          {userRole === ROLE_TEACHER ? (
             <CreateClassButton onUpdate={handleUpdate} />
           ) : (
             <JoinClassButton onUpdate={handleUpdate} />
