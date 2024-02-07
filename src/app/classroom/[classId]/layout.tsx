@@ -8,6 +8,14 @@ import { useParams } from "next/navigation";
 import { callGetClass } from "@/apis/classAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentClassAction } from "@/redux/slices/classSlice";
+import { FaChalkboardTeacher } from "react-icons/fa";
+import { IoNotifications } from "react-icons/io5";
+import {
+  MdAssignmentTurnedIn,
+  MdChecklistRtl,
+  MdOutlineWork,
+} from "react-icons/md";
+import { FaPeopleLine } from "react-icons/fa6";
 
 const ClassroomLayout = ({ children }: { children: ReactNode }) => {
   // const classId = props.params.classId;
@@ -35,52 +43,64 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Row className={"min-h-[82vh]"}>
-        <Col className={"border-[1px]"} md={3}>
-          <p className={"text-2xl font-bold"}>{currentClass.name}</p>
-          <p>
-            Teacher:{" "}
-            {currentClass.teacherLastName + " " + currentClass.teacherFirstName}
-          </p>
-        </Col>
-        <Col md={21}>
+        {/*<Col className={"border-[1px]"} md={3}>*/}
+        {/*  <p className={"text-2xl font-bold"}>{currentClass.name}</p>*/}
+        {/*  <p>*/}
+        {/*    Teacher:{" "}*/}
+        {/*    {currentClass.teacherLastName + " " + currentClass.teacherFirstName}*/}
+        {/*  </p>*/}
+        {/*</Col>*/}
+        <Col md={24}>
           <Row
-            className={"border-b-[1px]"}
-            justify="space-around"
+            className={"border-b-[1px] px-5"}
+            // justify="space-around"
             align="middle"
           >
-            <Col className={""} span={3}>
+            <Col span={3}>
+              <Row>
+                <FaChalkboardTeacher className={"h-10 w-10 mr-4"} />
+                <p className={"text-2xl font-bold"}>{currentClass.name}</p>
+              </Row>
+            </Col>
+
+            <Col className={""} span={2}>
               <Link
                 href={`${paths.classroom}/${classId}/${paths.classroomNotifications}`}
               >
-                Notifications
+                {/*Notifications*/}
+                <IoNotifications className={"h-6 w-6 mr-4"} />
               </Link>
             </Col>
-            <Col span={3}>
+            <Col span={2}>
               <Link
                 href={`${paths.classroom}/${classId}/${paths.classroomAssignments}`}
               >
-                Assignments
+                {/*Assignments*/}
+                <MdAssignmentTurnedIn className={"h-6 w-6 mr-4"} />
               </Link>
             </Col>
-            <Col span={3}>
+            <Col span={2}>
               <Link
                 href={`${paths.classroom}/${classId}/${paths.classroomMembers}`}
               >
-                Members
+                {/*Members*/}
+                <FaPeopleLine className={"h-6 w-6 mr-4"} />
               </Link>
             </Col>
-            <Col span={3}>
+            <Col span={2}>
               <Link
                 href={`${paths.classroom}/${classId}/${paths.appendingPosts}`}
               >
-                Appending Posts
+                {/*Appending Posts*/}
+                <MdChecklistRtl className={"h-6 w-6 mr-4"} />
               </Link>
             </Col>
-            <Col span={3}>
+            <Col span={2}>
               <Link
                 href={`${paths.classroom}/${classId}/${paths.classroomOrientations}`}
               >
-                Orientations
+                {/*Orientations*/}
+                <MdOutlineWork className={"h-6 w-6 mr-4"} />
               </Link>
             </Col>
           </Row>

@@ -15,6 +15,7 @@ import {
 import { Avatar, Col, Divider, Row } from "antd";
 import { FormatDate } from "@/utils/formatDate";
 import { callReplyNotification } from "@/apis/commentsAPI";
+import { colors } from "@/utils/constant";
 
 type CommentInputs = {
   [key: number]: string;
@@ -25,7 +26,9 @@ type ShowComments = {
 
 const ClassNotification = (props: any) => {
   const dispatch = useDispatch();
-  const classId = props.params.classId;
+  // const classId = props.params.classId;
+  // console.log("check params: ", props.params);
+  const [classId, setClassId] = useState(props.params.classId);
   const [notification, setNotification] = useState("");
   const [comment, setComment] = useState<CommentInputs>({});
   const [showAllComments, setShowAllComments] = useState<ShowComments>({});
@@ -33,17 +36,21 @@ const ClassNotification = (props: any) => {
   const classInfo = useSelector(
     (state) => state.classes?.currentClass?.classInfo || {},
   );
-  const notificationsList = useSelector(
-    (state) => state.classes?.currentClass?.notifications || [],
+  const notificationList = useSelector(
+    (state) => state.classes?.currentClass?.notifications || null,
   );
+  // console.log("check noti: ", notificationList);
   const user = useSelector((state) => state.account.user);
-  console.log(user);
+  // console.log(user);
   const userRole = user.role;
   const getClassDetail = async () => {
+    setClassId(props.params.classId);
     const res = await callGetClass(classId);
-    if (res?.id) {
+    // console.log(">>>check res: ", res);
+    if (res) {
       dispatch(getCurrentClassAction(res));
-      const notificationList = await callGetNotification(res.id);
+      const notificationList = await callGetNotification(classId);
+      // console.log("check noti list: ", notificationList);
       notificationList.sort((a: object, b: object) => {
         return new Date(b.postTime) - new Date(a.postTime);
       });
@@ -90,13 +97,13 @@ const ClassNotification = (props: any) => {
   return (
     <>
       <div className={"w-3/5 mx-auto"}>
-        <div
-          className={
-            "bg-gradient-to-r from-red-500 w-full h-56 flex items-end p-5 my-5 rounded-xl"
-          }
-        >
-          <p className={"text-3xl font-bold text-white"}>Notifications</p>
-        </div>
+        {/*<div*/}
+        {/*  className={*/}
+        {/*    "bg-gradient-to-r from-red-500 w-full h-56 flex items-end p-5 my-5 rounded-xl"*/}
+        {/*  }*/}
+        {/*>*/}
+        {/*  <p className={"text-3xl font-bold text-white"}>Notifications</p>*/}
+        {/*</div>*/}
         <Row>
           <Col className={"h-28 place-items-start pr-5"} span={5}>
             <div className={"border-[1px] h-full pt-2 pl-4 rounded-xl"}>
@@ -115,11 +122,12 @@ const ClassNotification = (props: any) => {
               onKeyPress={(e) => e.key === "Enter" && handleEnter()}
               className={"border-[1px] w-full rounded-xl px-5 py-3"}
             />
-            {notificationsList.map((notification) => (
+            {notificationList.map((notification) => (
               <>
                 <div
                   key={notification.id}
-                  className={"border-[1px] mt-5 rounded-xl w-full py-3"}
+                  className={`mt-5 rounded-xl w-full py-3 bg-[${colors.blue_6}]`}
+                  style={{ backgroundColor: `${colors.blue_6}` }}
                 >
                   <div className="px-5">
                     <Row>
@@ -130,11 +138,24 @@ const ClassNotification = (props: any) => {
                         className="mr-3"
                       />
                       <Col>
-                        <p className={"font-semibold text-lg"}>
-                          {classInfo.teacherLastName +
-                            " " +
-                            classInfo.teacherFirstName}
-                        </p>
+                        <Row>
+                          <p
+                            className={"font-semibold text-lg mr-1"}
+                            style={{ color: `${colors.blue_5}` }}
+                          >
+                            {classInfo.teacherLastName +
+                              " " +
+                              classInfo.teacherFirstName}
+                          </p>
+                          <p
+                            className={"relative top-[5px]"}
+                            style={{ color: `${colors.blue_5}` }}
+                          >
+                            {" "}
+                            đã đăng một thông báo
+                          </p>
+                        </Row>
+
                         <p className={"text-gray-500"}>
                           {FormatDate(notification.postTime)}
                         </p>
