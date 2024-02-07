@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from 'react';
 import "react-notion/src/styles.css";
 import "prismjs/themes/prism-tomorrow.css";
+import { callPostDocument, DocumentInput } from '@/apis/documentsAPI';
 
 
 import { NotionRenderer } from "react-notion";
@@ -46,6 +47,16 @@ const Index = () => {
         setInputValue(e.target.value);
     };
 
+    const onPostDocument = async (document: DocumentInput) => {
+        let formData = new FormData();
+        formData.append("title", document.title);
+        formData.append("type", document.type);
+        formData.append("veryFirstText", document.veryFirstText);
+        formData.append("notionPageId", document.notionPageId);
+        const response = await callPostDocument(formData);
+        console.log(response);
+    }
+
 
     return (
         <div>
@@ -55,6 +66,14 @@ const Index = () => {
                 onChange={handleInputChange}
                 placeholder="Enter query..."
             />
+            <button onClick={() => onPostDocument(
+                {
+                    title: documentTitle.current,
+                    type: "TEXT",
+                    veryFirstText: veryFirstText.current,
+                    notionPageId: inputValue
+                }
+            )}>Submit</button>
             {data && (
                 <div>
                     <h2>Results:</h2>
