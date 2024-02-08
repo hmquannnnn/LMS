@@ -10,6 +10,7 @@ import { NotionRenderer } from "react-notion";
 const Index = () => {
     const [inputValue, setInputValue] = useState('');
     const [data, setData] = useState();
+    const [fileInput, setFileInput] = useState(null);
     const documentTitle = useRef('');
     const veryFirstText = useRef('');
     useEffect(() => {
@@ -47,12 +48,17 @@ const Index = () => {
         setInputValue(e.target.value);
     };
 
+    const handleFileInputChange = (e) => {
+        setFileInput(e.target.files[0]);
+    }
+
     const onPostDocument = async (document: DocumentInput) => {
         let formData = new FormData();
         formData.append("title", document.title);
         formData.append("type", document.type);
         formData.append("veryFirstText", document.veryFirstText);
         formData.append("notionPageId", document.notionPageId);
+        formData.append("thumbnail", fileInput);
         const response = await callPostDocument(formData);
         console.log(response);
     }
@@ -74,6 +80,8 @@ const Index = () => {
                     notionPageId: inputValue
                 }
             )}>Submit</button>
+            <br />
+            <input type="file" onChange={handleFileInputChange} />
             {data && (
                 <div>
                     <h2>Results:</h2>
