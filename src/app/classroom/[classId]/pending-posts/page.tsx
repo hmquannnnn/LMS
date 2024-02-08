@@ -1,22 +1,22 @@
 "use client";
 
-import { callGetAllPosts, callHandleAppendingPost } from "@/apis/classAPI";
-import { getAppendingPostsAction } from "@/redux/slices/classSlice";
+import { callGetAllPosts, callHandlePendingPost } from "@/apis/classAPI";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callFetchUserById } from "@/apis/userAPI";
 import paths from "@/app/paths";
+import { getPendingPostsAction } from "@/redux/slices/classSlice";
 
-const AppendingPosts = (props: any) => {
+const PendingPosts = (props: any) => {
   const classId = props.params.classId;
   const router = useRouter();
   const dispatch = useDispatch();
-  const appendingList = useSelector(
-    (state) => state?.classes?.currentClass?.appendingPosts?.postsList || [],
+  const pendingList = useSelector(
+    (state) => state?.classes?.currentClass?.pendingPosts?.postsList || [],
   );
   const [isUpdate, setIsUpdate] = useState(true);
-  const getAllAppendingPosts = async () => {
+  const getAllPendingPosts = async () => {
     setIsUpdate(false);
     const res = await callGetAllPosts(classId);
     if (res?.length) {
@@ -27,25 +27,25 @@ const AppendingPosts = (props: any) => {
           return { ...post, user };
         });
 
-      const appendingListsWithUsers = await Promise.all(promises);
-      dispatch(getAppendingPostsAction(appendingListsWithUsers));
+      const pendingListsWithUsers = await Promise.all(promises);
+      dispatch(getPendingPostsAction(pendingListsWithUsers));
     }
     console.log(" check res: ", res);
   };
   useEffect(() => {
     if (typeof window !== "undefined") {
-      getAllAppendingPosts();
+      getAllPendingPosts();
     }
   }, [isUpdate]);
   const handlePost = async (postId: number, action: string) => {
-    const res = await callHandleAppendingPost(postId, action);
+    const res = await callHandlePendingPost(postId, action);
     setIsUpdate(true);
     console.log(">> check res: ", res);
   };
-  console.log(">>> check length: ", appendingList.length);
+  // console.log(">>> check length: ", appendingList.length);
   return (
     <div className={"w-4/5 mx-auto"}>
-      {appendingList.length ? (
+      {pendingList.length ? (
         <table className={"w-full border-collapse border border-slate-400"}>
           <thead>
             <tr className="bg-gray-200">
@@ -56,7 +56,7 @@ const AppendingPosts = (props: any) => {
             </tr>
           </thead>
           <tbody>
-            {appendingList.map((post, index) => (
+            {pendingList.map((post, index) => (
               <tr key={post.id} className="odd:bg-white even:bg-gray-100">
                 <td className={"border border-slate-400"}>{index + 1}</td>
                 <td className={"border border-slate-400"}>{post.title}</td>
@@ -96,4 +96,4 @@ const AppendingPosts = (props: any) => {
   );
 };
 
-export default AppendingPosts;
+export default PendingPosts;
