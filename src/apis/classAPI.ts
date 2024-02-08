@@ -60,7 +60,7 @@ export const callGetAllPosts = (classId: number) => {
   return instance.get(`${classUrl}/${classId}/posts`);
 };
 
-export const callHandleAppendingPost = (postId: number, action: string) => {
+export const callHandlePendingPost = (postId: number, action: string) => {
   return instance.put(`posts/${postId}/action/${action}`);
 };
 

@@ -43,7 +43,7 @@ const initialState = {
         assignmentStatus: [],
       },
     ],
-    appendingPosts: {
+    pendingPosts: {
       total: 0,
       postsList: [],
     },
@@ -69,11 +69,17 @@ export const classSlice = createSlice({
       state.currentClass.assignments.total = action.payload.length;
     },
     getMembersAction: (state, action) => {
-      state.currentClass.members = action.payload;
+      const { students, status } = action.payload;
+      if (students && Array.isArray(students)) {
+        state.currentClass.members = students.map((student) => ({
+          studentInfo: student,
+          assignmentStatus: status[student.id.toString()] || [],
+        }));
+      }
     },
-    getAppendingPostsAction: (state, action) => {
-      state.currentClass.appendingPosts.total = action.payload.length;
-      state.currentClass.appendingPosts.postsList = action.payload;
+    getPendingPostsAction: (state, action) => {
+      state.currentClass.pendingPosts.total = action.payload.length;
+      state.currentClass.pendingPosts.postsList = action.payload;
     },
   },
   extraReducers: (builder) => {},
@@ -85,7 +91,7 @@ export const {
   getAssignmentsAction,
   getMembersAction,
   getNotificationsAction,
-  getAppendingPostsAction,
+  getPendingPostsAction,
 } = classSlice.actions;
 
 export default classSlice.reducer;

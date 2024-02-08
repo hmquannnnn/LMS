@@ -89,7 +89,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
             </Col>
             <Col span={2}>
               <Link
-                href={`${paths.classroom}/${classId}/${paths.appendingPosts}`}
+                href={`${paths.classroom}/${classId}/${paths.pendingPosts}`}
               >
                 {/*Appending Posts*/}
                 <MdChecklistRtl className={"h-6 w-6 mr-4"} />
