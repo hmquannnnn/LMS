@@ -8,7 +8,7 @@ import { Spin } from 'antd';
 const DocumentIdPage = ({ params }) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    const [notFound, setNotFound] = useState(false);
     const documentId = params.documentId;
 
     useEffect(() => {
@@ -18,10 +18,10 @@ const DocumentIdPage = ({ params }) => {
                 const data = await response.json();
                 setData(data);
                 // add delay to show loading spinner
-                // await new Promise(resolve => setTimeout(resolve, 5000));
-
+                // await new Promise(resolve => setTimeout(resolve, 2000));
             } catch (error) {
                 console.error('Error fetching data:', error);
+                setNotFound(true);
             } finally {
                 setLoading(false);
             }
@@ -29,9 +29,17 @@ const DocumentIdPage = ({ params }) => {
         fetchData();
     }, [documentId]);
 
+    if (notFound) {
+        return (
+            <div className="w-full flex justify-center h-screen mt-[50vh]">
+                <h1>404 | Not Found</h1>
+            </div>
+        );
+    }
+
     if (loading) {
         return (
-            <div className="w-full flex justify-center">
+            <div className="w-full flex justify-center h-screen mt-[50vh]">
                 <Spin />
             </div>
         );
@@ -39,7 +47,7 @@ const DocumentIdPage = ({ params }) => {
 
     return (
         <div>
-            DocumentIdPage {params.documentId}
+            {/* DocumentIdPage {params.documentId} */}
             <div>
                 {data && <NotionRenderer blockMap={data} fullPage hideHeader />}
             </div>

@@ -16,3 +16,13 @@ export const callPostDocument = (document: FormData) => {
   };
   return instance.post(`${documentUrl}`, document);
 };
+
+export const callGetDocuments = (type: String | null) => {
+  // instance.defaults.headers.common = {
+  //   Authorization: `Bearer ${localStorage.getItem("token")}`,
+  // };
+  if (type != null) {
+    return instance.get(`${documentUrl}?type=${type}`);
+  }
+  return instance.get(`${documentUrl}`);
+};
