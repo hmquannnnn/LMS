@@ -1,4 +1,5 @@
 "use client";
+"use client";
 
 import { configureStore } from "@reduxjs/toolkit";
 import { accountSlice } from "@/redux/slices/accountSlice";

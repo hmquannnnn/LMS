@@ -31,5 +31,13 @@ const config: Config = {
     },
   },
   plugins: [],
+  safelist: [
+    "min-w-[600px]",
+    "max-w-[600px]",
+    "min-w-[300px]",
+    "max-w-[300px]",
+    "min-h-[200px]",
+    "min-h-[400px]",
+  ],
 };
 export default config;
