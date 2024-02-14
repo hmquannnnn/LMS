@@ -43,7 +43,7 @@ const Library = () => {
                             <DocumentPreview props={{ data: data[0], imgWidth: "600px", imgHeight: "400px", imgUrl: data[0]?.thumbnail?.id ? (MEDIA_URL + data[0]?.thumbnail?.id) : "https://placehold.co/600x400" }}></DocumentPreview>
                         </div>
                         <div className="w-min text-xs">
-                            {data.filter((item, index) => index >= 3 && index <= 4).map((item) => {
+                            {data.filter((item, index) => index >= 3 && index <= 20).map((item) => {
                                 return (
                                     <div key={item.id} className="mb-14">
                                         <DocumentPreview props={{ data: item, imgWidth: "300px", imgHeight: "200px", imgUrl: item?.thumbnail?.id ? (MEDIA_URL + item?.thumbnail?.id) : "https://placehold.co/300x200" }}></DocumentPreview>
