@@ -26,3 +26,10 @@ export const callGetDocuments = (type: String | null) => {
   }
   return instance.get(`${documentUrl}`);
 };
+
+export const callGetDocumentById = (documentId: string) => {
+  instance.defaults.headers.common = {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  };
+  return instance.get(`${documentUrl}/${documentId}`);
+};
