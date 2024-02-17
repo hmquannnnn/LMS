@@ -24,10 +24,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <StoreProvider>
             {/*<MyApp></MyApp>*/}
+
             <html lang="en">
+
                 {/*{window.location.pathname === paths.logIn ? <></> : <Header></Header>}*/}
 
                 <body className={inter.className}>
+                    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@700&display=swap" rel="stylesheet"></link>
                     {pathName !== paths.logIn && <Header />}
                     {/*<Header/>*/}
 

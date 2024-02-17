@@ -152,7 +152,7 @@
   .notion-page {
     padding: 0;
     margin: 0 auto;
-    max-width: 708px;
+    /* max-width: 708px; */
     width: 100%;
   }
   

@@ -1,17 +1,17 @@
 'use client'
 
-import type {MenuProps} from 'antd';
-import {Col, Drawer, Row} from "antd";
-import {GiHamburgerMenu} from "react-icons/gi";
+import type { MenuProps } from 'antd';
+import { Col, Drawer, Row } from "antd";
+import { GiHamburgerMenu } from "react-icons/gi";
 import Link from "next/link";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import "./header.scss"
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LoggedInDropdown from "@/components/header/accountManagement/loggedIn";
 import DefaultDropdown from "@/components/header/accountManagement/default";
-import {useRouter} from "next/navigation";
-import {callFetchUser} from "@/apis/userAPI";
-import {doGetAccountAction} from "@/redux/slices/accountSlice";
+import { useRouter } from "next/navigation";
+import { callFetchUser } from "@/apis/userAPI";
+import { doGetAccountAction } from "@/redux/slices/accountSlice";
 
 const items: MenuProps['items'] = [
     {
@@ -70,7 +70,7 @@ const Header = () => {
 
     return (
         <>
-            <Row className={" bg-red-500 h-12 px-3 w-full"} style={{zIndex: "1000"}}>
+            <Row className={"sticky top-0 bg-[#b8e6f6] h-12 px-3 w-full"} style={{ zIndex: "1000" }}>
                 <Col md={18} className={"h-fit my-auto"}>
                     <Row>
                         {/*<Dropdown className={"my-auto"} menu={{items}}>*/}
@@ -80,7 +80,7 @@ const Header = () => {
                             onClick={showDrawer}
                         >
                             <Row>
-                                <GiHamburgerMenu className={"mr-2.5 text-xl my-auto"}/>
+                                <GiHamburgerMenu className={"mr-2.5 text-xl my-auto"} />
                                 <p className={"text-lg"}>Topic</p>
                             </Row>
                         </button>
@@ -92,7 +92,7 @@ const Header = () => {
                         {/*</Dropdown>*/}
                         <input
                             className={"h-8 rounded border-[1px] border-gray-200 pl-2 my-auto ml-2 outline-none w-1/2"}
-                            type={"text"} placeholder={"Search"}/>
+                            type={"text"} placeholder={"Search"} />
                     </Row>
                 </Col>
 
@@ -100,7 +100,7 @@ const Header = () => {
                     <Link href={"/library"} className={"text-white font-semibold decoration-white text-lg"}>Library</Link>
                     <Link href={"/my-classes"} className={"text-white font-semibold text-lg"}>My Classes</Link>
                     {/*<Link href={"/profile"} className={"text-white font-semibold text-lg"}>Profile</Link>*/}
-                    {isAuthenticated ? <LoggedInDropdown/> : <DefaultDropdown/>}
+                    {isAuthenticated ? <LoggedInDropdown /> : <DefaultDropdown />}
                 </Col>
 
 
