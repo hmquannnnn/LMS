@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useRef, use } from "react";
+import { useEffect, useState, useRef } from "react";
 import { NotionRenderer } from "react-notion";
 import { callGetDocumentById, callLikeDocument, callUnLikeDocument } from "@/apis/documentsAPI";
 import { FacebookIcon, HeartLikeIcon, HeartUnLikeIcon, TwitterIcon } from "./component/sidebarIcon";
@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import "@/style/notion.css";
 // import "prismjs/themes/prism-tomorrow.css";
-import { Divider, Spin } from 'antd';
+import { Spin } from 'antd';
 
 function formatVietnameseDateTime(dateTime: Date) {
     const days = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
@@ -18,11 +18,11 @@ function formatVietnameseDateTime(dateTime: Date) {
     const date = (dateTime.getDate()).toString().padStart(2, '0');
     const month = months[dateTime.getMonth()];
     const year = dateTime.getFullYear();
-    const hour = dateTime.getHours();
-    const minute = dateTime.getMinutes();
-    const second = dateTime.getSeconds();
+    const hour = dateTime.getHours().toString().padStart(2, '0');
+    const minute = dateTime.getMinutes().toString().padStart(2, '0');
+    const second = dateTime.getSeconds().toString().padStart(2, '0');
 
-    return `${dayOfWeek}, ${date}/${month}/${year}, ${hour}:${minute}:${second} GMT+7`;
+    return `${dayOfWeek}, ${date}/${month}/${year}, ${hour}:${minute}:${second}`;
 }
 
 const formatDocumentTitle = (title: string) => {
@@ -120,23 +120,25 @@ const DocumentIdPage = ({ params }) => {
         <>
 
             {/* <StickyContainer > */}
-            <div className=" fixed flex flex-col h-[90vh] gap-10 w-[18%] mt-8 pb-5 pl-10">
+            <div className=" fixed flex  flex-col h-[90vh] gap-10 w-[18%] mt-8  pl-10">
                 {/* bg-gradient-to-br from-pink_1 to-yellow_1 */}
                 {/* <div className="h-40 border-2  rounded-xl "></div> */}
-                <div className="h-[95%] border-2 rounded-xl pl-4 pt-4 pr-6">
-                    <svg
-                        aria-label="Unlike"
-                        className="x1lliihq x1n2onr6 xxk16z8 inline mr-1 fill-blue_5"
-                        fill=""
-                        height="18"
-                        role="img"
-                        viewBox="0 0 48 48"
-                        width="18"
-                    >
-                        <title>Unlike</title>
-                        <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
-                    </svg>
-                    <span className="font-headingText text-blue_5 mb-3 inline-block">Danh sách yêu thích</span>
+                <div className="h-full border-2 rounded-xl pl-4 pt-4 pr-6">
+                    <a href="http://localhost:3000/library/favorite">
+                        <svg
+                            aria-label="Unlike"
+                            className="x1lliihq x1n2onr6 xxk16z8 inline mr-1 fill-blue_5"
+                            fill=""
+                            height="18"
+                            role="img"
+                            viewBox="0 0 48 48"
+                            width="18"
+                        >
+                            <title>Unlike</title>
+                            <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
+                        </svg>
+                        <span className="font-headingText text-blue_5 mb-3 inline-block">Danh sách yêu thích</span>
+                    </a>
                     <ul className="pl-2">
                         {favoriteDocuments.current && favoriteDocuments.current.data.map((document, index) => {
                             return (
@@ -171,9 +173,9 @@ const DocumentIdPage = ({ params }) => {
                 {isLiked && <HeartUnLikeIcon onClick={() => onUnLike()} />}
             </div >
 
-            < div className="flex justify-start mx-auto ml-[20vw] pr-[5vw] mr-[4vw]" >
+            < div className="flex justify-start mx-auto ml-[20vw] pr-[5vw] mr-[4vw] " >
                 <div className=" pl-10 pr-20">
-                    {data && <div className="mx-auto my-0  text-[2.5rem] font-[520] mt-[0.75em] mb-[0.25em]">{documentTitle.current}</div>}
+                    {data && <div className="font-headingOpenSans font-[550] mx-auto my-0  text-[2.5rem] mt-[0.75em] mb-[0.25em]">{formatDocumentTitle(documentTitle.current)}</div>}
                     {postTime.current && <p className="mx-auto my-0  text-sm text-gray-500">{postTime.current}</p>}
                     {data && <NotionRenderer blockMap={data} fullPage hideHeader />}
                 </div>

@@ -9,6 +9,8 @@ const config: Config = {
   theme: {
     fontFamily: {
       headingText: ['"Roboto Slab"', "sans-serif"],
+      headingOpenSans: ['"OpenSans"', "sans-serif"],
+      vollkorn: ['"Vollkorn"', "serif"],
     },
     extend: {
       backgroundImage: {
