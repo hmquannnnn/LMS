@@ -77,7 +77,12 @@ const Header = () => {
                         <button
                             className={"border-[1px] text-center border-white text-white font-semibold h-8 rounded my-auto px-2 text-lg"}
                             // onClick={(e) => e.preventDefault()}
-                            onClick={showDrawer}
+                            onClick={
+                                // showDrawer
+                                () => {
+                                    router.push("/library/topics");
+                                }
+                            }
                         >
                             <Row>
                                 <GiHamburgerMenu className={"mr-2.5 text-xl my-auto"} />

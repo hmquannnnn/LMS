@@ -14,7 +14,7 @@ const MenuItem = ({ label, imageSrc, href }) => (
 );
 
 const Menu = () => {
-    const [startIndex, setStartIndex] = useState(4);
+    const [startIndex, setStartIndex] = useState(0);
     const items = [
         { label: 'VĂN HÓA', imageSrc: 'https://placehold.co/200x400/png', href: "" },
         { label: 'THỂ THAO', imageSrc: 'https://placehold.co/200x400/png', href: "" },
