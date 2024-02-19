@@ -7,6 +7,11 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    fontFamily: {
+      headingText: ['"Roboto Slab"', "sans-serif"],
+      headingOpenSans: ['"OpenSans"', "sans-serif"],
+      vollkorn: ['"Vollkorn"', "serif"],
+    },
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -35,5 +40,13 @@ const config: Config = {
     },
   },
   plugins: [],
+  safelist: [
+    "min-w-[600px]",
+    "max-w-[600px]",
+    "min-w-[300px]",
+    "max-w-[300px]",
+    "min-h-[200px]",
+    "min-h-[400px]",
+  ],
 };
 export default config;

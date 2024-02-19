@@ -9,6 +9,22 @@ const nextConfig = {
   //         },
   //     ];
   // },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "10049",
+        pathname: "/api/v1/media/**",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;
