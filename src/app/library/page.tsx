@@ -2,7 +2,9 @@
 import { useEffect, useState, useRef } from "react";
 import { callGetDocuments } from "@/apis/documentsAPI";
 import DocumentPreview from "@/app/library/documentPreview";
-
+import { Spin } from 'antd';
+import HeaderWithLogo from "@/components/headerWithLogo";
+import LogoSVG from "@/components/logo";
 const MEDIA_URL = "http://localhost:10049/api/v1/media/";
 const Library = () => {
     const [data, setData] = useState([]);
@@ -26,9 +28,14 @@ const Library = () => {
         <>
 
             <div>
+                <HeaderWithLogo />
+
+                {data.length == 0 && <div className="w-full flex justify-center h-screen mt-[50vh]">
+                    <Spin />
+                </div>}
                 {
                     data.length > 0 &&
-                    <div className="flex justify-between py-[10vh] px-[15vw]">
+                    <div className="flex flex-wrap justify-between  px-[15vw]">
 
                         <div className="w-min text-xs">
                             {data.filter((item, index) => index >= 1 && index <= 2).map((item) => {

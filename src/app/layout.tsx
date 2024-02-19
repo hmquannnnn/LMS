@@ -24,19 +24,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <StoreProvider>
             {/*<MyApp></MyApp>*/}
+
             <html lang="en">
+
                 {/*{window.location.pathname === paths.logIn ? <></> : <Header></Header>}*/}
 
                 <body className={inter.className}>
+                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;600;700&display=swap"></link>
+                    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@700&display=swap" rel="stylesheet"></link>
+                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"></link>
                     {pathName !== paths.logIn && <Header />}
                     {/*<Header/>*/}
 
                     {children}
                     {pathName !== paths.logIn && <Footer />}
-                </body>
+                </body >
 
-            </html>
-        </StoreProvider>
+            </html >
+        </StoreProvider >
 
     )
 }

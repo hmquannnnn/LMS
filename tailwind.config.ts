@@ -7,6 +7,11 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    fontFamily: {
+      headingText: ['"Roboto Slab"', "sans-serif"],
+      headingOpenSans: ['"OpenSans"', "sans-serif"],
+      vollkorn: ['"Vollkorn"', "serif"],
+    },
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
