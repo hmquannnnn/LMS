@@ -1,10 +1,11 @@
 "use client";
 
-import {Col, Divider, Row} from "antd";
-import {filterPostsByStatus} from "@/app/classroom/[classId]/pending-posts/page";
-import {useEffect, useState} from "react";
-import {useRouter, useSearchParams} from "next/navigation";
-import {assignmentStatus} from "@/utils/constant";
+import { Col, Divider, Row } from "antd";
+import { filterPostsByStatus } from "@/app/classroom/[classId]/pending-posts/page";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { assignmentStatus } from "@/utils/constant";
+import paths from "@/app/paths";
 
 // const thumbnailHeight = "70%";
 // const titleHeight = "12%";
@@ -98,23 +99,23 @@ const OrientationPostsList = (props: any) => {
                       gridTemplateRows: "70% 12% 12%",
                       gap: "calc((100% - (70% + 12% + 12%)) / 2)",
                     }}
-                    // onClick={() =>
-                    //   router.push(
-                    //     `${paths.classroom}/${classId}/post/${post.id}`,
-                    //   )
-                    // }
+                    onClick={() =>
+                      router.push(
+                        `${paths.classroom}/${classId}/post/${post.id}`,
+                      )
+                    }
                   >
                     <div
                       className={
                         "h-full w-full bg-green_6 rounded-2xl max-w-full"
                       }
-                      // style={{ height: "70%" }}
+                    // style={{ height: "70%" }}
                     ></div>
                     <div
                       className={
                         "h-full w-full bg-green_6 rounded-2xl px-3 max-w-full text-ellipsis overflow-hidden flex  items-center"
                       }
-                      // style={{ height: "12%" }}
+                    // style={{ height: "12%" }}
                     >
                       <p
                         className={
@@ -128,7 +129,7 @@ const OrientationPostsList = (props: any) => {
                       className={
                         "h-full w-full bg-green_6 rounded-2xl px-3 truncate max-w-full flex  items-center"
                       }
-                      // style={{ height: "12%" }}
+                    // style={{ height: "12%" }}
                     >
                       <p className={"text-green_3"}>
                         {post.user.lastName + " " + post.user.firstName}

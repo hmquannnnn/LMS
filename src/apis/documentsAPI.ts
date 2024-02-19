@@ -25,13 +25,23 @@ export const callGetDocuments = (type: String | null) => {
 };
 
 export const callGetDocumentById = (documentId: string) => {
+  instance.defaults.headers.common = {
+    Authorization: ``,
+  };
   return instance.get(`${documentUrl}/detail/${documentId}`);
 };
 
 export const callLikeDocument = (documentId: string) => {
-  instance.defaults.headers.common = {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-  };
+  if (!localStorage.getItem("token")) {
+    instance.defaults.headers.common = {
+      Authorization: ``,
+    };
+  } else {
+    instance.defaults.headers.common = {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    };
+  }
+
   return instance.put(`${documentUrl}/${documentId}/like`);
 };
 
