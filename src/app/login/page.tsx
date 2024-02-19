@@ -4,7 +4,7 @@ import Link from "next/link";
 import paths from "@/app/paths";
 import { callLogin } from "@/apis/authAPI";
 import { SubmitHandler, useForm } from "react-hook-form";
-import FormInput from "@/types/FormInput";
+import FormInput from "@/types/formInput";
 import { useDispatch, useSelector } from "react-redux";
 import { doLoginAction } from "@/redux/slices/accountSlice";
 import { useRouter } from "next/navigation";

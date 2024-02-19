@@ -82,7 +82,7 @@ const ClassMember = (props: any) => {
                       {status === STATUS.APPROVED ? (
                         <FaCheck className={"text-green-500 mx-auto"} />
                       ) : status === STATUS.PENDING ? (
-                        <MdPending className={"text-yellow-600 mx-auto"} />
+                        <MdPending className={"text-yellow-400 mx-auto"} />
                       ) : status ===
                         STATUS.NOT_YET_SUBMITTED ? null : status ===
                         STATUS.REJECTED ? (

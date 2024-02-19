@@ -7,6 +7,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { callFetchUserById } from "@/apis/userAPI";
 import paths from "@/app/paths";
 import { getPendingPostsAction } from "@/redux/slices/classSlice";
+import { assignmentStatus } from "@/utils/constant";
+
+export const filterPostsByStatus = async (status: string, classId: number) => {
+  const res = await callGetAllPosts(classId);
+  // console.log("check raw: ", res);
+  if (res?.length) {
+    const promises = res
+      .filter((post) => post.type === status)
+      .map(async (post) => {
+        const user = await callFetchUserById(post.authorId);
+        return { ...post, user };
+      });
+
+    const pendingListsWithUsers = await Promise.all(promises);
+    // dispatch(getPendingPostsAction(pendingListsWithUsers));
+    return pendingListsWithUsers;
+  }
+};
 
 const PendingPosts = (props: any) => {
   const classId = props.params.classId;
@@ -18,19 +36,20 @@ const PendingPosts = (props: any) => {
   const [isUpdate, setIsUpdate] = useState(true);
   const getAllPendingPosts = async () => {
     setIsUpdate(false);
-    const res = await callGetAllPosts(classId);
-    if (res?.length) {
-      const promises = res
-        .filter((post) => post.type === "PENDING")
-        .map(async (post) => {
-          const user = await callFetchUserById(post.authorId);
-          return { ...post, user };
-        });
-
-      const pendingListsWithUsers = await Promise.all(promises);
-      dispatch(getPendingPostsAction(pendingListsWithUsers));
-    }
-    console.log(" check res: ", res);
+    const res = await filterPostsByStatus(assignmentStatus.PENDING, classId);
+    console.log(">>>check: ", res);
+    dispatch(getPendingPostsAction(res));
+    // if (res?.length) {
+    //   const promises = res
+    //     .filter((post) => post.type === "PENDING")
+    //     .map(async (post) => {
+    //       const user = await callFetchUserById(post.authorId);
+    //       return { ...post, user };
+    //     });
+    //
+    //   const pendingListsWithUsers = await Promise.all(promises);
+    //   dispatch(getPendingPostsAction(pendingListsWithUsers));
+    // }
   };
   useEffect(() => {
     if (typeof window !== "undefined") {

@@ -48,6 +48,10 @@ export const callGetAssigmentStatus = (classId: string) => {
   return instance.get(`${classUrl}/${classId}/assignments/status`);
 };
 
+export const callGetAssignmentStatusStudent = (classId: string) => {
+  return instance.get(`${classUrl}/${classId}/assignments/student/status`);
+};
+
 export const callSubmitAssignment = (assignmentId: number, req: object) => {
   instance.defaults.headers.common = {
     Authorization: `Bearer ${localStorage.getItem("token")}`,

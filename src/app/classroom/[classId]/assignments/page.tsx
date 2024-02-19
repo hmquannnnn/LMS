@@ -4,6 +4,7 @@ import {
   callCreateAssigment,
   callCreateNotification,
   callGetAssigment,
+  callGetAssignmentStatusStudent,
   callGetClass,
   callSubmitAssignment,
 } from "@/apis/classAPI";
@@ -15,11 +16,22 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Modal, Row } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
-import { colors, ROLE_STUDENT } from "@/utils/constant";
+import {
+  assignmentStatus,
+  colors,
+  Orientations,
+  ROLE_STUDENT,
+  ROLE_TEACHER,
+} from "@/utils/constant";
+import { MdPending } from "react-icons/md";
+import { FaCheck } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
+import paths from "@/app/paths";
 
 const ClassAssignment = (props: any) => {
   const classId = props.params.classId;
   const dispatch = useDispatch();
+  const router = useRouter();
   const classInfo = useSelector(
     (state) => state.classes?.currentClass?.classInfo || {},
   );
@@ -34,14 +46,34 @@ const ClassAssignment = (props: any) => {
   const [updateFlag, setUpdateFlag] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showSubmitForm, setShowSubmitForm] = useState(false);
-  // const [newAssignment, setNewAssignment] = useState(false);
+
   const getClassDetail = async () => {
     const classInfo = await callGetClass(classId);
+
     if (classInfo?.id) {
       dispatch(getCurrentClassAction(classInfo));
-      const assignmentList = await callGetAssigment(classInfo.id);
-      // console.log(">>>check assignments: ", assignmentsList);
-      dispatch(getAssignmentsAction(assignmentList));
+      // let assignmentList: object = {};
+      // if (userRole === ROLE_TEACHER) {
+      //   assignmentList = await callGetAssigment(classId);
+      // }
+      // if (userRole === ROLE_STUDENT) {
+      //   assignmentList = await callGetAssignmentStatusStudent(classId);
+      // }
+      if (userRole === ROLE_TEACHER) {
+        const assignmentList = await callGetAssigment(classId);
+        assignmentList.sort((a: object, b: object) => {
+          return new Date(a.id) - new Date(b.id);
+        });
+        dispatch(getAssignmentsAction(assignmentList));
+      }
+      if (userRole === ROLE_STUDENT) {
+        const assignmentList = await callGetAssignmentStatusStudent(classId);
+        assignmentList.sort((a: object, b: object) => {
+          return new Date(a.id) - new Date(b.id);
+        });
+        dispatch(getAssignmentsAction(assignmentList));
+      }
+
       setUpdateFlag(true);
     }
   };
@@ -64,11 +96,13 @@ const ClassAssignment = (props: any) => {
       isForGroup: isForGroup,
     };
     const res = await callCreateAssigment(classId, assignmentReq);
+    console.log("check: ", res);
     setUpdateFlag(false);
     setIsModalOpen(false);
-
-    const notificationContent = `ASSIGNMENT ${assignmentsList.length + 1}: ${title} - ${content}`;
-    await callCreateNotification(classId, notificationContent);
+    if (res?.id) {
+      const notificationContent = `ASSIGNMENT ${assignmentsList.length + 1}: ${title} - ${content}`;
+      await callCreateNotification(classId, notificationContent);
+    }
   };
 
   const showModal = () => {
@@ -123,226 +157,252 @@ const ClassAssignment = (props: any) => {
 
   return (
     <>
-      <div className={"w-3/5 mx-auto"}>
-        <div
-          className={
-            "bg-gradient-to-r from-red-500 w-full h-56 flex items-end p-5 my-5 rounded-xl"
-          }
-        >
-          <p className={"text-3xl font-bold text-white"}>Assignment</p>
-        </div>
-
-        <Row>
-          <Col span={5} className={"pr-5"}>
-            <button
-              className={
-                "border-[1px] bg-red-500 text-white rounded-xl w-full text-center py-3 font-bold"
-              }
-              onClick={showModal}
-            >
-              Add assignment
-            </button>
-            <Modal
-              title={"Add assignment"}
-              open={isModalOpen}
-              onCancel={handleCancel}
-              footer={null}
-            >
-              <form onSubmit={handleCreateAssignment}>
-                <div>
-                  <input
-                    type={"text"}
-                    name={"title"}
-                    placeholder={"Title"}
-                    className="border-[1px] rounded w-full px-4 py-1 mb-3"
-                  />
-                  {/*<input*/}
-                  {/*  type={"text"}*/}
-                  {/*  name={"content"}*/}
-                  {/*  placeholder={"Content"}*/}
-                  {/*  className="border-[1px] rounded w-full px-4 py-1 mb-3"*/}
-                  {/*/>*/}
-                  <Editor
-                    name="caption"
-                    apiKey="ty6mn9smak440qi6gv53qqivqdulai6ja9wl6ao0bt12odwr"
-                    onInit={(evt, editor) => (editorRef.current = editor)}
-                    initialValue="<p>This is the initial content of the editor.</p>"
-                    init={{
-                      height: 500,
-                      menubar: false,
-                      plugins: [
-                        "advlist",
-                        "autolink",
-                        "lists",
-                        "link",
-                        "image",
-                        "charmap",
-                        "preview",
-                        "anchor",
-                        "searchreplace",
-                        "visualblocks",
-                        "code",
-                        "fullscreen",
-                        "insertdatetime",
-                        "media",
-                        "table",
-                        "code",
-                        "help",
-                        "wordcount",
-                      ],
-                      toolbar:
-                        "undo redo | blocks | " +
-                        "bold italic forecolor | alignleft aligncenter " +
-                        "alignright alignjustify | bullist numlist outdent indent | " +
-                        "removeformat | help",
-                      content_style:
-                        "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                    }}
-                  />
-                  <input type={"datetime-local"} name={"dueDateTime"} />
-                  <button
-                    type={"submit"}
-                    className="border-[1px] bg-red-500 text-white rounded w-full text-center py-1 font-bold"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
-            </Modal>
-          </Col>
-          <Col span={19}>
-            {assignmentsList.map((assignment) => (
-              <>
-                <Row
-                  className={"border-[1px] mb-5 rounded-xl w-full px-5 py-3"}
-                  style={{ backgroundColor: `${colors.blue_6}` }}
-                  span={18}
+      <Row>
+        <Col span={5} className={"pr-5"}>
+          <button
+            className={
+              "border-[1px] bg-red-500 text-white rounded-xl w-full text-center py-3 font-bold"
+            }
+            onClick={showModal}
+          >
+            Add assignment
+          </button>
+          <Modal
+            title={"Add assignment"}
+            open={isModalOpen}
+            onCancel={handleCancel}
+            footer={null}
+          >
+            <form onSubmit={handleCreateAssignment}>
+              <div>
+                <input
+                  type={"text"}
+                  name={"title"}
+                  placeholder={"Title"}
+                  className="border-[1px] rounded w-full px-4 py-1 mb-3"
+                />
+                {/*<input*/}
+                {/*  type={"text"}*/}
+                {/*  name={"content"}*/}
+                {/*  placeholder={"Content"}*/}
+                {/*  className="border-[1px] rounded w-full px-4 py-1 mb-3"*/}
+                {/*/>*/}
+                <Editor
+                  name="caption"
+                  apiKey="ty6mn9smak440qi6gv53qqivqdulai6ja9wl6ao0bt12odwr"
+                  onInit={(evt, editor) => (editorRef.current = editor)}
+                  initialValue="<p>This is the initial content of the editor.</p>"
+                  init={{
+                    height: 500,
+                    menubar: false,
+                    plugins: [
+                      "advlist",
+                      "autolink",
+                      "lists",
+                      "link",
+                      "image",
+                      "charmap",
+                      "preview",
+                      "anchor",
+                      "searchreplace",
+                      "visualblocks",
+                      "code",
+                      "fullscreen",
+                      "insertdatetime",
+                      "media",
+                      "table",
+                      "code",
+                      "help",
+                      "wordcount",
+                    ],
+                    toolbar:
+                      "undo redo | blocks | " +
+                      "bold italic forecolor | alignleft aligncenter " +
+                      "alignright alignjustify | bullist numlist outdent indent | " +
+                      "removeformat | help",
+                    content_style:
+                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                  }}
+                />
+                <input type={"datetime-local"} name={"dueDateTime"} />
+                <button
+                  type={"submit"}
+                  className="border-[1px] bg-red-500 text-white rounded w-full text-center py-1 font-bold"
                 >
-                  <Col span={21}>
-                    <p
-                      className={"font-bold"}
-                      style={{
-                        color: `${colors.blue_7}`,
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      {assignment.title}
-                    </p>
-                    <p>
-                      {/*Content:{" "}*/}
-                      <div
-                        dangerouslySetInnerHTML={{ __html: assignment.content }}
+                  Submit
+                </button>
+              </div>
+            </form>
+          </Modal>
+        </Col>
+        <Col span={19}>
+          {userRole === ROLE_STUDENT && (
+            <Row className={"mb-5 w-full"}>
+              <Col span={21} className={"flex items-center justify-center"}>
+                <p>Assignments</p>
+              </Col>
+              <Col span={3} className={"flex items-center justify-center"}>
+                <p>Status</p>
+              </Col>
+            </Row>
+          )}
+
+          {assignmentsList.map((assignment) => (
+            <>
+              <Row className={"mb-5 w-full"}>
+                <Col
+                  span={21}
+                  className={
+                    "border-[1px] rounded-xl px-5 py-3 bg-blue_6 cursor-pointer"
+                  }
+                  onClick={() =>
+                    router.push(
+                      `${paths.classroom}/${classId}/${paths.classroomAssignments}/${assignment.id}`,
+                    )
+                  }
+                >
+                  <p
+                    className={"font-bold"}
+                    style={{
+                      color: `${colors.blue_7}`,
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {assignment.title}
+                  </p>
+
+                  <div
+                    dangerouslySetInnerHTML={{ __html: assignment.content }}
+                  />
+                </Col>
+                <Col span={3} className={"flex items-center"}>
+                  {user.role === ROLE_STUDENT && (
+                    // <button
+                    //   className={
+                    //     "text-white font-semibold bg-green-500 rounded py-1 px-4 text-base"
+                    //   }
+                    //   onClick={openSubmitForm}
+                    // >
+                    //   Submit
+                    // </button>
+                    <>
+                      {assignment.status === assignmentStatus.APPROVED ? (
+                        <FaCheck
+                          className={"text-green-500 mx-auto text-5xl"}
+                        />
+                      ) : assignment.status === assignmentStatus.PENDING ? (
+                        <MdPending
+                          className={"text-yellow-400  mx-auto text-5xl"}
+                        />
+                      ) : null}
+                    </>
+                  )}
+                </Col>
+              </Row>
+              <Modal
+                title={"Submit Form"}
+                open={showSubmitForm}
+                onCancel={handleCloseSubmit}
+                footer={null}
+              >
+                <div>
+                  <form onSubmit={(e) => handleSubmit(e, assignment.id)}>
+                    <Col>
+                      <div className={"my-2"}>
+                        <input
+                          name={"title"}
+                          type={"text"}
+                          placeholder={"Title"}
+                          className={"mb-2 rounded border-[1px]"}
+                        />
+                        <div>
+                          <label htmlFor="orientation">
+                            Select orientation
+                          </label>
+                          <select
+                            name="orientation"
+                            id="orientation"
+                            className={"border-[1px] px-2 p-0.5 rounded ml-2"}
+                          >
+                            <option value={`${Orientations.TECHNIQUE}`}>
+                              TECHNIQUE
+                            </option>
+                            <option value={`${Orientations.MAJOR}`}>
+                              MAJOR
+                            </option>
+                            <option value={`${Orientations.RESEARCH}`}>
+                              RESEARCH
+                            </option>
+                            <option value={`${Orientations.SOCIAL}`}>
+                              SOCIAL
+                            </option>
+                            <option value={`${Orientations.MANAGEMENT}`}>
+                              MANAGEMENT
+                            </option>
+                            <option value={`${Orientations.ART}`}> ART</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <Editor
+                        name="caption"
+                        apiKey="ty6mn9smak440qi6gv53qqivqdulai6ja9wl6ao0bt12odwr"
+                        onInit={(evt, editor) => (editorRef.current = editor)}
+                        initialValue="<p>This is the initial content of the editor.</p>"
+                        init={{
+                          height: 500,
+                          menubar: false,
+                          plugins: [
+                            "advlist",
+                            "autolink",
+                            "lists",
+                            "link",
+                            "image",
+                            "charmap",
+                            "preview",
+                            "anchor",
+                            "searchreplace",
+                            "visualblocks",
+                            "code",
+                            "fullscreen",
+                            "insertdatetime",
+                            "media",
+                            "table",
+                            "code",
+                            "help",
+                            "wordcount",
+                          ],
+                          toolbar:
+                            "undo redo | blocks | " +
+                            "bold italic forecolor | alignleft aligncenter " +
+                            "alignright alignjustify | bullist numlist outdent indent | " +
+                            "removeformat | help",
+                          content_style:
+                            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                        }}
                       />
-                    </p>
-                  </Col>
-                  <Col span={3}>
-                    {user.role === ROLE_STUDENT && (
+                      {/* <button onClick={log}>Log editor content</button> */}
+                      <input
+                        name="files"
+                        type="file"
+                        multiple
+                        className={"mt-2"}
+                      />
+
                       <button
-                        className={
-                          "text-white font-semibold bg-green-500 rounded py-1 px-4 text-base"
-                        }
-                        onClick={openSubmitForm}
+                        type="submit"
+                        className="border-[1px] bg-rose-500 w-full rounded mt-2 text-white font-bold font-xl py-2"
                       >
                         Submit
                       </button>
-                    )}
-                  </Col>
-                </Row>
-                <Modal
-                  title={"Submit Form"}
-                  open={showSubmitForm}
-                  onCancel={handleCloseSubmit}
-                  footer={null}
-                >
-                  <div>
-                    <form onSubmit={(e) => handleSubmit(e, assignment.id)}>
-                      <Col>
-                        <div className={"my-2"}>
-                          <input
-                            name={"title"}
-                            type={"text"}
-                            placeholder={"Title"}
-                            className={"mb-2 rounded border-[1px]"}
-                          />
-                          <div>
-                            <label htmlFor="orientation">
-                              Select orientation
-                            </label>
-                            <select
-                              name="orientation"
-                              id="orientation"
-                              className={"border-[1px] px-2 p-0.5 rounded ml-2"}
-                            >
-                              <option value="TECHNIQUE">TECHNIQUE</option>
-                              <option value="MAJOR">MAJOR</option>
-                              <option value="RESEARCH">RESEARCH</option>
-                              <option value="SOCIAL">SOCIAL</option>
-                              <option value="MANAGEMENT">MANAGEMENT</option>
-                              <option value="ART"> ART</option>
-                            </select>
-                          </div>
-                        </div>
-
-                        <Editor
-                          name="caption"
-                          apiKey="ty6mn9smak440qi6gv53qqivqdulai6ja9wl6ao0bt12odwr"
-                          onInit={(evt, editor) => (editorRef.current = editor)}
-                          initialValue="<p>This is the initial content of the editor.</p>"
-                          init={{
-                            height: 500,
-                            menubar: false,
-                            plugins: [
-                              "advlist",
-                              "autolink",
-                              "lists",
-                              "link",
-                              "image",
-                              "charmap",
-                              "preview",
-                              "anchor",
-                              "searchreplace",
-                              "visualblocks",
-                              "code",
-                              "fullscreen",
-                              "insertdatetime",
-                              "media",
-                              "table",
-                              "code",
-                              "help",
-                              "wordcount",
-                            ],
-                            toolbar:
-                              "undo redo | blocks | " +
-                              "bold italic forecolor | alignleft aligncenter " +
-                              "alignright alignjustify | bullist numlist outdent indent | " +
-                              "removeformat | help",
-                            content_style:
-                              "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                          }}
-                        />
-                        {/* <button onClick={log}>Log editor content</button> */}
-                        <input
-                          name="files"
-                          type="file"
-                          multiple
-                          className={"mt-2"}
-                        />
-
-                        <button
-                          type="submit"
-                          className="border-[1px] bg-rose-500 w-full rounded mt-2 text-white font-bold font-xl py-2"
-                        >
-                          Submit
-                        </button>
-                      </Col>
-                    </form>
-                  </div>
-                </Modal>
-              </>
-            ))}
-          </Col>
-        </Row>
-      </div>
+                    </Col>
+                  </form>
+                </div>
+              </Modal>
+            </>
+          ))}
+        </Col>
+      </Row>
     </>
   );
 };

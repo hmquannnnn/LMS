@@ -36,6 +36,7 @@ const initialState = {
     assignments: {
       total: 0,
       assignmentsList: [],
+      currentAssignment: {},
     },
     members: [
       {
@@ -81,6 +82,9 @@ export const classSlice = createSlice({
       state.currentClass.pendingPosts.total = action.payload.length;
       state.currentClass.pendingPosts.postsList = action.payload;
     },
+    getCurrentAssignment: (state, action) => {
+      state.currentClass.assignments.currentAssignment = action.payload;
+    },
   },
   extraReducers: (builder) => {},
 });
@@ -92,6 +96,7 @@ export const {
   getMembersAction,
   getNotificationsAction,
   getPendingPostsAction,
+  getCurrentAssignment,
 } = classSlice.actions;
 
 export default classSlice.reducer;

@@ -1,3 +1,6 @@
+import Orientations from "@/types/orientations";
+import AssignmentStatus from "@/types/assignmentStatus";
+
 export const ROLE_TEACHER: string = "ROLE_TEACHER";
 export const ROLE_STUDENT: string = "ROLE_STUDENT";
 export const ROLE_ADMIN: string = "ROLE_ADMIN";
@@ -16,4 +19,20 @@ export const colors = {
   green_1: "#c6e5a4",
   green_2: "#0fb251",
   green_3: "#517b23",
+};
+
+export const assignmentStatus: AssignmentStatus = {
+  APPROVED: "APPROVED",
+  NOT_SUBMITTED: "NOT_SUBMITTED",
+  PENDING: "PENDING",
+  REJECTED: "REJECTED",
+};
+
+export const Orientations: Orientations = {
+  TECHNIQUE: "TECHNIQUE",
+  SOCIAL: "SOCIAL",
+  ART: "ART",
+  MANAGEMENT: "MANAGEMENT",
+  RESEARCH: "RESEARCH",
+  MAJOR: "MAJOR",
 };

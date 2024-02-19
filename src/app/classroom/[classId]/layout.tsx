@@ -52,7 +52,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
         {/*</Col>*/}
         <Col md={24}>
           <Row
-            className={"border-b-[1px] px-5"}
+            className={"border-b-[1px] px-5 mb-5"}
             // justify="space-around"
             align="middle"
           >
