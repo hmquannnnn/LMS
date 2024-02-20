@@ -96,11 +96,11 @@ const ClassAssignment = (props: any) => {
       isForGroup: isForGroup,
     };
     const res = await callCreateAssigment(classId, assignmentReq);
-    console.log("check: ", res);
+    // console.log("check: ", res);
     setUpdateFlag(false);
     setIsModalOpen(false);
     if (res?.id) {
-      const notificationContent = `ASSIGNMENT ${assignmentsList.length + 1}: ${title} - ${content}`;
+      const notificationContent = `${title}: ${content}`;
       await callCreateNotification(classId, notificationContent);
     }
   };

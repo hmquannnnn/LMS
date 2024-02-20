@@ -98,11 +98,11 @@ const OrientationPostsList = (props: any) => {
                       gridTemplateRows: "70% 12% 12%",
                       gap: "calc((100% - (70% + 12% + 12%)) / 2)",
                     }}
-                    // onClick={() =>
-                    //   router.push(
-                    //     `${paths.classroom}/${classId}/post/${post.id}`,
-                    //   )
-                    // }
+                    onClick={() =>
+                      router.push(
+                        `${paths.classroom}/${classId}/post/${post.id}`,
+                      )
+                    }
                   >
                     <div
                       className={

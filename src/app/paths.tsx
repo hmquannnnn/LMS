@@ -13,6 +13,7 @@ const paths: Paths = {
   classroomOrientations: "orientations",
   pendingPosts: "pending-posts",
   post: "post",
+  favoriteDocumentations: "favorite",
 };
 
 export default paths;
