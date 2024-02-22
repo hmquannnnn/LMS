@@ -24,6 +24,7 @@
     "notion-client": "^6.16.0",
     "postcss-import": "^16.0.0",
     "react": "^18",
+    "react-avatar-edit": "^1.2.0",
     "react-avatar-editor": "^13.0.2",
     "react-dom": "^18",
     "react-hook-form": "^7.49.3",

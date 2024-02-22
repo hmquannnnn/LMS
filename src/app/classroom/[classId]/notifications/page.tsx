@@ -13,59 +13,69 @@ import {
   getNotificationsAction,
 } from "@/redux/slices/classSlice";
 import { Avatar, Col, Divider, Row } from "antd";
-import { FormatDate } from "@/utils/formatDate";
-import { callReplyNotification } from "@/apis/commentsAPI";
+import { FormatDate, FormatDateTime } from "@/utils/formatDate";
+import {
+  callGetAllNotificationComments,
+  callReplyNotification,
+} from "@/apis/commentsAPI";
 import { colors } from "@/utils/constant";
+import { IoPeopleSharp } from "react-icons/io5";
 
 type CommentInputs = {
   [key: number]: string;
 };
-type ShowComments = {
-  [key: number]: boolean;
+
+type NotificationWithComments = {
+  notificationId: number;
+  showComments: boolean;
+  comments: any[];
 };
 
 const ClassNotification = (props: any) => {
   const dispatch = useDispatch();
-  // const classId = props.params.classId;
-  // console.log("check params: ", props.params);
   const [classId, setClassId] = useState(props.params.classId);
   const [notification, setNotification] = useState("");
   const [comment, setComment] = useState<CommentInputs>({});
-  const [showAllComments, setShowAllComments] = useState<ShowComments>({});
-  const [isUpdate, setIsUpdate] = useState(true);
+  const [notificationsWithComments, setNotificationsWithComments] = useState<
+    NotificationWithComments[]
+  >([]);
   const classInfo = useSelector(
     (state) => state.classes?.currentClass?.classInfo || {},
   );
   const notificationList = useSelector(
     (state) => state.classes?.currentClass?.notifications || null,
   );
-  // console.log("check noti: ", notificationList);
   const user = useSelector((state) => state.account.user);
-  // console.log(user);
-  const userRole = user.role;
+
   const getClassDetail = async () => {
     setClassId(props.params.classId);
     const res = await callGetClass(classId);
-    // console.log(">>>check res: ", res);
     if (res) {
       dispatch(getCurrentClassAction(res));
       const notificationList = await callGetNotification(classId);
-      // console.log("check noti list: ", notificationList);
       notificationList.sort((a: object, b: object) => {
         return new Date(b.postTime) - new Date(a.postTime);
       });
       dispatch(getNotificationsAction(notificationList));
-      setIsUpdate(false);
+
+      const initialNotificationsWithComments = notificationList.map(
+        (notification) => ({
+          notificationId: notification.id,
+          showComments: false,
+          comments: [],
+        }),
+      );
+      setNotificationsWithComments(initialNotificationsWithComments);
     }
   };
+
   useEffect(() => {
     getClassDetail();
-  }, [isUpdate]);
+  }, []);
 
   const handleInputChange = (e) => {
     const message = e.target.value;
     setNotification(message);
-    // console.log("check state: ", notification);
   };
 
   const handleChangeComment = (e, notificationId: number) => {
@@ -78,32 +88,70 @@ const ClassNotification = (props: any) => {
 
   const handleEnter = async () => {
     const res = await callCreateNotification(classId, notification);
-    setIsUpdate(true);
-    setNotification("");
+    if (res) {
+      getClassDetail();
+      setNotification("");
+    }
   };
 
   const handleEnterReply = async (notificationId: number) => {
     const content = comment[notificationId];
     if (content.trim() !== "") {
       const res = await callReplyNotification(notificationId, content);
-      setIsUpdate(true);
-      setComment((prevInputs) => ({
-        ...prevInputs,
-        [notificationId]: "",
-      }));
+      if (res) {
+        getClassDetail();
+        setComment((prevInputs) => ({
+          ...prevInputs,
+          [notificationId]: "",
+        }));
+      }
+    }
+  };
+
+  const toggleShowComments = (notificationId: number) => {
+    setNotificationsWithComments((prevState) => {
+      return prevState.map((notification) => {
+        if (notification.notificationId === notificationId) {
+          return {
+            ...notification,
+            showComments: !notification.showComments,
+          };
+        }
+        return notification;
+      });
+    });
+  };
+
+  const handleSeeAllComments = async (notificationId: number) => {
+    toggleShowComments(notificationId);
+    const notificationIndex = notificationsWithComments.findIndex(
+      (notification) => notification.notificationId === notificationId,
+    );
+    if (
+      notificationIndex !== -1 &&
+      notificationsWithComments[notificationIndex].comments.length === 0
+    ) {
+      const comments = await callGetAllNotificationComments(notificationId);
+      const sortedComments = comments.sort((a, b) => {
+        return new Date(b.postTime) - new Date(a.postTime);
+      });
+      setNotificationsWithComments((prevState) => {
+        return prevState.map((notification) => {
+          if (notification.notificationId === notificationId) {
+            return {
+              ...notification,
+              comments: sortedComments,
+            };
+          }
+          return notification;
+        });
+      });
     }
   };
 
   return (
     <>
       <div className={"w-3/5 mx-auto"}>
-        {/*<div*/}
-        {/*  className={*/}
-        {/*    "bg-gradient-to-r from-red-500 w-full h-56 flex items-end p-5 my-5 rounded-xl"*/}
-        {/*  }*/}
-        {/*>*/}
-        {/*  <p className={"text-3xl font-bold text-white"}>Notifications</p>*/}
-        {/*</div>*/}
         <Row>
           <Col className={"h-28 place-items-start pr-5"} span={5}>
             <div className={"border-[1px] h-full pt-2 pl-4 rounded-xl"}>
@@ -164,13 +212,69 @@ const ClassNotification = (props: any) => {
                     <div
                       dangerouslySetInnerHTML={{ __html: notification.content }}
                     />
-                    {/*<p className={"mt-5"}>{notification.content}</p>*/}
                   </div>
-                  <Divider className="w-full mt-3" />
+                  <Divider className="w-full my-3" />
                   <div className="px-5">
                     {notification.lastComment?.id ? (
                       <>
-                        <div className="mx-3">
+                        <Row className={"mb-2"}>
+                          <IoPeopleSharp
+                            className={"relative my-auto h-5 w-5"}
+                          />
+                          <div
+                            className={"cursor-pointer text-base ml-2"}
+                            onClick={() =>
+                              handleSeeAllComments(notification.id)
+                            }
+                          >
+                            See all comments
+                          </div>
+                        </Row>
+                      </>
+                    ) : null}
+
+                    {/* All comments  */}
+                    {notificationsWithComments.find(
+                      (notif) => notif.notificationId === notification.id,
+                    )?.showComments &&
+                      notificationsWithComments
+                        .find(
+                          (notif) => notif.notificationId === notification.id,
+                        )
+                        ?.comments.map((comment) => (
+                          <div
+                            key={comment.id}
+                            className={"mx-3 bg-blue-50 rounded-3xl p-2 mb-2"}
+                          >
+                            <Row>
+                              <Avatar
+                                size={42}
+                                icon={<UserOutlined />}
+                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${comment.userAvatarId}`}
+                                className="mr-2.5"
+                              />
+                              <Col>
+                                <p className="font-semibold text-base text-gray-800">
+                                  {comment.userLastName +
+                                    " " +
+                                    comment.userFirstName}
+                                </p>
+                                <p className="text-gray-500">
+                                  {FormatDateTime(comment.postTime)}
+                                </p>
+                              </Col>
+                            </Row>
+                            <p className={"mt-3"}>{comment.content}</p>
+                          </div>
+                        ))}
+
+                    {/*Last comment  */}
+                    {notification.lastComment?.id &&
+                    !notificationsWithComments.find(
+                      (notif) => notif.notificationId === notification.id,
+                    )?.showComments ? (
+                      <>
+                        <div className="mx-3 bg-blue-50 rounded-3xl p-2 ">
                           <Row>
                             <Avatar
                               size={42}
@@ -185,7 +289,9 @@ const ClassNotification = (props: any) => {
                                   notification.lastComment.userFirstName}
                               </p>
                               <p className="text-gray-500">
-                                {FormatDate(notification.lastComment.postTime)}
+                                {FormatDateTime(
+                                  notification.lastComment.postTime,
+                                )}
                               </p>
                             </Col>
                           </Row>
@@ -198,7 +304,7 @@ const ClassNotification = (props: any) => {
                     <input
                       placeholder="Add comment"
                       type="text"
-                      value={comment[notification.id]}
+                      value={comment[notification.id] || ""}
                       onChange={(e) => handleChangeComment(e, notification.id)}
                       onKeyPress={(e) =>
                         e.key === "Enter" && handleEnterReply(notification.id)

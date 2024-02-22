@@ -47,21 +47,38 @@ const MyClasses = () => {
           )}
         </Col>
         <Col md={20}>
-          {classesList.map((classItem) => {
-            return (
-              <div
-                className={"border-[1px] px-10 py-5"}
-                key={classItem.id}
-                onClick={() =>
-                  router.push(
-                    `${paths.classroom}/${classItem.id}/notifications`,
-                  )
-                }
-              >
-                <p>{classItem.name}</p>
-              </div>
-            );
-          })}
+          <Row className={"flex flex-wrap"}>
+            {classesList.map((classItem) => {
+              return (
+                <div key={classItem.id} className={"relative w-1/6 pb-[8%]"}>
+                  <div
+                    className={
+                      "bg-blue_1 text-blue_5 rounded-xl px-5 py-4 cursor-pointer place-items-end grid h-full"
+                    }
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      width: "92%",
+                      height: "88%",
+                      // display: "grid",
+                      // gridTemplateRows: "70% 12% 12%",
+                      // gap: "calc((100% - (70% + 12% + 12%)) / 2)",
+                    }}
+                    key={classItem.id}
+                    onClick={() =>
+                      router.push(
+                        `${paths.classroom}/${classItem.id}/notifications`,
+                      )
+                    }
+                  >
+                    <p className={"font-semibold text-xl"}>{classItem.name}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </Row>
         </Col>
       </Row>
     </>

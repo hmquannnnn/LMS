@@ -16,18 +16,13 @@ import {
   MdOutlineWork,
 } from "react-icons/md";
 import { FaPeopleLine } from "react-icons/fa6";
+import { ROLE_TEACHER } from "@/utils/constant";
 
 const ClassroomLayout = ({ children }: { children: ReactNode }) => {
-  // const classId = props.params.classId;
-
-  // const router = useRouter();
-  // // const { classid } = router.query;
-  // console.log("check classId: ", router.query);
-  // console.log("check params: ", params);
   const params = useParams();
   const dispatch = useDispatch();
-  // console.log("check params: ", params);
   const classId = params.classId;
+  const user = useSelector((state) => state.account.user);
   const getClassDetails = async () => {
     const res = await callGetClass(classId);
     if (res?.id) {
@@ -43,13 +38,6 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Row className={"min-h-[82vh]"}>
-        {/*<Col className={"border-[1px]"} md={3}>*/}
-        {/*  <p className={"text-2xl font-bold"}>{currentClass.name}</p>*/}
-        {/*  <p>*/}
-        {/*    Teacher:{" "}*/}
-        {/*    {currentClass.teacherLastName + " " + currentClass.teacherFirstName}*/}
-        {/*  </p>*/}
-        {/*</Col>*/}
         <Col md={24}>
           <Row
             className={"border-b-[1px] px-5 mb-5"}
@@ -87,14 +75,17 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                 <FaPeopleLine className={"h-6 w-6 mr-4"} />
               </Link>
             </Col>
-            <Col span={2}>
-              <Link
-                href={`${paths.classroom}/${classId}/${paths.pendingPosts}`}
-              >
-                {/*Appending Posts*/}
-                <MdChecklistRtl className={"h-6 w-6 mr-4"} />
-              </Link>
-            </Col>
+            {user.role === ROLE_TEACHER && (
+              <Col span={2}>
+                <Link
+                  href={`${paths.classroom}/${classId}/${paths.pendingPosts}`}
+                >
+                  {/*Appending Posts*/}
+                  <MdChecklistRtl className={"h-6 w-6 mr-4"} />
+                </Link>
+              </Col>
+            )}
+
             <Col span={2}>
               <Link
                 href={`${paths.classroom}/${classId}/${paths.classroomOrientations}`}
