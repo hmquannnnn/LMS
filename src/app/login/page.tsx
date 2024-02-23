@@ -32,6 +32,7 @@ const LogIn = () => {
       "Content-Type": "application/json",
     };
     const res = await callLogin(username, password);
+    console.log(res);
     if (res?.id) {
       console.log(res);
       localStorage.setItem("token", res.token);
@@ -44,11 +45,19 @@ const LogIn = () => {
       router.push("/");
       message.success("Log in successfully!");
     } else {
-      notification.error({
-        message: "Failed",
-        description: "Wrong username or password",
-        duration: 2,
-      });
+      if (res?.response?.status === 409) {
+        notification.info({
+          message: "Oops!",
+          description: "Please verify your email",
+          duration: 2,
+        });
+      } else {
+        notification.error({
+          message: "Failed",
+          description: "Wrong username or password",
+          duration: 2,
+        });
+      }
     }
   };
 
@@ -88,7 +97,7 @@ const LogIn = () => {
         {/*    <input type="submit" />*/}
         {/*</form>*/}
         <p>
-          Don't have an account?{" "}
+          {"Don\'t have an account? "}
           <Link className={"text-blue-700"} href={paths.register}>
             Register
           </Link>

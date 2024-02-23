@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:production": "env-cmd -f .env.production npm run build"
   },
   "dependencies": {
     "@babel/runtime": "^7.23.8",
