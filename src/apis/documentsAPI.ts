@@ -25,29 +25,19 @@ export const callGetDocuments = (type: String | null) => {
 };
 
 export const callGetDocumentById = (documentId: string) => {
-  instance.defaults.headers.common = {
-    Authorization: ``,
-  };
   return instance.get(`${documentUrl}/detail/${documentId}`);
 };
 
 export const callLikeDocument = (documentId: string) => {
-  if (!localStorage.getItem("token")) {
-    instance.defaults.headers.common = {
-      Authorization: ``,
-    };
-  } else {
-    instance.defaults.headers.common = {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    };
-  }
-
-  return instance.put(`${documentUrl}/${documentId}/like`);
+  instance.defaults.headers.common = {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  };
+  return instance.put(`/users${documentUrl}/${documentId}/like`);
 };
 
 export const callUnLikeDocument = (documentId: string) => {
   instance.defaults.headers.common = {
     Authorization: `Bearer ${localStorage.getItem("token")}`,
   };
-  return instance.put(`${documentUrl}/${documentId}/unlike`);
+  return instance.put(`/users${documentUrl}/${documentId}/unlike`);
 };

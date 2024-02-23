@@ -69,7 +69,7 @@ const ClassMember = (props: any) => {
           </thead>
           <tbody>
             {membersList.map((student: object, index: number) => (
-              <tr>
+              <tr key={index}>
                 <th className={"border"}>{index + 1}</th>
                 <th className={"border"}>
                   {student.studentInfo.lastName +
@@ -77,15 +77,15 @@ const ClassMember = (props: any) => {
                     student.studentInfo.firstName}
                 </th>
                 {userRole === ROLE_TEACHER &&
-                  student.assignmentStatus.map((status: number) => (
-                    <th className={"border"}>
+                  student.assignmentStatus.map((status: number, index: number) => (
+                    <th className={"border"} key={index}>
                       {status === STATUS.APPROVED ? (
                         <FaCheck className={"text-green-500 mx-auto"} />
                       ) : status === STATUS.PENDING ? (
                         <MdPending className={"text-yellow-400 mx-auto"} />
                       ) : status ===
                         STATUS.NOT_YET_SUBMITTED ? null : status ===
-                        STATUS.REJECTED ? (
+                          STATUS.REJECTED ? (
                         <MdCancel className={"text-red-600 mx-auto"} />
                       ) : null}
                     </th>
