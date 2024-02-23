@@ -22,9 +22,9 @@ export const callGetAllFavoriteDocuments = (userId: String) => {
 export const callGetPageFavoriteDocuments = (
   userId: String,
   page: number,
-  pageSize: number
+  pageSize: number,
 ) => {
   return instance.get(
-    `/users/${userId}/favourite-documents/page?page=${page}&pageSize=${pageSize}`
+    `/users/${userId}/favourite-documents/page?page=${page}&pageSize=${pageSize}`,
   );
 };

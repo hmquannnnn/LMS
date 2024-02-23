@@ -62,7 +62,7 @@ export const classSlice = createSlice({
       state.currentClass.classInfo = action.payload;
     },
     getNotificationsAction: (state, action) => {
-      console.log(">>> check payload: ", action.payload);
+      // console.log(">>> check payload: ", action.payload);
       state.currentClass.notifications = action.payload;
     },
     getAssignmentsAction: (state, action) => {

@@ -1,6 +1,6 @@
 import instance from "@/utils/axiosCustomize";
 
-const commentUrl = "/comments";
+const commentUrl = "comments";
 
 export const callReplyNotification = (
   notificationId: number,
@@ -13,6 +13,6 @@ export const callGetCommentById = (commentId: number) => {
   return instance.get(`${commentUrl}/${commentId}`);
 };
 
-const callGetAllNotificationComments = (notificationId: number) => {
+export const callGetAllNotificationComments = (notificationId: number) => {
   return instance.get(`notifications/${notificationId}/${commentUrl}`);
 };
