@@ -5,6 +5,7 @@ import {filterPostsByStatus} from "@/app/classroom/[classId]/pending-posts/page"
 import {useEffect, useState} from "react";
 import {useRouter, useSearchParams} from "next/navigation";
 import {assignmentStatus} from "@/utils/constant";
+import paths from "@/app/paths";
 
 // const thumbnailHeight = "70%";
 // const titleHeight = "12%";
@@ -118,7 +119,7 @@ const OrientationPostsList = (props: any) => {
                     >
                       <p
                         className={
-                          "uppercase text-green_3 font-semibold text-lg max-h-full text-ellipsis overflow-hidden"
+                          "uppercase text-green_3 font-semibold text-lg max-h-full truncate h-fit leading-none"
                         }
                       >
                         {post.title}

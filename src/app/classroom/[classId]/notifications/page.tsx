@@ -156,7 +156,7 @@ const ClassNotification = (props: any) => {
           <Col className={"h-28 place-items-start pr-5"} span={5}>
             <div className={"border-[1px] h-full pt-2 pl-4 rounded-xl"}>
               <p className={"text-lg font-semibold mb-6"}>Class code</p>
-              <p className={"text-2xl font-bold text-rose-500"}>
+              <p className={"text-2xl font-bold text-blue_5"}>
                 {classInfo.code}
               </p>
             </div>

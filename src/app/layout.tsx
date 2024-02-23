@@ -45,8 +45,6 @@ export default function RootLayout({
             href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
           ></link>
           {pathName !== paths.logIn && pathName != paths.register && <Header />}
-          {/*<Header/>*/}
-
           {children}
           {pathName !== paths.logIn && pathName != paths.register && <Footer />}
         </body>

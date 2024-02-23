@@ -1,8 +1,8 @@
 import {useRef, useState} from "react";
 import AvatarEditor from "react-avatar-editor";
 import {FcAddImage} from "react-icons/fc";
-import {AiFillGithub} from "react-icons/ai";
 import {Modal, Slider} from "antd";
+import {callChangeAvatar} from "@/apis/userAPI";
 // import "antd/dist/antd.css";
 
 const boxStyle = {
@@ -28,7 +28,9 @@ const CropperModal = ({ src, modalOpen, setModalOpen, setPreview }) => {
       const dataUrl = cropRef.current.getImage().toDataURL();
       const result = await fetch(dataUrl);
       const blob = await result.blob();
-      setPreview(URL.createObjectURL(blob));
+      await setPreview(URL.createObjectURL(blob));
+      const res = await callChangeAvatar(blob);
+      console.log(res);
       setModalOpen(false);
     }
   };
@@ -59,7 +61,7 @@ const CropperModal = ({ src, modalOpen, setModalOpen, setPreview }) => {
           style={{
             margin: "0 auto",
             width: "80%",
-            color: "cyan",
+            // color: "cyan",
           }}
           defaultValue={slideValue}
           onChange={(value) => setSlideValue(value)}
@@ -69,7 +71,7 @@ const CropperModal = ({ src, modalOpen, setModalOpen, setPreview }) => {
             display: "flex",
             padding: "10px",
             border: "3px solid white",
-            background: "black",
+            // background: "black",
           }}
         >
           <button onClick={() => setModalOpen(false)} className={"bg-green"}>
@@ -84,7 +86,8 @@ const CropperModal = ({ src, modalOpen, setModalOpen, setPreview }) => {
   );
 };
 
-const Cropper = () => {
+const Cropper = ({ imgSrc }) => {
+  // console.log("check img: ", imgSrc);
   const [src, setSrc] = useState(null);
   const [preview, setPreview] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -102,10 +105,10 @@ const Cropper = () => {
 
   return (
     <>
-      <header>
-        <h1>React Avatar Cropper</h1>
-        <hr />
-      </header>
+      {/*<header>*/}
+      {/*  <h1>React Avatar Cropper</h1>*/}
+      {/*  <hr />*/}
+      {/*</header>*/}
       <main className="container">
         <CropperModal
           modalOpen={modalOpen}
@@ -127,23 +130,39 @@ const Cropper = () => {
         <div className="img-container">
           <img
             src={
-              preview ||
-              "https://www.signivis.com/img/custom/avatars/member-avatar-01.png"
+              // preview ||
+              // "https://www.signivis.com/img/custom/avatars/member-avatar-01.png"
+              imgSrc
             }
             alt=""
             width="200"
             height="200"
+            style={{
+              borderRadius: "50%",
+              border: "2px solid black",
+              height: "200px",
+              width: "200px",
+            }}
           />
         </div>
       </main>
+      <img
+        src={
+          preview ||
+          "https://www.signivis.com/img/custom/avatars/member-avatar-01.png"
+        }
+        width="200"
+        height="200"
+        style={{ borderRadius: "50%", border: "2px solid black" }}
+      />
 
-      <footer>
-        <hr />
-        <a href="https://github.com/mrAJAY1">
-          <AiFillGithub />
-          &#160; Github
-        </a>
-      </footer>
+      {/*<footer>*/}
+      {/*  <hr />*/}
+      {/*  <a href="https://github.com/mrAJAY1">*/}
+      {/*    <AiFillGithub />*/}
+      {/*    &#160; Github*/}
+      {/*  </a>*/}
+      {/*</footer>*/}
     </>
   );
 };

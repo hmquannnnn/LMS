@@ -6,9 +6,10 @@ export const callFetchUser = () => {
 
 export const callChangeAvatar = (file: File) => {
   instance.defaults.headers.common = {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
     "Content-Type": "multipart/form-data",
   };
-  return instance.post(`/user`, file);
+  return instance.post(`/users/update-avatar`, file);
 };
 
 export const callFetchUserById = (userId: number) => {
