@@ -18,7 +18,7 @@ import {
 } from "react-icons/io";
 import { UserOutlined } from "@ant-design/icons";
 import { callCommentToPost, callHandleLikePost } from "@/apis/postAPI";
-
+import Image from 'next/image'
 interface button {
   PREV: string;
   NEXT: string;
@@ -112,7 +112,8 @@ const PostDetails = (props: any) => {
             <>
               <div className={"my-auto w-full"}>
                 {media[mediaIndex].type.includes("image") ? (
-                  <img
+                  <Image
+                    alt="Author's avatar"
                     className={" mx-auto rounded-2xl"}
                     style={{
                       width: "80%",
