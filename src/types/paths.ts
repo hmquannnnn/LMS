@@ -11,6 +11,7 @@ interface Paths {
   classroomOrientations: string;
   pendingPosts: string;
   post: string;
+  favoriteDocumentations: string;
 }
 
 export default Paths;
