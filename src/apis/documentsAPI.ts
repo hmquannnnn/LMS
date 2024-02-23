@@ -32,12 +32,12 @@ export const callLikeDocument = (documentId: string) => {
   instance.defaults.headers.common = {
     Authorization: `Bearer ${localStorage.getItem("token")}`,
   };
-  return instance.put(`${documentUrl}/${documentId}/like`);
+  return instance.put(`/users${documentUrl}/${documentId}/like`);
 };
 
 export const callUnLikeDocument = (documentId: string) => {
   instance.defaults.headers.common = {
     Authorization: `Bearer ${localStorage.getItem("token")}`,
   };
-  return instance.put(`${documentUrl}/${documentId}/unlike`);
+  return instance.put(`/users${documentUrl}/${documentId}/unlike`);
 };
