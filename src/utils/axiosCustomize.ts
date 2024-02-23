@@ -23,6 +23,10 @@ instance.interceptors.response.use(
   function (response) {
     // Any status code that lies within the range of 2xx cause this function to trigger
     // Do something with response data
+    if (window.location.href.includes("/register")) {
+      localStorage.setItem("verifyToken", response?.data?.token);
+      window.location.href = "/verify-your-email";
+    }
 
     return response && response.data ? response.data : response;
   },
@@ -34,6 +38,7 @@ instance.interceptors.response.use(
       if (window.location.href.includes("/login")) {
         localStorage.setItem("verifyToken", error?.response?.data?.token);
       }
+      console.log(">>>Có lỗi", error?.response?.data);
       window.location.href = "/verify-your-email";
       return error;
     }

@@ -15,7 +15,8 @@ export const callRegister = (
   lastname: string,
   password: string,
   DoB: string,
-  role: string
+  role: string,
+  email: string
 ) => {
   const req = {
     firstName: firstname,
@@ -24,6 +25,7 @@ export const callRegister = (
     password: password,
     dateOfBirth: DoB,
     role: role,
+    email: email,
   };
   console.log(">>>check req: ", req);
   return instance.post("/register", req);

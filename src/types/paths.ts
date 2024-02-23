@@ -12,6 +12,8 @@ interface Paths {
   pendingPosts: string;
   post: string;
   favoriteDocumentations: string;
+  sendVerificationEmail: string;
+  verifyEmail: string;
 }
 
 export default Paths;

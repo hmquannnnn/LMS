@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { callVerifyEmail } from '@/apis/authAPI';
+import { useSearchParams } from 'next/navigation';
+
 
 const VerifyEmailPage = () => {
     const searchParams = useSearchParams();
@@ -14,6 +15,10 @@ const VerifyEmailPage = () => {
         });
     }, []);
 
-    return <div>Verifying email...</div>;
+    return (
+        <div>Verifying email...</div>
+
+    )
+
 }
 export default VerifyEmailPage;
