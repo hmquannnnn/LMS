@@ -7,8 +7,6 @@ import { StoreProvider } from "@/redux/storeProvider";
 import paths from "@/app/paths";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer";
-import { Suspense } from "react";
-import { GiSushis } from "react-icons/gi";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -47,14 +45,7 @@ export default function RootLayout({
             href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
           ></link>
           {pathName !== paths.logIn && pathName != paths.register && <Header />}
-          {/*<Header/>*/}
-          <Suspense fallback={
-            <div className="w-full flex justify-center h-screen mt-[50vh]">
-              <h1>404 | Not Found</h1>
-            </div>}
-          >
-            {children}
-          </Suspense>
+          {children}
           {pathName !== paths.logIn && pathName != paths.register && <Footer />}
         </body>
       </html>
