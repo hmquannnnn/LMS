@@ -17,9 +17,13 @@ export const callPostDocument = (document: FormData) => {
   return instance.post(`${documentUrl}`, document);
 };
 
-export const callGetDocuments = (type: String | null) => {
-  if (type != null) {
+export const callGetDocuments = (type: String | null, topic: String | null) => {
+  if (type != null && topic != null) {
+    return instance.get(`${documentUrl}?type=${type}&topic=${topic}`);
+  } else if (type != null) {
     return instance.get(`${documentUrl}?type=${type}`);
+  } else if (topic != null) {
+    return instance.get(`${documentUrl}?topic=${topic}`);
   }
   return instance.get(`${documentUrl}`);
 };

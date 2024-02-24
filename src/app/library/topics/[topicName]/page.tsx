@@ -1,10 +1,12 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { callGetPageFavoriteDocuments } from "@/apis/userAPI";
+import { callGetDocuments } from "@/apis/documentsAPI";
 import { Spin, Button, Modal } from 'antd';
+import Image from 'next/image'
 
 const formatDocumentTitle = (title: string) => {
     return title.charAt(0).toUpperCase() + title.substring(1).toLowerCase();
@@ -22,11 +24,21 @@ function isJwtExpired(token: String) {
     return decodedPayload.exp < currentTime;
 }
 
+const topicNames = {
+    CULTURE: 'VĂN HÓA',
+    SPORT: 'THỂ THAO',
+    SOCIAL: 'XÃ HỘI',
+    TOURISM: 'DU LỊCH',
+    BUSINESS: 'KINH DOANH',
+    JOB: 'VIỆC LÀM',
+    HEALTH: 'SỨC KHỎE',
+    RELAX: 'GIẢI TRÍ'
+}
 
-const TopicDetailPage = () => {
+const TopicDetailPage = (props: any) => {
     const [favoriteDocuments, setFavoriteDocuments] = useState([]);
     const [openRemindLoginModal, setOpenRemindLoginModal] = useState(false);
-
+    const [documentList, setDocumentList] = useState([]);
     const user = useSelector((state) => state.account.user);
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -35,8 +47,8 @@ const TopicDetailPage = () => {
         const fetchFavoriteData = async (userId: String) => {
             try {
                 const response = await callGetPageFavoriteDocuments(userId, 0, 5);
+                console.log(response.data);
                 setFavoriteDocuments(response.data);
-                setLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -45,6 +57,20 @@ const TopicDetailPage = () => {
             fetchFavoriteData(user?.id);
         }
     }, [user])
+
+    useEffect(() => {
+        const fetchDocuments = async () => {
+            try {
+                const response = await callGetDocuments(null, props.params.topicName);
+                console.log(response);
+                setDocumentList(response);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        fetchDocuments();
+    }, [props.params.topicName])
 
     const handleCancelModal = () => {
         setOpenRemindLoginModal(false);
@@ -109,20 +135,10 @@ const TopicDetailPage = () => {
             </div >
             <div className="w-[80%] mt-8 ml-[20%]">
                 <div className="h-[90vh]  pl-10 pt-8 pr-8 mr-10">
-                    <div className="">
-                        <svg
-                            aria-label="Unlike"
-                            className="x1lliihq x1n2onr6 xxk16z8 inline mr-1 fill-blue_5"
-                            fill=""
-                            height="48"
-                            role="img"
-                            viewBox="0 0 48 48"
-                            width="48"
-                        >
-                            <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
-                        </svg>
+                    <div className="flex items-center gap-4">
+                        <Image src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSw5AP3H_GiJXKNUfyvPZye9h6XT0N01JcsIIn1OepH6N60fx-U" alt="Demo culture topic picture" width={200} height={200} />
                         <h1 className="font-headingOpenSans font-bold text-3xl inline align-middle ml-4">
-                            {'Topic\'s name'.toLocaleUpperCase()}
+                            {topicNames[props.params.topicName].toLocaleUpperCase()}
                         </h1>
 
                     </div>
@@ -133,7 +149,7 @@ const TopicDetailPage = () => {
                             <div className="border-r-[1px] border-blue_5 text-center pb-8 font-bold">Văn bản</div>
                             <div className="text-center font-bold">Dạng thức</div>
                             {/* <div></div> */}
-                            {favoriteDocuments.length > 0 && favoriteDocuments.map((document, index) => {
+                            {documentList?.length > 0 && documentList.map((document, index) => {
                                 return (
                                     <>
 

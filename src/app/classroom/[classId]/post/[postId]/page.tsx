@@ -1,5 +1,4 @@
 "use client";
-import { Document, Page } from 'react-pdf'
 import { callGetPost } from "@/apis/classAPI";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,23 +18,8 @@ import {
 import { UserOutlined } from "@ant-design/icons";
 import { callCommentToPost, callHandleLikePost } from "@/apis/postAPI";
 import Image from 'next/image'
-import { pdfjs } from 'react-pdf';
-import path from 'node:path';
-import fs from 'node:fs';
-
-// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-//   'pdfjs-dist/legacy/build/pdf.worker.min.js',
-//   import.meta.url,
-// ).toString();
-// const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
-// const pdfWorkerPath = path.join(pdfjsDistPath, 'build', 'pdf.worker.js');
-
-// fs.copyFileSync(pdfWorkerPath, './dist/pdf.worker.js');
-// import { pdfjs } from 'react-pdf';
-
-// pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
-
+import GoogleDocsViewer from 'react-google-docs-viewer';
+import { Spin } from "antd";
 interface button {
   PREV: string;
   NEXT: string;
@@ -71,9 +55,8 @@ const PostDetails = (props: any) => {
   // function onDocumentLoadSuccess({ numPages }) {
   //   setNumPages(numPages);
   // }
-  const fileObject = {
-    url: '' as String | null,
-  };
+  const [pdfData, setPdfData] = useState();
+
 
   useEffect(() => {
     if (media) {
@@ -82,22 +65,7 @@ const PostDetails = (props: any) => {
     }
   }, [mediaIndex, media]);
 
-  function changePage(offset) {
-    setPageNumber(prevPageNumber => prevPageNumber + offset);
-  }
 
-  function previousPage() {
-    changePage(-1);
-  }
-
-  function nextPage() {
-    changePage(1);
-  }
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
-    setNumPages(numPages);
-    setPageNumber(1);
-
-  }
   const handleInput = (e) => {
     setTextAreaHeight("auto"); // Reset height to auto to ensure the correct new height is calculated
     const target = e.target;
@@ -123,23 +91,21 @@ const PostDetails = (props: any) => {
 
   const handleImageSlider = (type: string) => {
     // console.log(type);
-    setTimeout(() => {
-      if (type === buttonType.PREV) {
-        // console.log(0);
-        if (mediaIndex === 0) {
-          setMediaIndex(media.length - 1);
-        } else {
-          setMediaIndex(mediaIndex - 1);
-        }
+    if (type === buttonType.PREV) {
+      // console.log(0);
+      if (mediaIndex === 0) {
+        setMediaIndex(media.length - 1);
       } else {
-        // console.log(1);
-        if (mediaIndex === media.length - 1) {
-          setMediaIndex(0);
-        } else {
-          setMediaIndex(mediaIndex + 1);
-        }
+        setMediaIndex(mediaIndex - 1);
       }
-    }, 1000);
+    } else {
+      // console.log(1);
+      if (mediaIndex === media.length - 1) {
+        setMediaIndex(0);
+      } else {
+        setMediaIndex(mediaIndex + 1);
+      }
+    }
   };
 
   const handleLikePost = async () => {
@@ -168,60 +134,26 @@ const PostDetails = (props: any) => {
   return (
     <>
       <div
-        className={"flex justify-center max-h-[78vh] mx-[2vw] my-5 rounded-2xl "}
+        className={"flex justify-center max-h-[78vh] h-[78vh] mx-[2vw] my-5 rounded-2xl "}
         style={{ backgroundColor: `${colors.green_1}` }}
       >
-        {post?.medias?.length > 0 && (
-          <div className={"w-full  px-10 flex-col items-center"}>
-
-            <div className={"my-auto  w-full flex justify-center h-full"}>
-              {media[mediaIndex].type.includes("image") ? (
-                <Image
-                  alt="Author's avatar"
-                  className={" mx-auto rounded-2xl"}
-                  style={{
-                    width: "80%",
-                    minWidth: "80%",
-                    maxWidth: "80%",
-                    height: "60%",
-                    minHeight: "60%",
-                    maxHeight: "60%",
-                  }}
-                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${media[mediaIndex].id}`}
-                />
-              ) : media[mediaIndex].type.includes("video") ? (
-                <video
-                  className={" mx-auto rounded-2xl"}
-                  style={{
-                    width: "80%",
-                    minWidth: "80%",
-                    maxWidth: "80%",
-                    height: "60%",
-                    minHeight: "300px",
-                    // maxHeight: "60%",
-                  }}
-                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/stream/${media[mediaIndex].id}`}
-                  controls
-                />
-              ) : media[mediaIndex].type.includes("pdf") ? (
-                <div className='w-min h-full '>
-                  <Document className={"h-full overflow-y-scroll"} file={file.url} onLoadSuccess={onDocumentLoadSuccess}>
-                    {/* <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} canvasBackground='white' /> */}
-                    {Array.from(
-                      new Array(numPages),
-                      (el, index) => (
-                        <Page
-                          renderTextLayer={false} renderAnnotationLayer={false} canvasBackground='white'
-                          key={`page_${index + 1}`}
-                          pageNumber={index + 1}
-                        />
-                      ),
-                    )}
-                  </Document>
-                  {/* <div>
+        {/* <Document className={"h-full overflow-y-scroll"} file={file.url} onLoadSuccess={onDocumentLoadSuccess}> */}
+        {/* <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} canvasBackground='white' /> */}
+        {/* {Array.from(
+            new Array(numPages),
+            (el, index) => (
+              <Page
+                renderTextLayer={false} renderAnnotationLayer={false} canvasBackground='white'
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+              />
+            ),
+          )} */}
+        {/* </Document> */}
+        {/* <div>
                       Page {pageNumber} of {numPages}
                     </div> */}
-                  {/* <div>
+        {/* <div>
                       <p>
                         Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
                       </p>
@@ -240,13 +172,62 @@ const PostDetails = (props: any) => {
                         Next
                       </button>
                     </div> */}
+        {post?.medias?.length > 0 && (
+          <div className={"w-full relative flex-col items-center"}>
+
+            <div className={"my-auto absolute w-full px-10 flex items-center justify-center h-full z-[2]"}>
+              {media[mediaIndex].type.includes("image") ? (
+                <Image
+                  alt="Author's avatar"
+                  className={"h-fit w-fit mx-auto rounded-2xl max-h-[100%] max-w-[100%] object-contain"}
+                  // style={{
+                  //   width: "80%",
+                  //   minWidth: "80%",
+                  //   maxWidth: "80%",
+                  //   height: "60%",
+                  //   minHeight: "60%",
+                  //   maxHeight: "60%",
+                  // }}
+                  width={"10000"}
+                  height={"10000"}
+
+                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${media[mediaIndex].id}`}
+                />
+              ) : media[mediaIndex].type.includes("video") ? (
+                <video
+                  className={" mx-auto rounded-2xl"}
+                  style={{
+                    width: "80%",
+                    minWidth: "80%",
+                    maxWidth: "80%",
+                    height: "60%",
+                    minHeight: "300px",
+                    // maxHeight: "60%",
+                  }}
+                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/stream/${media[mediaIndex].id}`}
+                  controls
+                />
+              ) : media[mediaIndex].type.includes("pdf") ? (
+                <div className='w-full h-full '>
+
+                  <GoogleDocsViewer
+                    width="100%"
+                    height="78vh"
+                    // className={"h-full w-full overflow-y-scroll"}
+                    // fileUrl={"http://www.minhupro.xyz/api/v1/media/fda06ddb-a7f7-4030-b22c-11f146813b91"}
+                    fileUrl={file.url}
+                  />
+
                 </div>
               ) : (
                 <p>Unsupported media type</p>
               )}
             </div>
+            <div className="absolute w-full h-full px-10 flex justify-center items-center z-[1]">
+              <Spin />
+            </div>
             <div
-              className={"flex mx-auto justify-center text-green_3 mt-4 text-lg"}
+              className={"flex mx-auto justify-center text-green_3  text-lg mt-[62%]"}
             >
               <button onClick={() => handleImageSlider(buttonType.PREV)}>
                 <IoIosArrowBack />
