@@ -1,5 +1,4 @@
 "use client";
-// import { Document, Page } from 'react-pdf'
 import { callGetPost } from "@/apis/classAPI";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,22 +18,8 @@ import {
 import { UserOutlined } from "@ant-design/icons";
 import { callCommentToPost, callHandleLikePost } from "@/apis/postAPI";
 import Image from 'next/image'
-import { pdfjs } from 'react-pdf';
 import GoogleDocsViewer from 'react-google-docs-viewer';
-
-// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-//   'pdfjs-dist/legacy/build/pdf.worker.min.js',
-//   import.meta.url,
-// ).toString();
-// const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
-// const pdfWorkerPath = path.join(pdfjsDistPath, 'build', 'pdf.worker.js');
-
-// fs.copyFileSync(pdfWorkerPath, './dist/pdf.worker.js');
-// import { pdfjs } from 'react-pdf';
-
-// pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
-
+import { Spin } from "antd";
 interface button {
   PREV: string;
   NEXT: string;
@@ -70,6 +55,7 @@ const PostDetails = (props: any) => {
   // function onDocumentLoadSuccess({ numPages }) {
   //   setNumPages(numPages);
   // }
+  const [pdfData, setPdfData] = useState();
 
 
   useEffect(() => {
@@ -79,22 +65,7 @@ const PostDetails = (props: any) => {
     }
   }, [mediaIndex, media]);
 
-  function changePage(offset) {
-    setPageNumber(prevPageNumber => prevPageNumber + offset);
-  }
 
-  function previousPage() {
-    changePage(-1);
-  }
-
-  function nextPage() {
-    changePage(1);
-  }
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
-    setNumPages(numPages);
-    setPageNumber(1);
-
-  }
   const handleInput = (e) => {
     setTextAreaHeight("auto"); // Reset height to auto to ensure the correct new height is calculated
     const target = e.target;
@@ -120,23 +91,21 @@ const PostDetails = (props: any) => {
 
   const handleImageSlider = (type: string) => {
     // console.log(type);
-    setTimeout(() => {
-      if (type === buttonType.PREV) {
-        // console.log(0);
-        if (mediaIndex === 0) {
-          setMediaIndex(media.length - 1);
-        } else {
-          setMediaIndex(mediaIndex - 1);
-        }
+    if (type === buttonType.PREV) {
+      // console.log(0);
+      if (mediaIndex === 0) {
+        setMediaIndex(media.length - 1);
       } else {
-        // console.log(1);
-        if (mediaIndex === media.length - 1) {
-          setMediaIndex(0);
-        } else {
-          setMediaIndex(mediaIndex + 1);
-        }
+        setMediaIndex(mediaIndex - 1);
       }
-    }, 1000);
+    } else {
+      // console.log(1);
+      if (mediaIndex === media.length - 1) {
+        setMediaIndex(0);
+      } else {
+        setMediaIndex(mediaIndex + 1);
+      }
+    }
   };
 
   const handleLikePost = async () => {
@@ -204,8 +173,9 @@ const PostDetails = (props: any) => {
                       </button>
                     </div> */}
         {post?.medias?.length > 0 && (
-          <div className={"w-full px-10 flex-col items-center"}>
-            <div className={"my-auto  w-full flex items-center justify-center h-full"}>
+          <div className={"w-full relative flex-col items-center"}>
+
+            <div className={"my-auto absolute w-full px-10 flex items-center justify-center h-full z-[2]"}>
               {media[mediaIndex].type.includes("image") ? (
                 <Image
                   alt="Author's avatar"
@@ -253,8 +223,11 @@ const PostDetails = (props: any) => {
                 <p>Unsupported media type</p>
               )}
             </div>
+            <div className="absolute w-full h-full px-10 flex justify-center items-center z-[1]">
+              <Spin />
+            </div>
             <div
-              className={"flex mx-auto justify-center text-green_3 mt-4 text-lg"}
+              className={"flex mx-auto justify-center text-green_3  text-lg mt-[62%]"}
             >
               <button onClick={() => handleImageSlider(buttonType.PREV)}>
                 <IoIosArrowBack />
