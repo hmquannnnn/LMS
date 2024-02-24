@@ -1,5 +1,5 @@
 "use client";
-import { Document, Page } from 'react-pdf'
+// import { Document, Page } from 'react-pdf'
 import { callGetPost } from "@/apis/classAPI";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,8 +20,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { callCommentToPost, callHandleLikePost } from "@/apis/postAPI";
 import Image from 'next/image'
 import { pdfjs } from 'react-pdf';
-import path from 'node:path';
-import fs from 'node:fs';
+import GoogleDocsViewer from 'react-google-docs-viewer';
 
 // pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 //   'pdfjs-dist/legacy/build/pdf.worker.min.js',
@@ -71,9 +70,7 @@ const PostDetails = (props: any) => {
   // function onDocumentLoadSuccess({ numPages }) {
   //   setNumPages(numPages);
   // }
-  const fileObject = {
-    url: '' as String | null,
-  };
+
 
   useEffect(() => {
     if (media) {
@@ -168,60 +165,26 @@ const PostDetails = (props: any) => {
   return (
     <>
       <div
-        className={"flex justify-center max-h-[78vh] mx-[2vw] my-5 rounded-2xl "}
+        className={"flex justify-center max-h-[78vh] h-[78vh] mx-[2vw] my-5 rounded-2xl "}
         style={{ backgroundColor: `${colors.green_1}` }}
       >
-        {post?.medias?.length > 0 && (
-          <div className={"w-full  px-10 flex-col items-center"}>
-
-            <div className={"my-auto  w-full flex justify-center h-full"}>
-              {media[mediaIndex].type.includes("image") ? (
-                <Image
-                  alt="Author's avatar"
-                  className={" mx-auto rounded-2xl"}
-                  style={{
-                    width: "80%",
-                    minWidth: "80%",
-                    maxWidth: "80%",
-                    height: "60%",
-                    minHeight: "60%",
-                    maxHeight: "60%",
-                  }}
-                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${media[mediaIndex].id}`}
-                />
-              ) : media[mediaIndex].type.includes("video") ? (
-                <video
-                  className={" mx-auto rounded-2xl"}
-                  style={{
-                    width: "80%",
-                    minWidth: "80%",
-                    maxWidth: "80%",
-                    height: "60%",
-                    minHeight: "300px",
-                    // maxHeight: "60%",
-                  }}
-                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/stream/${media[mediaIndex].id}`}
-                  controls
-                />
-              ) : media[mediaIndex].type.includes("pdf") ? (
-                <div className='w-min h-full '>
-                  <Document className={"h-full overflow-y-scroll"} file={file.url} onLoadSuccess={onDocumentLoadSuccess}>
-                    {/* <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} canvasBackground='white' /> */}
-                    {Array.from(
-                      new Array(numPages),
-                      (el, index) => (
-                        <Page
-                          renderTextLayer={false} renderAnnotationLayer={false} canvasBackground='white'
-                          key={`page_${index + 1}`}
-                          pageNumber={index + 1}
-                        />
-                      ),
-                    )}
-                  </Document>
-                  {/* <div>
+        {/* <Document className={"h-full overflow-y-scroll"} file={file.url} onLoadSuccess={onDocumentLoadSuccess}> */}
+        {/* <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} canvasBackground='white' /> */}
+        {/* {Array.from(
+            new Array(numPages),
+            (el, index) => (
+              <Page
+                renderTextLayer={false} renderAnnotationLayer={false} canvasBackground='white'
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+              />
+            ),
+          )} */}
+        {/* </Document> */}
+        {/* <div>
                       Page {pageNumber} of {numPages}
                     </div> */}
-                  {/* <div>
+        {/* <div>
                       <p>
                         Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
                       </p>
@@ -240,6 +203,51 @@ const PostDetails = (props: any) => {
                         Next
                       </button>
                     </div> */}
+        {post?.medias?.length > 0 && (
+          <div className={"w-full px-10 flex-col items-center"}>
+            <div className={"my-auto  w-full flex items-center justify-center h-full"}>
+              {media[mediaIndex].type.includes("image") ? (
+                <Image
+                  alt="Author's avatar"
+                  className={"h-fit w-fit mx-auto rounded-2xl max-h-[100%] max-w-[100%] object-contain"}
+                  // style={{
+                  //   width: "80%",
+                  //   minWidth: "80%",
+                  //   maxWidth: "80%",
+                  //   height: "60%",
+                  //   minHeight: "60%",
+                  //   maxHeight: "60%",
+                  // }}
+                  width={"10000"}
+                  height={"10000"}
+
+                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${media[mediaIndex].id}`}
+                />
+              ) : media[mediaIndex].type.includes("video") ? (
+                <video
+                  className={" mx-auto rounded-2xl"}
+                  style={{
+                    width: "80%",
+                    minWidth: "80%",
+                    maxWidth: "80%",
+                    height: "60%",
+                    minHeight: "300px",
+                    // maxHeight: "60%",
+                  }}
+                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/stream/${media[mediaIndex].id}`}
+                  controls
+                />
+              ) : media[mediaIndex].type.includes("pdf") ? (
+                <div className='w-full h-full '>
+
+                  <GoogleDocsViewer
+                    width="100%"
+                    height="78vh"
+                    // className={"h-full w-full overflow-y-scroll"}
+                    // fileUrl={"http://www.minhupro.xyz/api/v1/media/fda06ddb-a7f7-4030-b22c-11f146813b91"}
+                    fileUrl={file.url}
+                  />
+
                 </div>
               ) : (
                 <p>Unsupported media type</p>

@@ -32,6 +32,12 @@ const nextConfig = {
         port: "10049",
         pathname: "/api/v1/media/**",
       },
+      {
+        protocol: "http",
+        hostname: "www.minhupro.xyz",
+        port: "",
+        pathname: "/api/v1/media/**",
+      },
     ],
   },
 };

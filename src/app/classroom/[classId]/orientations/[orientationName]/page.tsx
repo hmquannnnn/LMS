@@ -70,7 +70,7 @@ const OrientationPostsList = (props: any) => {
               className={"text-center text-green_6 font-bold text-2xl"}
               style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}
             >
-              {mappingArray[orientationName][0].toUpperCase()}
+
             </div>
           </div>
         </div>

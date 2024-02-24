@@ -5,7 +5,7 @@ import DocumentPreview from "@/app/library/documentPreview";
 import { Spin } from "antd";
 import HeaderWithLogo from "@/components/headerWithLogo";
 
-const MEDIA_URL = "http://localhost:10049/api/v1/media/";
+const MEDIA_URL = process.env.NEXT_PUBLIC_BACKEND_URL + "/media/";
 const Library = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
