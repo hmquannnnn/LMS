@@ -14,8 +14,8 @@ const paths: Paths = {
   pendingPosts: "pending-posts",
   post: "post",
   favoriteDocumentations: "favorite",
-  sendVerificationEmail: "verify-your-email",
-  verifyEmail: "verify-email",
+  sendVerificationEmail: "/verify-your-email",
+  verifyEmail: "/verify-email",
 };
 
 export default paths;

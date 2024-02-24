@@ -15,7 +15,7 @@ instance.interceptors.request.use(
   function (error) {
     // Do something with request error
     return Promise.reject(error);
-  }
+  },
 );
 
 // Add a response interceptor
@@ -39,12 +39,13 @@ instance.interceptors.response.use(
         localStorage.setItem("verifyToken", error?.response?.data?.token);
       }
       console.log(">>>Có lỗi", error?.response?.data);
-      window.location.href = "/verify-your-email";
+      setTimeout((window.location.href = "/verify-your-email"), 2000);
+
       return error;
     }
     console.log(">>>Có lỗi", error);
     return error?.response?.data ?? Promise.reject(error);
-  }
+  },
 );
 
 if (typeof window !== "undefined") {
