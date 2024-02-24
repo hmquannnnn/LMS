@@ -264,15 +264,15 @@ const ClassNotification = (props: any) => {
                                 </p>
                               </Col>
                             </Row>
-                            <p className={"mt-3"}>{comment.content}</p>
+                            <p className={"mt-3 ml-12"}>{comment.content}</p>
                           </div>
                         ))}
 
                     {/*Last comment  */}
                     {notification.lastComment?.id &&
-                    !notificationsWithComments.find(
-                      (notif) => notif.notificationId === notification.id,
-                    )?.showComments ? (
+                      !notificationsWithComments.find(
+                        (notif) => notif.notificationId === notification.id,
+                      )?.showComments ? (
                       <>
                         <div className="mx-3 bg-blue-50 rounded-3xl p-2 ">
                           <Row>
@@ -295,7 +295,7 @@ const ClassNotification = (props: any) => {
                               </p>
                             </Col>
                           </Row>
-                          <p className={"mt-3"}>
+                          <p className={"mt-3  ml-12"}>
                             {notification.lastComment.content}
                           </p>
                         </div>

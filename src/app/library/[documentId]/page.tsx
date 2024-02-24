@@ -48,6 +48,7 @@ const DocumentIdPage = ({ params }) => {
     const [notFound, setNotFound] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
     const [openRemindLoginModal, setOpenRemindLoginModal] = useState(false);
+    const NEXT_PUBLIC_FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL;
     const postTime = useRef<String>();
     const documentTitle = useRef();
     const favoriteDocuments = useRef();
@@ -193,12 +194,12 @@ const DocumentIdPage = ({ params }) => {
             <div className="fixed right-0 flex flex-col gap-2 w-fit  pr-[2vw] pt-56 " >
                 <FacebookIcon onClick={
                     () => {
-                        window.open("https://www.facebook.com/sharer/sharer.php?u=" + "https://dantri.com.vn/xa-hoi/nguyen-pho-thu-tuong-trinh-dinh-dung-bi-khien-trach-20240125223746500.htm", "facebook-share-dialog", "width=600,height=600")
+                        window.open("https://www.facebook.com/sharer/sharer.php?u=" + "http://www.minhupro.xyz/library/17", "facebook-share-dialog", "width=600,height=600")
                     }
                 } />
                 <TwitterIcon onClick={
                     () => {
-                        window.open("https://twitter.com/intent/tweet?url=" + "https://dantri.com.vn/xa-hoi/nguyen-pho-thu-tuong-trinh-dinh-dung-bi-khien-trach-20240125223746500.htm", "twitter-share-dialog", "width=600,height=600")
+                        window.open("https://twitter.com/intent/tweet?url=" + "http://www.minhupro.xyz/library/17", "twitter-share-dialog", "width=600,height=600")
                     }
                 } />
                 <div className="h-[1px] bg-gray-300 mx-1.5"></div>
