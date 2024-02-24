@@ -1,10 +1,10 @@
 "use client";
 
 // import { div, Divider, div } from "antd";
-import { filterPostsByStatus } from "@/app/classroom/[classId]/pending-posts/page";
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { assignmentStatus } from "@/utils/constant";
+import {filterPostsByStatus} from "@/app/classroom/[classId]/pending-posts/page";
+import {useEffect, useState} from "react";
+import {useRouter, useSearchParams} from "next/navigation";
+import {assignmentStatus} from "@/utils/constant";
 import paths from "@/app/paths";
 
 // const thumbnailHeight = "70%";
@@ -49,7 +49,18 @@ const OrientationPostsList = (props: any) => {
         props.params.classId,
         orientationName,
       );
-      const duplicatedPosts = [...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts];
+      const duplicatedPosts = [
+        ...filteredPosts,
+        // ...filteredPosts,
+        // ...filteredPosts,
+        // ...filteredPosts,
+        // ...filteredPosts,
+        // ...filteredPosts,
+        // ...filteredPosts,
+        // ...filteredPosts,
+        // ...filteredPosts,
+        // ...filteredPosts,
+      ];
       // console.log("raw: ", filteredPosts);
       await setPostsList(duplicatedPosts);
     };
@@ -63,19 +74,20 @@ const OrientationPostsList = (props: any) => {
         <div className={"px-10"}>
           <div
             className={
-              "h-full bg-green_5 rounded-xl flex justify-center items-center shadow-xl px-3"
+              "min-h-full bg-green_5 rounded-xl flex justify-center items-center shadow-xl px-3 h-[850px]"
             }
           >
             <div
               className={"text-center text-green_6 font-bold text-2xl"}
               style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}
             >
-
+              {/*{mappingArray[orientationName][0].toUpperCase()}*/}
+              {orientationName}
             </div>
           </div>
         </div>
 
-        <div >
+        <div>
           <p className={"italic font-timesNewRoman text-lg"}>
             Chào mừng các em đến với cộng đồng nhóm ngành Xã hội. Khối Xã hội
             bao gồm nhiều ngành nghề khác nhau, nhưng chủ yếu đều liên quan đến
@@ -116,13 +128,13 @@ const OrientationPostsList = (props: any) => {
                       className={
                         "h-full w-full bg-green_6 rounded-2xl max-w-full"
                       }
-                    // style={{ height: "70%" }}
+                      // style={{ height: "70%" }}
                     ></div>
                     <div
                       className={
                         "h-full w-full bg-green_6 rounded-2xl px-3 max-w-full text-ellipsis overflow-hidden flex  items-center"
                       }
-                    // style={{ height: "12%" }}
+                      // style={{ height: "12%" }}
                     >
                       <p
                         className={
@@ -136,7 +148,7 @@ const OrientationPostsList = (props: any) => {
                       className={
                         "h-full w-full bg-green_6 rounded-2xl px-3 truncate max-w-full flex  items-center"
                       }
-                    // style={{ height: "12%" }}
+                      // style={{ height: "12%" }}
                     >
                       <p className={"text-green_3"}>
                         {post.user.lastName + " " + post.user.firstName}

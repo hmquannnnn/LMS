@@ -96,13 +96,13 @@ const ClassAssignment = (props: any) => {
       isForGroup: isForGroup,
     };
     const res = await callCreateAssigment(classId, assignmentReq);
-    // console.log("check: ", res);
+    console.log("check: ", res);
     setUpdateFlag(false);
     setIsModalOpen(false);
-    if (res?.id) {
-      const notificationContent = `${title}: ${content}`;
-      await callCreateNotification(classId, notificationContent);
-    }
+    // if (res.status === "success") {
+    const notificationContent = `${title}: ${content}`;
+    await callCreateNotification(classId, notificationContent);
+    // }
   };
 
   const showModal = () => {
@@ -158,84 +158,87 @@ const ClassAssignment = (props: any) => {
   return (
     <>
       <Row>
-        <Col span={5} className={"pr-5"}>
-          <button
-            className={
-              "border-[1px] bg-red-500 text-white rounded-xl w-full text-center py-3 font-bold"
-            }
-            onClick={showModal}
-          >
-            Add assignment
-          </button>
-          <Modal
-            title={"Add assignment"}
-            open={isModalOpen}
-            onCancel={handleCancel}
-            footer={null}
-          >
-            <form onSubmit={handleCreateAssignment}>
-              <div>
-                <input
-                  type={"text"}
-                  name={"title"}
-                  placeholder={"Title"}
-                  className="border-[1px] rounded w-full px-4 py-1 mb-3"
-                />
-                {/*<input*/}
-                {/*  type={"text"}*/}
-                {/*  name={"content"}*/}
-                {/*  placeholder={"Content"}*/}
-                {/*  className="border-[1px] rounded w-full px-4 py-1 mb-3"*/}
-                {/*/>*/}
-                <Editor
-                  name="caption"
-                  apiKey="ty6mn9smak440qi6gv53qqivqdulai6ja9wl6ao0bt12odwr"
-                  onInit={(evt, editor) => (editorRef.current = editor)}
-                  initialValue="<p>This is the initial content of the editor.</p>"
-                  init={{
-                    height: 500,
-                    menubar: false,
-                    plugins: [
-                      "advlist",
-                      "autolink",
-                      "lists",
-                      "link",
-                      "image",
-                      "charmap",
-                      "preview",
-                      "anchor",
-                      "searchreplace",
-                      "visualblocks",
-                      "code",
-                      "fullscreen",
-                      "insertdatetime",
-                      "media",
-                      "table",
-                      "code",
-                      "help",
-                      "wordcount",
-                    ],
-                    toolbar:
-                      "undo redo | blocks | " +
-                      "bold italic forecolor | alignleft aligncenter " +
-                      "alignright alignjustify | bullist numlist outdent indent | " +
-                      "removeformat | help",
-                    content_style:
-                      "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                  }}
-                />
-                <input type={"datetime-local"} name={"dueDateTime"} />
-                <button
-                  type={"submit"}
-                  className="border-[1px] bg-red-500 text-white rounded w-full text-center py-1 font-bold"
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
-          </Modal>
-        </Col>
-        <Col span={19}>
+        {userRole === ROLE_TEACHER && (
+          <Col span={5} className={"pr-5"}>
+            <button
+              className={
+                "border-[1px] bg-blue_5 text-blue_6 rounded-xl w-full text-center py-3 font-bold"
+              }
+              onClick={showModal}
+            >
+              Add assignment
+            </button>
+            <Modal
+              title={"Add assignment"}
+              open={isModalOpen}
+              onCancel={handleCancel}
+              footer={null}
+            >
+              <form onSubmit={handleCreateAssignment}>
+                <div>
+                  <input
+                    type={"text"}
+                    name={"title"}
+                    placeholder={"Title"}
+                    className="border-[1px] rounded w-full px-4 py-1 mb-3"
+                  />
+                  {/*<input*/}
+                  {/*  type={"text"}*/}
+                  {/*  name={"content"}*/}
+                  {/*  placeholder={"Content"}*/}
+                  {/*  className="border-[1px] rounded w-full px-4 py-1 mb-3"*/}
+                  {/*/>*/}
+                  <Editor
+                    name="caption"
+                    apiKey="ty6mn9smak440qi6gv53qqivqdulai6ja9wl6ao0bt12odwr"
+                    onInit={(evt, editor) => (editorRef.current = editor)}
+                    initialValue="<p>This is the initial content of the editor.</p>"
+                    init={{
+                      height: 500,
+                      menubar: false,
+                      plugins: [
+                        "advlist",
+                        "autolink",
+                        "lists",
+                        "link",
+                        "image",
+                        "charmap",
+                        "preview",
+                        "anchor",
+                        "searchreplace",
+                        "visualblocks",
+                        "code",
+                        "fullscreen",
+                        "insertdatetime",
+                        "media",
+                        "table",
+                        "code",
+                        "help",
+                        "wordcount",
+                      ],
+                      toolbar:
+                        "undo redo | blocks | " +
+                        "bold italic forecolor | alignleft aligncenter " +
+                        "alignright alignjustify | bullist numlist outdent indent | " +
+                        "removeformat | help",
+                      content_style:
+                        "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                    }}
+                  />
+                  <input type={"datetime-local"} name={"dueDateTime"} />
+                  <button
+                    type={"submit"}
+                    className="border-[1px] bg-red-500 text-white rounded w-full text-center py-1 font-bold"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </Modal>
+          </Col>
+        )}
+
+        <Col span={19} className={"mx-auto pl-16"}>
           {userRole === ROLE_STUDENT && (
             <Row className={"mb-5 w-full"}>
               <Col span={21} className={"flex items-center justify-center"}>
@@ -252,9 +255,7 @@ const ClassAssignment = (props: any) => {
               <Row className={"mb-5 w-full"}>
                 <Col
                   span={21}
-                  className={
-                    "border-[1px] rounded-xl px-5 py-3 bg-blue_6 cursor-pointer"
-                  }
+                  className={"rounded-xl px-5 py-3 bg-blue_6 cursor-pointer"}
                   onClick={() =>
                     router.push(
                       `${paths.classroom}/${classId}/${paths.classroomAssignments}/${assignment.id}`,

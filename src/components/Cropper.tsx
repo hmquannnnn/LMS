@@ -1,19 +1,21 @@
+"use client";
+
 import {useRef, useState} from "react";
 import AvatarEditor from "react-avatar-editor";
-import {FcAddImage} from "react-icons/fc";
 import {Modal, Slider} from "antd";
 import {callChangeAvatar} from "@/apis/userAPI";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {doGetAccountAction} from "@/redux/slices/accountSlice";
 // import "antd/dist/antd.css";
 
 const boxStyle = {
-  width: "300px",
-  height: "300px",
+  width: "350px",
+  height: "350px",
   display: "flex",
   flexFlow: "column",
   justifyContent: "center",
   alignItems: "center",
+  // paddingTop: "5px",
 };
 const modalStyle = {
   display: "flex",
@@ -46,7 +48,7 @@ const CropperModal = ({ src, modalOpen, setModalOpen, setPreview }) => {
   return (
     <Modal
       style={modalStyle}
-      visible={modalOpen}
+      open={modalOpen}
       onCancel={() => setModalOpen(false)}
       footer={null}
     >
@@ -54,7 +56,7 @@ const CropperModal = ({ src, modalOpen, setModalOpen, setPreview }) => {
         <AvatarEditor
           ref={cropRef}
           image={src}
-          style={{ width: "100%", height: "100%" }}
+          style={{ width: "70%", height: "70%", marginTop: "10px" }}
           border={50}
           borderRadius={150}
           color={[0, 0, 0, 0.72]}
@@ -66,8 +68,9 @@ const CropperModal = ({ src, modalOpen, setModalOpen, setPreview }) => {
         <Slider
           min={10}
           max={50}
+          tooltip={{ formatter: null }}
           style={{
-            margin: "0 auto",
+            margin: "10px auto",
             width: "80%",
             // color: "cyan",
           }}
@@ -78,14 +81,22 @@ const CropperModal = ({ src, modalOpen, setModalOpen, setPreview }) => {
           style={{
             display: "flex",
             padding: "10px",
-            border: "3px solid white",
+            // border: "3px solid white",
             // background: "black",
           }}
         >
-          <button onClick={() => setModalOpen(false)} className={"bg-green"}>
-            cancel
+          <button
+            onClick={() => setModalOpen(false)}
+            className={
+              "border-[1px] border-gray-400 text-gray-400 rounded py-1 mr-3 w-24"
+            }
+          >
+            Cancel
           </button>
-          <button onClick={handleSave} className={"bg-red-500"}>
+          <button
+            onClick={handleSave}
+            className={"bg-blue_5 text-blue_6 rounded py-1 w-24"}
+          >
             Save
           </button>
         </div>
@@ -100,6 +111,7 @@ const Cropper = ({ imgSrc }) => {
   const [preview, setPreview] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const inputRef = useRef(null);
+  const user = useSelector((state) => state.account.user);
 
   const handleInputClick = (e) => {
     e.preventDefault();
@@ -117,23 +129,12 @@ const Cropper = ({ imgSrc }) => {
       {/*  <h1>React Avatar Cropper</h1>*/}
       {/*  <hr />*/}
       {/*</header>*/}
-      <main className="container">
+      <div className="container">
         <CropperModal
           modalOpen={modalOpen}
           src={src}
           setPreview={setPreview}
           setModalOpen={setModalOpen}
-        />
-        <a href="/" onClick={handleInputClick}>
-          <FcAddImage className="add-icon" />
-        </a>
-        <small>Click to select image</small>
-        <input
-          type="file"
-          accept="image/*"
-          ref={inputRef}
-          onChange={handleImgChange}
-          style={{ display: "none" }}
         />
         <div className="img-container">
           <img
@@ -150,10 +151,33 @@ const Cropper = ({ imgSrc }) => {
               border: "2px solid black",
               height: "200px",
               width: "200px",
+              margin: "auto",
+              marginBottom: "10px",
             }}
           />
         </div>
-      </main>
+        <p className={"text-center font-semibold text-lg mb-2"}>
+          {user.lastName + " " + user.firstName}
+        </p>
+        <a
+          href="/"
+          onClick={handleInputClick}
+          className={
+            "bg-blue_6 text-blue_5 py-2 px-6 rounded mx-auto block w-[60%] text-center"
+          }
+        >
+          {/*<FcAddImage className="add-icon" />*/}
+          Choose avatar
+        </a>
+        {/*<small>Click to select image</small>*/}
+        <input
+          type="file"
+          accept="image/*"
+          ref={inputRef}
+          onChange={handleImgChange}
+          style={{ display: "none" }}
+        />
+      </div>
       {/*<img*/}
       {/*  src={*/}
       {/*    preview ||*/}

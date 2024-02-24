@@ -49,7 +49,9 @@ const JoinClassButton = ({ onUpdate }) => {
     <>
       <button
         type={"submit"}
-        className={"bg-white rounded-lg px-5 py-1.5 shadow font-semibold"}
+        className={
+          "bg-blue_6 text-blue_5 rounded-lg px-5 py-1.5 shadow hover:shadow-lg font-semibold"
+        }
         onClick={showModal}
       >
         {" "}
@@ -77,7 +79,7 @@ const JoinClassButton = ({ onUpdate }) => {
           <button
             type={"submit"}
             className={
-              "bg-rose-500 rounded px-10 py-1.5 font-semibold text-white"
+              "bg-blue_6 rounded px-10 py-1.5 font-semibold text-blue_5"
             }
           >
             Join
