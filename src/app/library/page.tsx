@@ -36,7 +36,7 @@ const Library = () => {
           <div className="flex flex-wrap justify-between  px-[15vw]">
             <div className="w-min text-xs">
               {data
-                .filter((item, index) => index >= 1 && index <= 2)
+                .filter((item, index) => index >= 1 && index <= 3)
                 .map((item) => {
                   return (
                     <div key={item.id} className="mb-14">
@@ -55,20 +55,28 @@ const Library = () => {
                 })}
             </div>
             <div className="w-min text-center text-md">
-              <DocumentPreview
-                props={{
-                  data: data[0],
-                  imgWidth: "600px",
-                  imgHeight: "400px",
-                  imgUrl: data[0]?.thumbnail?.id
-                    ? MEDIA_URL + data[0]?.thumbnail?.id
-                    : "https://placehold.co/600x400",
-                }}
-              ></DocumentPreview>
+              {data
+                .filter((item, index) => index >= 4 && index <= 5)
+                .map((item) => {
+                  return (
+                    <div key={item.id} className="mb-14">
+                      <DocumentPreview
+                        props={{
+                          data: item,
+                          imgWidth: "600px",
+                          imgHeight: "400px",
+                          imgUrl: item?.thumbnail?.id
+                            ? MEDIA_URL + item?.thumbnail?.id
+                            : "https://placehold.co/300x200",
+                        }}
+                      ></DocumentPreview>
+                    </div>
+                  );
+                })}
             </div>
             <div className="w-min text-xs">
               {data
-                .filter((item, index) => index >= 3 && index <= 20)
+                .filter((item, index) => index >= 6 && index <= 20)
                 .map((item) => {
                   return (
                     <div key={item.id} className="mb-14">

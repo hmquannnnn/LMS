@@ -2,30 +2,33 @@
 import React from 'react';
 import Image from 'next/image';
 import HeaderWithLogo from "@/components/headerWithLogo";
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+const MenuItem = ({ label, imageSrc, href, topicName }) => {
 
-const MenuItem = ({ label, imageSrc, href }) => (
-    <a href={href} className="flex flex-col items-center cursor-pointer">
-        <div className="flex flex-col items-center">
-            <Image width={200} height={400} src={imageSrc} alt={label} className="w-full h-auto mb-2" />
-            <div className="mt-2 text-xl font-semibold font-vollkorn text-blue_4 ">{label}</div>
-        </div>
-    </a>
-);
+    return (
+        <Link href={"/library/topics/" + topicName} className="flex flex-col items-center cursor-pointer">
+            <div className="flex flex-col items-center">
+                <Image width={200} height={400} src={imageSrc} alt={label} className="w-full h-auto mb-2" />
+                <div className="mt-2 text-xl font-semibold font-vollkorn text-blue_4 ">{label}</div>
+            </div>
+        </Link>
+    )
+};
 
 const Menu = () => {
     const [startIndex, setStartIndex] = useState(0);
     const items = [
-        { label: 'VĂN HÓA', imageSrc: 'https://placehold.co/200x400/png', href: "" },
-        { label: 'THỂ THAO', imageSrc: 'https://placehold.co/200x400/png', href: "" },
-        { label: 'XÃ HỘI', imageSrc: 'https://placehold.co/200x400/png', href: "" },
-        { label: 'DU LỊCH', imageSrc: 'https://placehold.co/200x400/png', href: "" },
-        { label: 'KINH DOANH', imageSrc: 'https://placehold.co/200x400/png', href: "" },
-        { label: 'VIỆC LÀM', imageSrc: 'https://placehold.co/200x400/png', href: "" },
-        { label: 'SỨC KHỎE', imageSrc: 'https://placehold.co/200x400/png', href: "" },
-        { label: 'GIẢI TRÍ', imageSrc: 'https://placehold.co/200x400/png', href: "" },
-        { label: 'GIẢI TRÍ', imageSrc: 'https://placehold.co/200x400/png', href: "" },
-        { label: 'GIẢI TRÍ', imageSrc: 'https://placehold.co/200x400/png', href: "" },
+        { topicName: 'CULTURE', label: 'VĂN HÓA', imageSrc: 'https://placehold.co/200x400/png', href: "" },
+        { topicName: 'SPORT', label: 'THỂ THAO', imageSrc: 'https://placehold.co/200x400/png', href: "" },
+        { topicName: 'SOCIAL', label: 'XÃ HỘI', imageSrc: 'https://placehold.co/200x400/png', href: "" },
+        { topicName: 'TOURISM', label: 'DU LỊCH', imageSrc: 'https://placehold.co/200x400/png', href: "" },
+        { topicName: 'BUSINESS', label: 'KINH DOANH', imageSrc: 'https://placehold.co/200x400/png', href: "" },
+        { topicName: 'JOB', label: 'VIỆC LÀM', imageSrc: 'https://placehold.co/200x400/png', href: "" },
+        { topicName: 'HEALTH', label: 'SỨC KHỎE', imageSrc: 'https://placehold.co/200x400/png', href: "" },
+        { topicName: 'RELAX', label: 'GIẢI TRÍ', imageSrc: 'https://placehold.co/200x400/png', href: "" },
+        { topicName: 'RELAX', label: 'GIẢI TRÍ', imageSrc: 'https://placehold.co/200x400/png', href: "" },
+        { topicName: 'RELAX', label: 'GIẢI TRÍ', imageSrc: 'https://placehold.co/200x400/png', href: "" },
 
 
     ];
@@ -57,7 +60,7 @@ const Menu = () => {
                         if (index >= startIndex && index <= startIndex + 3) return true;
                         return false;
                     }).map((item, index) => (
-                        <MenuItem key={index} label={item.label} imageSrc={item.imageSrc} href={item.href} />
+                        <MenuItem key={index} label={item.label} imageSrc={item.imageSrc} href={item.href} topicName={item.topicName} />
                     ))}
                 </div>
                 <button className="p-2" onClick={() => handleNext()}>

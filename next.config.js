@@ -38,6 +38,19 @@ const nextConfig = {
         port: "",
         pathname: "/api/v1/media/**",
       },
+
+      {
+        protocol: "https",
+        hostname: "encrypted-tbn3.gstatic.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "i.pinimg.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
