@@ -178,7 +178,7 @@ const ClassNotification = (props: any) => {
                   style={{ backgroundColor: `${colors.blue_6}` }}
                 >
                   <div className="px-5">
-                    <Row>
+                    <Row className={"mb-2"}>
                       <Avatar
                         size={48}
                         icon={<UserOutlined />}
@@ -270,9 +270,9 @@ const ClassNotification = (props: any) => {
 
                     {/*Last comment  */}
                     {notification.lastComment?.id &&
-                      !notificationsWithComments.find(
-                        (notif) => notif.notificationId === notification.id,
-                      )?.showComments ? (
+                    !notificationsWithComments.find(
+                      (notif) => notif.notificationId === notification.id,
+                    )?.showComments ? (
                       <>
                         <div className="mx-3 bg-blue-50 rounded-3xl p-2 ">
                           <Row>

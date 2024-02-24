@@ -1,5 +1,4 @@
 import instance from "@/utils/axiosCustomize";
-import { object } from "prop-types";
 
 interface User {
   firstname: string;
@@ -9,6 +8,7 @@ interface User {
   DoB: string;
   role: string;
 }
+
 export const callRegister = (
   firstname: string,
   username: string,
@@ -16,7 +16,8 @@ export const callRegister = (
   password: string,
   DoB: string,
   role: string,
-  email: string
+  email: string,
+  gender: string,
 ) => {
   const req = {
     firstName: firstname,
@@ -26,6 +27,7 @@ export const callRegister = (
     dateOfBirth: DoB,
     role: role,
     email: email,
+    gender: gender,
   };
   console.log(">>>check req: ", req);
   return instance.post("/register", req);

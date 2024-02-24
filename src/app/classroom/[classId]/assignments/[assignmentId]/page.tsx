@@ -47,9 +47,7 @@ const AssignmentDetails = (props: any) => {
 
   return (
     <>
-      <div
-        className={"w-full border-amber-500 min-h-[80vh] h-fit border-[1px]"}
-      >
+      <div className={"w-full min-h-[80vh] h-fit"}>
         <div
           className={
             "py-5 px-10 rounded-xl bg-blue_6 h-fit mx-auto w-[90%] my-10"
@@ -62,43 +60,55 @@ const AssignmentDetails = (props: any) => {
             dangerouslySetInnerHTML={{ __html: currentAssignment.content }}
           />
         </div>
-        <table className={"w-[90%] mx-auto px-4 text-left"}>
-          <tr className={"border border-collapse py-2"}>
-            <th className={"border border-collapse w-1/3 px-5 py-2"}>
-              Deadline
-            </th>
-            <th className={"border border-collapse font-normal text-left px-5"}>
-              {FormatDate(currentAssignment.assignedDateTime)}
-            </th>
-          </tr>
-          <tr>
-            <th className={"border border-collapse w-1/3 text-left px-5 py-2"}>
-              Status
-            </th>
-            <th className={"border border-collapse font-normal text-left px-5"}>
-              {currentAssignment.status}
-            </th>
-          </tr>
-          <tr>
-            <th className={"border border-collapse w-1/3 text-left px-5 py-2"}>
-              Submission
-            </th>
-            <th className={"border border-collapse font-normal text-left px-5"}>
-              {currentAssignment.status === assignmentStatus.NOT_SUBMITTED ? (
-                <button
-                  className={
-                    "rounded bg-blue_8 px-3 py-1 font-semibold text-white"
-                  }
-                  onClick={() => router.push(`${assignmentId}/submit`)}
-                >
-                  Submit
-                </button>
-              ) : (
-                <p>See post</p>
-              )}
-            </th>
-          </tr>
-        </table>
+        {user.role === ROLE_STUDENT && (
+          <table className={"w-[90%] mx-auto px-4 text-left"}>
+            <tr className={"border border-collapse py-2"}>
+              <th className={"border border-collapse w-1/3 px-5 py-2"}>
+                Deadline
+              </th>
+              <th
+                className={"border border-collapse font-normal text-left px-5"}
+              >
+                {FormatDate(currentAssignment.assignedDateTime)}
+              </th>
+            </tr>
+            <tr>
+              <th
+                className={"border border-collapse w-1/3 text-left px-5 py-2"}
+              >
+                Status
+              </th>
+              <th
+                className={"border border-collapse font-normal text-left px-5"}
+              >
+                {currentAssignment.status}
+              </th>
+            </tr>
+            <tr>
+              <th
+                className={"border border-collapse w-1/3 text-left px-5 py-2"}
+              >
+                Submission
+              </th>
+              <th
+                className={"border border-collapse font-normal text-left px-5"}
+              >
+                {currentAssignment.status === assignmentStatus.NOT_SUBMITTED ? (
+                  <button
+                    className={
+                      "rounded bg-blue_8 px-3 py-1 font-semibold text-white"
+                    }
+                    onClick={() => router.push(`${assignmentId}/submit`)}
+                  >
+                    Submit
+                  </button>
+                ) : (
+                  <p>See post</p>
+                )}
+              </th>
+            </tr>
+          </table>
+        )}
       </div>
     </>
   );
