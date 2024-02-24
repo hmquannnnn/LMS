@@ -60,7 +60,7 @@ const PostDetails = (props: any) => {
       setIsUpdate(false);
     }
 
-    // console.log(res);
+    console.log(res);
     // setPost(res);
   };
 
@@ -115,11 +115,11 @@ const PostDetails = (props: any) => {
   return (
     <>
       <div
-        className={"flex max-h-[78vh] mx-[2vw] my-5 rounded-2xl "}
+        className={"flex justify-center max-h-[78vh] mx-[2vw] my-5 rounded-2xl "}
         style={{ backgroundColor: `${colors.green_1}` }}
       >
-        <div className={"w-full  px-10 flex items-center"}>
-          {post?.medias?.length > 0 && (
+        {post?.medias?.length > 0 && (
+          <div className={"w-full  px-10 flex items-center"}>
             <>
               <div className={"my-auto w-full"}>
                 {media[mediaIndex].type.includes("image") ? (
@@ -152,7 +152,7 @@ const PostDetails = (props: any) => {
                   />
                 ) : null}
                 <div
-                  className={"mx-auto justify-center text-green_3 mt-4 text-lg"}
+                  className={"flex mx-auto justify-center text-green_3 mt-4 text-lg"}
                 >
                   <button onClick={() => handleImageSlider(buttonType.PREV)}>
                     <IoIosArrowBack />
@@ -166,8 +166,8 @@ const PostDetails = (props: any) => {
                 </div>
               </div>
             </>
-          )}
-        </div>
+          </div>
+        )}
         <div className={"max-w-[800px] min-w-[30vw] min-h-[80vh] w-max overflow-auto px-10 py-10 pr-20"}>
           <div
             className="flex items-center mb-2 text-lg"
