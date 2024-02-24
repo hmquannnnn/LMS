@@ -24,7 +24,9 @@ const LoggedInDropdown = () => {
     {
       key: "2",
       label: (
-        <Link href={`${paths.favoriteDocumentations}`}>Favorite List</Link>
+        <Link href={`${paths.library}/${paths.favoriteDocumentations}`}>
+          Favorite List
+        </Link>
       ),
     },
     {

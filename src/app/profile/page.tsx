@@ -1,7 +1,7 @@
 "use client";
 
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserInfo from "@/components/userInfo";
 import { ROLE_STUDENT } from "@/utils/constant";
 import Cropper from "@/components/Cropper";
@@ -10,7 +10,11 @@ const Profile = () => {
   const user = useSelector((state) => state.account.user);
   const [src, setSrc] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [isRendered, setIsRendered] = useState(false);
 
+  useEffect(() => {
+    setIsRendered(true);
+  }, []);
   const onClose = () => {
     setPreview(null);
   };

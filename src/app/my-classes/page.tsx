@@ -50,10 +50,10 @@ const MyClasses = () => {
           <Row className={"flex flex-wrap"}>
             {classesList.map((classItem) => {
               return (
-                <div key={classItem.id} className={"relative w-1/6 pb-[8%]"}>
+                <div key={classItem.id} className={"relative w-1/6 pb-[10%] "}>
                   <div
                     className={
-                      "bg-blue_1 text-blue_5 rounded-xl px-5 py-4 cursor-pointer place-items-end grid h-full"
+                      "bg-blue_1 text-blue_5 rounded-xl px-5 py-4 cursor-pointer place-items-end grid"
                     }
                     style={{
                       position: "absolute",

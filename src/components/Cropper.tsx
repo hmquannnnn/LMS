@@ -3,6 +3,8 @@ import AvatarEditor from "react-avatar-editor";
 import {FcAddImage} from "react-icons/fc";
 import {Modal, Slider} from "antd";
 import {callChangeAvatar} from "@/apis/userAPI";
+import {useDispatch} from "react-redux";
+import {doGetAccountAction} from "@/redux/slices/accountSlice";
 // import "antd/dist/antd.css";
 
 const boxStyle = {
@@ -22,15 +24,21 @@ const modalStyle = {
 const CropperModal = ({ src, modalOpen, setModalOpen, setPreview }) => {
   const [slideValue, setSlideValue] = useState(10);
   const cropRef = useRef(null);
+  const dispatch = useDispatch();
 
   const handleSave = async () => {
     if (cropRef) {
       const dataUrl = cropRef.current.getImage().toDataURL();
+      console.log(dataUrl.slice(22));
       const result = await fetch(dataUrl);
       const blob = await result.blob();
       await setPreview(URL.createObjectURL(blob));
-      const res = await callChangeAvatar(blob);
-      console.log(res);
+      let newFile = new File([blob], "newAvatar.jpg");
+      const formData = new FormData();
+      formData.append("file", newFile);
+      const res = await callChangeAvatar(formData);
+      dispatch(doGetAccountAction(res));
+      // console.log(res);
       setModalOpen(false);
     }
   };
@@ -146,15 +154,15 @@ const Cropper = ({ imgSrc }) => {
           />
         </div>
       </main>
-      <img
-        src={
-          preview ||
-          "https://www.signivis.com/img/custom/avatars/member-avatar-01.png"
-        }
-        width="200"
-        height="200"
-        style={{ borderRadius: "50%", border: "2px solid black" }}
-      />
+      {/*<img*/}
+      {/*  src={*/}
+      {/*    preview ||*/}
+      {/*    "https://www.signivis.com/img/custom/avatars/member-avatar-01.png"*/}
+      {/*  }*/}
+      {/*  width="200"*/}
+      {/*  height="200"*/}
+      {/*  style={{ borderRadius: "50%", border: "2px solid black" }}*/}
+      {/*/>*/}
 
       {/*<footer>*/}
       {/*  <hr />*/}
