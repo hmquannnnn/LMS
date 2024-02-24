@@ -22,7 +22,14 @@ export default function RootLayout({
 }) {
   const router = useRouter();
   const pathName = usePathname();
-
+  const notShowHeaderAndFooter = () => {
+    return (
+      pathName != paths.logIn &&
+      pathName != paths.register &&
+      pathName != paths.sendVerificationEmail &&
+      pathName != paths.verifyEmail
+    );
+  };
   // console.log(pathName);
   return (
     <StoreProvider>
@@ -44,9 +51,9 @@ export default function RootLayout({
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
           ></link>
-          {pathName !== paths.logIn && pathName != paths.register && <Header />}
+          {notShowHeaderAndFooter() && <Header />}
           {children}
-          {pathName !== paths.logIn && pathName != paths.register && <Footer />}
+          {notShowHeaderAndFooter() && <Footer />}
         </body>
       </html>
     </StoreProvider>
