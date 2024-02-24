@@ -12,6 +12,7 @@ const config: Config = {
       headingText: ['"Roboto Slab"', "sans-serif"],
       headingOpenSans: ['"OpenSans"', "sans-serif"],
       vollkorn: ['"Vollkorn"', "serif"],
+      timesNewRoman: ['"Times New Roman"', "serif"],
     },
     extend: {
       backgroundImage: {

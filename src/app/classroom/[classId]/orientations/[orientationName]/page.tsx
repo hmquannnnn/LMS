@@ -1,10 +1,10 @@
 "use client";
 
-import {Col, Divider, Row} from "antd";
-import {filterPostsByStatus} from "@/app/classroom/[classId]/pending-posts/page";
-import {useEffect, useState} from "react";
-import {useRouter, useSearchParams} from "next/navigation";
-import {assignmentStatus} from "@/utils/constant";
+// import { div, Divider, div } from "antd";
+import { filterPostsByStatus } from "@/app/classroom/[classId]/pending-posts/page";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { assignmentStatus } from "@/utils/constant";
 import paths from "@/app/paths";
 
 // const thumbnailHeight = "70%";
@@ -30,6 +30,12 @@ const filterPostsByOrientation = async (
 const OrientationPostsList = (props: any) => {
   // console.log(props.params);
   const orientationName = props.params.orientationName;
+  const mappingArray = {
+    SOCIAL: ["Xã hội"],
+    ART: ["Nghệ thuật"],
+    SCIENCE: ["Khoa học"],
+  };
+
   const classId = props.params.classId;
   const [postsList, setPostsList] = useState([]);
   const router = useRouter();
@@ -43,8 +49,9 @@ const OrientationPostsList = (props: any) => {
         props.params.classId,
         orientationName,
       );
+      const duplicatedPosts = [...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts, ...filteredPosts];
       // console.log("raw: ", filteredPosts);
-      await setPostsList(filteredPosts);
+      await setPostsList(duplicatedPosts);
     };
 
     fetchPosts();
@@ -52,24 +59,24 @@ const OrientationPostsList = (props: any) => {
   console.log(postsList);
   return (
     <>
-      <Row className={"h-full lg:mx-auto w-4/6"}>
-        <Col span={3} className={"px-10"}>
+      <div className={"h-full lg:mx-auto w-4/6 flex mb-8"}>
+        <div className={"px-10"}>
           <div
             className={
-              "h-full bg-green_5 rounded-xl flex justify-center items-center shadow-xl"
+              "h-full bg-green_5 rounded-xl flex justify-center items-center shadow-xl px-3"
             }
           >
-            <p
-              className={"text-green_6 font-bold text-2xl"}
+            <div
+              className={"text-center text-green_6 font-bold text-2xl"}
               style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}
             >
-              {orientationName}
-            </p>
+              {mappingArray[orientationName][0].toUpperCase()}
+            </div>
           </div>
-        </Col>
+        </div>
 
-        <Col span={21}>
-          <p className={"italic"}>
+        <div >
+          <p className={"italic font-timesNewRoman text-lg"}>
             Chào mừng các em đến với cộng đồng nhóm ngành Xã hội. Khối Xã hội
             bao gồm nhiều ngành nghề khác nhau, nhưng chủ yếu đều liên quan đến
             con người và xã hội, được chia thành các nhóm chính như: Nhóm ngành
@@ -77,8 +84,8 @@ const OrientationPostsList = (props: any) => {
             Giáo dục; Nhóm ngành Phiên dịch; Nhóm ngành Văn hóa và Du lịch; ...
             Khối nhóm ngành này sẽ phù hợp với những bạn ...
           </p>
-          <Divider className={"bg-green_4 h-1"} />
-          <Row className={"flex flex-wrap"}>
+          <div className={"bg-green_4 my-3 h-[2px]"} />
+          <div className={"flex flex-wrap"}>
             {postsList.map((post: object, index: number) => (
               <>
                 <div
@@ -109,13 +116,13 @@ const OrientationPostsList = (props: any) => {
                       className={
                         "h-full w-full bg-green_6 rounded-2xl max-w-full"
                       }
-                      // style={{ height: "70%" }}
+                    // style={{ height: "70%" }}
                     ></div>
                     <div
                       className={
                         "h-full w-full bg-green_6 rounded-2xl px-3 max-w-full text-ellipsis overflow-hidden flex  items-center"
                       }
-                      // style={{ height: "12%" }}
+                    // style={{ height: "12%" }}
                     >
                       <p
                         className={
@@ -129,7 +136,7 @@ const OrientationPostsList = (props: any) => {
                       className={
                         "h-full w-full bg-green_6 rounded-2xl px-3 truncate max-w-full flex  items-center"
                       }
-                      // style={{ height: "12%" }}
+                    // style={{ height: "12%" }}
                     >
                       <p className={"text-green_3"}>
                         {post.user.lastName + " " + post.user.firstName}
@@ -139,9 +146,9 @@ const OrientationPostsList = (props: any) => {
                 </div>
               </>
             ))}
-          </Row>
-        </Col>
-      </Row>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
