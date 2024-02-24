@@ -10,7 +10,9 @@ import {
 import { useEffect } from "react";
 import { FaCheck } from "react-icons/fa";
 import { MdCancel, MdPending } from "react-icons/md";
-import { ROLE_TEACHER } from "@/utils/constant";
+import { ROLE_STUDENT, ROLE_TEACHER } from "@/utils/constant";
+import { Avatar, Divider } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 const STATUS = {
   APPROVED: 2,
@@ -54,46 +56,117 @@ const ClassMember = (props: any) => {
 
   return (
     <>
-      <div className={"w-3/5 mx-auto"}>
-        <table>
-          <thead>
-            <tr className={"border border-collapse"}>
-              <th className={"border"}>No</th>
-              <th className={"border"}>Name</th>
-              {Array.from({ length: total }).map((_, index) => (
-                <th key={index} className={"border"}>
-                  Assignment {index + 1}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {membersList.map((student: object, index: number) => (
-              <tr key={index}>
-                <th className={"border"}>{index + 1}</th>
-                <th className={"border"}>
-                  {student.studentInfo.lastName +
-                    " " +
-                    student.studentInfo.firstName}
-                </th>
-                {userRole === ROLE_TEACHER &&
-                  student.assignmentStatus.map((status: number, index: number) => (
-                    <th className={"border"} key={index}>
-                      {status === STATUS.APPROVED ? (
-                        <FaCheck className={"text-green-500 mx-auto"} />
-                      ) : status === STATUS.PENDING ? (
-                        <MdPending className={"text-yellow-400 mx-auto"} />
-                      ) : status ===
-                        STATUS.NOT_YET_SUBMITTED ? null : status ===
-                          STATUS.REJECTED ? (
-                        <MdCancel className={"text-red-600 mx-auto"} />
-                      ) : null}
-                    </th>
+      <div className={"w-[90%] mx-auto"}>
+        <div className={"mb-20"}>
+          <p className={"font-bold text-xl"}>Teacher</p>
+          <Divider className={"border-blue_3 my-1"} />
+          <div className={"flex flex-row items-center px-3"}>
+            <Avatar
+              size={30}
+              icon={<UserOutlined />}
+              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${user.avatarId}`}
+              className="mr-2.5"
+            />
+            <p className={"h-fit"}>
+              {classInfo.teacherLastName + " " + classInfo.teacherFirstName}
+            </p>
+          </div>
+        </div>
+        <div>
+          <div className={"flex flex-row items-center"}>
+            <p className={"font-bold text-xl h-fit"}>Students list &nbsp;</p>
+            <p className={"h-fit"}>({membersList?.length || 0} students)</p>
+          </div>
+
+          <Divider className={"border-blue_3 my-1"} />
+          {userRole === ROLE_TEACHER && (
+            <>
+              <div className={"my-5"}>
+                <p className={"text-red-600 flex flex-row font-semibold"}>
+                  *<p className={"text-black"}>Note</p>
+                </p>
+                <div className={"flex flex-row items-center"}>
+                  <FaCheck className={"text-green-500"} />
+                  <p className={"h-fit ml-4"}>Approved</p>
+                </div>
+                <div className={"flex flex-row items-center"}>
+                  <MdPending className={"text-yellow-400"} />
+                  <p className={"h-fit ml-4"}>Pending</p>
+                </div>
+                <div className={"flex flex-row items-center"}>
+                  <MdCancel className={"text-red-600"} />
+                  <p className={"h-fit ml-4"}>Rejected</p>
+                </div>
+              </div>
+              <table className={"font-normal"}>
+                <thead>
+                  <tr className={"border border-collapse py-1 px-1"}>
+                    <th className={"border px-1.5 font-semibold"}>No</th>
+                    <th className={"border font-semibold"}>Name</th>
+                    {userRole === ROLE_TEACHER &&
+                      Array.from({ length: total }).map((_, index) => (
+                        <th key={index} className={"border px-4 font-semibold"}>
+                          Assignment {index + 1}
+                        </th>
+                      ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {membersList.map((student: object, index: number) => (
+                    <tr key={index} className={"px-2 py-1 font-normal"}>
+                      <th className={"border font-normal px-2 py-1"}>
+                        {index + 1}
+                      </th>
+                      <th className={"border px-4 font-normal"}>
+                        {student.studentInfo.lastName +
+                          " " +
+                          student.studentInfo.firstName}
+                      </th>
+                      {userRole === ROLE_TEACHER &&
+                        student.assignmentStatus.map(
+                          (status: number, index: number) => (
+                            <th className={"border"} key={index}>
+                              {status === STATUS.APPROVED ? (
+                                <FaCheck className={"text-green-500 mx-auto"} />
+                              ) : status === STATUS.PENDING ? (
+                                <MdPending
+                                  className={"text-yellow-400 mx-auto"}
+                                />
+                              ) : status ===
+                                STATUS.NOT_YET_SUBMITTED ? null : status ===
+                                STATUS.REJECTED ? (
+                                <MdCancel className={"text-red-600 mx-auto"} />
+                              ) : null}
+                            </th>
+                          ),
+                        )}
+                    </tr>
                   ))}
-              </tr>
+                </tbody>
+              </table>
+            </>
+          )}
+
+          {userRole === ROLE_STUDENT &&
+            membersList.map((student: object, index: number) => (
+              <div className={"flex flex-row px-3 my-2.5"}>
+                <p className={"mr-10 w-3"}>{index + 1}</p>
+                <div className={"span-10 flex flex-row"}>
+                  <Avatar
+                    size={30}
+                    icon={<UserOutlined />}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${student.studentInfo.avatarId}`}
+                    className="mr-2.5"
+                  />
+                  <th className={"font-normal"}>
+                    {student.studentInfo.lastName +
+                      " " +
+                      student.studentInfo.firstName}
+                  </th>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
+        </div>
       </div>
     </>
   );

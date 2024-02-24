@@ -32,8 +32,8 @@ const Profile = () => {
         {/*<Cropper />*/}
         <div className={"col-span-3"}></div>
         <div className={"col-span-9"}>
-          <h3>My profile</h3>
-          <div className={"grid grid-cols-3"}>
+          <h3 className={"font-bold text-2xl"}>My profile</h3>
+          <div className={"grid grid-cols-5 mt-3"}>
             <div className={"col-span-2"}>
               <UserInfo
                 label={"Name: "}
