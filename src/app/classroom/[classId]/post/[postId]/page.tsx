@@ -1,14 +1,14 @@
 "use client";
 
 import { callGetPost } from "@/apis/classAPI";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getCurrentAuthors,
   getCurrentPostAction,
 } from "@/redux/slices/postSlice";
 import { colors } from "@/utils/constant";
-import { Avatar, Col, Row } from "antd";
+import { Avatar } from "antd";
 import { callFetchUserById } from "@/apis/userAPI";
 import {
   IoIosArrowBack,
@@ -42,6 +42,14 @@ const PostDetails = (props: any) => {
   const [mediaIndex, setMediaIndex] = useState(0);
   const [isUpdate, setIsUpdate] = useState(true);
   const [commentInput, setCommentInput] = useState("");
+  const [textAreaHeight, setTextAreaHeight] = useState("auto");
+  const textAreaRef = useRef(null);
+
+  const handleInput = (e) => {
+    setTextAreaHeight("auto"); // Reset height to auto to ensure the correct new height is calculated
+    const target = e.target;
+    if (target.offsetHeight <= target.scrollHeight) setTextAreaHeight(`${target.scrollHeight}px`); // Set new height based on scroll height
+  };
 
   const getPostDetails = async () => {
     const res = await callGetPost(postId);
@@ -95,19 +103,22 @@ const PostDetails = (props: any) => {
     setCommentInput(value);
   };
 
-  const handleEnter = async () => {
+  const handleEnter = async (e) => {
+    e.preventDefault();
     const res = await callCommentToPost(post.id, commentInput);
     console.log(res);
+    console.log("press Enter")
     setCommentInput("");
+
   };
 
   return (
     <>
-      <Row
-        className={"min-h-[60vh] mx-20 my-10 rounded-2xl"}
+      <div
+        className={"flex max-h-[78vh] mx-[2vw] my-5 rounded-2xl "}
         style={{ backgroundColor: `${colors.green_1}` }}
       >
-        <Col span={12} className={"px-10 flex items-center"}>
+        <div className={"w-full  px-10 flex items-center"}>
           {post?.medias?.length > 0 && (
             <>
               <div className={"my-auto w-full"}>
@@ -140,7 +151,7 @@ const PostDetails = (props: any) => {
                     controls
                   />
                 ) : null}
-                <Row
+                <div
                   className={"mx-auto justify-center text-green_3 mt-4 text-lg"}
                 >
                   <button onClick={() => handleImageSlider(buttonType.PREV)}>
@@ -152,12 +163,12 @@ const PostDetails = (props: any) => {
                   <button onClick={() => handleImageSlider(buttonType.NEXT)}>
                     <IoIosArrowForward />
                   </button>
-                </Row>
+                </div>
               </div>
             </>
           )}
-        </Col>
-        <Col span={12} className={"border-amber-500 px-10 py-10 pr-20"}>
+        </div>
+        <div className={"max-w-[800px] min-w-[30vw] min-h-[80vh] w-max overflow-auto px-10 py-10 pr-20"}>
           <div
             className="flex items-center mb-2 text-lg"
             style={{ color: `${colors.green_3}` }}
@@ -179,15 +190,17 @@ const PostDetails = (props: any) => {
           >
             {post.title}
           </h4>
-          <div>
+          <div className="">
             <div
-              className={"text-lg overflow-auto"}
+              className={"text-lg text-justify inline-block"}
               dangerouslySetInnerHTML={{ __html: post.caption }}
             />
+
+
           </div>
           <div
+            className=" justify-between"
             style={{
-              position: "absolute",
               bottom: "1rem",
               left: "1rem",
               width: "100%",
@@ -195,7 +208,7 @@ const PostDetails = (props: any) => {
               backgroundColor: `transparent`,
             }}
           >
-            <Row>
+            <div className="flex">
               {post.isLiked ? (
                 <IoIosHeart
                   className={"w-6 h-6"}
@@ -212,29 +225,41 @@ const PostDetails = (props: any) => {
               <p className={"text-green_3 text-base ml-2"}>
                 {post.numberOfLikes}
               </p>
-            </Row>
-            <Row className={"mt-2"}>
+            </div>
+            <div className={"mt-2 flex"}>
               <Avatar
                 size={40}
                 icon={<UserOutlined />}
                 src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${user.avatarId}`}
                 className="mr-3"
               />
-              <input
-                type={"text"}
+              <textarea
+                ref={textAreaRef}
+                value={commentInput}
+                onInput={handleInput}
+                className={
+                  "w-full  bg-transparent rounded-3xl py-2 px-7 text-black placeholder-black outline-none"
+                }
+                style={{ border: `1px solid ${colors.green_3}`, height: textAreaHeight, overflow: "hidden" }}
+                placeholder="Thêm bình luận..."
+                onChange={(e) => handleChangeCommentInput(e)}
+                // onKeyPress={}
+                onKeyDown={(e) => e.key === "Enter" && handleEnter(e)}
+              />
+              {/* <textarea
                 value={commentInput}
                 placeholder={"Comment"}
-                onChange={(e) => handleChangeCommentInput(e)}
+                onChange={}
                 onKeyPress={(e) => e.key === "Enter" && handleEnter()}
                 className={
                   "w-4/5 bg-transparent rounded-3xl py-2 px-7 text-black placeholder-black outline-none"
                 }
                 style={{ border: `1px solid ${colors.green_3}` }}
-              />
-            </Row>
+              /> */}
+            </div>
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </>
   );
 };
