@@ -41,7 +41,10 @@ const Profile = () => {
               />
               <UserInfo label={"Email: "} value={user.email} />
               <UserInfo label={"Username: "} value={user.username} />
-              <UserInfo label={"Date of birth: "} value={user.dateOfBirth} />
+              <UserInfo
+                label={"Date of birth: "}
+                value={user.dateOfBirth.split("").reverse().join("")}
+              />
               <UserInfo label={"Gender: "} value={user.gender} />
               <UserInfo
                 label={"Role: "}
