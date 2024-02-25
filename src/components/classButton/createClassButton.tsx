@@ -93,6 +93,7 @@ const CreateClassButton = ({ onUpdate }) => {
       <Modal
         title={"Create new class successfully"}
         open={openSuccessAlert}
+        onCancel={() => setOpenSuccessAlert(false)}
         footer={null}
       >
         <p>Your class code: {classCode}</p>
