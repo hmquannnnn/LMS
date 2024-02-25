@@ -12,7 +12,6 @@ const VerifyEmailPage = () => {
     const router = useRouter();
     const verifyEmail = async () => {
         const res = await callVerifyEmail(code);
-        console.log(res);
         if (res.status === "ok") {
             router.push("/login");
             setIsVerify(true);

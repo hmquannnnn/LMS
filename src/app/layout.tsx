@@ -7,6 +7,7 @@ import { StoreProvider } from "@/redux/storeProvider";
 import paths from "@/app/paths";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -52,7 +53,9 @@ export default function RootLayout({
             href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
           ></link>
           {notShowHeaderAndFooter() && <Header />}
-          {children}
+          <Suspense fallback={<div>Loading...</div>}>
+            {children}
+          </Suspense>
           {notShowHeaderAndFooter() && <Footer />}
         </body>
       </html>
