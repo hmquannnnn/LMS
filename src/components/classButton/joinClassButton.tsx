@@ -89,6 +89,7 @@ const JoinClassButton = ({ onUpdate }) => {
       <Modal
         title={"Join class successfully"}
         open={openSuccessAlert}
+        onCancel={() => setOpenSuccessAlert(false)}
         footer={null}
       >
         <p>Your class name: {className}</p>
