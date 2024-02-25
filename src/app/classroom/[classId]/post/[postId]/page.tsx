@@ -59,7 +59,7 @@ const PostDetails = (props: any) => {
 
 
   useEffect(() => {
-    if (media) {
+    if (media && media.length > 0 && media[mediaIndex].type.includes("pdf")) {
       setFile({ url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${media[mediaIndex].id}` });
       // fileObject.url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${media[mediaIndex].id}`;
     }

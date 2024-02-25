@@ -6,6 +6,7 @@ import { FacebookIcon, HeartLikeIcon, HeartUnLikeIcon, TwitterIcon } from "./com
 import { callGetPageFavoriteDocuments } from "@/apis/userAPI";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+import { usePathname } from "next/navigation";
 import "@/style/notion.css";
 // import "prismjs/themes/prism-tomorrow.css";
 import { Spin, Button, Modal } from 'antd';
@@ -53,6 +54,7 @@ const DocumentIdPage = ({ params }) => {
     const documentTitle = useRef();
     const favoriteDocuments = useRef();
     const documentId = params.documentId;
+    const pathName = usePathname()
     // const [user, setUser] = useState();
     const user = useSelector((state) => state.account.user);
     const router = useRouter();
@@ -194,12 +196,12 @@ const DocumentIdPage = ({ params }) => {
             <div className="fixed right-0 flex flex-col gap-2 w-fit  pr-[2vw] pt-56 " >
                 <FacebookIcon onClick={
                     () => {
-                        window.open("https://www.facebook.com/sharer/sharer.php?u=" + "http://www.minhupro.xyz/library/17", "facebook-share-dialog", "width=600,height=600")
+                        window.open("https://www.facebook.com/sharer/sharer.php?u=" + NEXT_PUBLIC_FRONTEND_URL + pathName, "facebook-share-dialog", "width=600,height=600")
                     }
                 } />
                 <TwitterIcon onClick={
                     () => {
-                        window.open("https://twitter.com/intent/tweet?url=" + "http://www.minhupro.xyz/library/17", "twitter-share-dialog", "width=600,height=600")
+                        window.open("https://twitter.com/intent/tweet?url=" + NEXT_PUBLIC_FRONTEND_URL + pathName, "twitter-share-dialog", "width=600,height=600")
                     }
                 } />
                 <div className="h-[1px] bg-gray-300 mx-1.5"></div>

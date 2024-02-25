@@ -36,7 +36,7 @@ const nextConfig = {
         protocol: "http",
         hostname: "www.minhupro.xyz",
         port: "",
-        pathname: "/api/v1/media/**",
+        pathname: "/**",
       },
 
       {
