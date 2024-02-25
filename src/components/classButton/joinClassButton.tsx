@@ -94,9 +94,7 @@ const JoinClassButton = ({ onUpdate }) => {
       >
         <p>Your class name: {className}</p>
         <button
-          className={
-            "bg-rose-500 rounded px-10 py-1.5 font-semibold text-white"
-          }
+          className={"bg-blue_6 rounded px-10 py-1.5 font-semibold text-blue_5"}
           onClick={() => setOpenSuccessAlert(false)}
         >
           Done

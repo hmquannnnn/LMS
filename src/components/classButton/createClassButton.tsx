@@ -98,9 +98,7 @@ const CreateClassButton = ({ onUpdate }) => {
       >
         <p>Your class code: {classCode}</p>
         <button
-          className={
-            "bg-rose-500 rounded px-10 py-1.5 font-semibold text-white mt-2"
-          }
+          className={"bg-blue_6 rounded px-10 py-1.5 font-semibold text-blue_5"}
           onClick={() => setOpenSuccessAlert(false)}
         >
           Done
