@@ -79,7 +79,9 @@ const PendingPosts = (props: any) => {
               <tr key={post.id} className="odd:bg-white even:bg-gray-100">
                 <td className={"border border-slate-400"}>{index + 1}</td>
                 <td className={"border border-slate-400"}>{post.title}</td>
-                <td className={"border border-slate-400"}>{post.authorId}</td>
+                <td className={"border border-slate-400"}>
+                  {post.user.lastName + " " + post.user.firstName}
+                </td>
                 <td className={"border border-slate-400"}>
                   <button
                     className="bg-green-500 text-white px-3 py-1 mr-2 rounded"
