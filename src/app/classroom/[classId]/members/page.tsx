@@ -149,7 +149,7 @@ const ClassMember = (props: any) => {
 
           {userRole === ROLE_STUDENT &&
             membersList.map((student: object, index: number) => (
-              <div className={"flex flex-row px-3 my-2.5"}>
+              <div key={index} className={"flex flex-row px-3 my-2.5"}>
                 <p className={"mr-10 w-3"}>{index + 1}</p>
                 <div className={"span-10 flex flex-row"}>
                   <Avatar
