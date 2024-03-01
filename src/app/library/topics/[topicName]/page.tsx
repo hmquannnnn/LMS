@@ -164,7 +164,7 @@ const TopicDetailPage = (props: any) => {
                                             {formatDocumentTitle(document.title)}
                                         </li>
                                         <div className="text-center flex justify-center items-center" >{
-                                            document.type != "TEXT" ?
+                                            document.type == "TEXT" ?
                                                 (<svg
                                                     width="32px" height="32px"
                                                     viewBox="0 0 24 24"

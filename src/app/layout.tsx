@@ -8,6 +8,7 @@ import paths from "@/app/paths";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer";
 import { Suspense } from "react";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,18 +41,18 @@ export default function RootLayout({
         {/*{window.location.pathname === paths.logIn ? <></> : <Header></Header>}*/}
 
         <body className={inter.className}>
-          <link
+          <Link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;600;700&display=swap"
-          ></link>
-          <link
+          ></Link>
+          <Link
             href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@700&display=swap"
             rel="stylesheet"
-          ></link>
-          <link
+          ></Link>
+          <Link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
-          ></link>
+          ></Link>
           {notShowHeaderAndFooter() && <Header />}
           <Suspense fallback={<div>Loading...</div>}>
             {children}

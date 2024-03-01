@@ -22,7 +22,7 @@ const VerifyEmailPage = () => {
     }, []);
 
     return (
-        <div className="w-full h-[100vh] flex flex-col gap-5 items-center justify-center">
+        <div className="w-full h-[100vh] flex flex-col gap-5 items-center justify-center mix-blend-hard-light bg">
             {!isVerify && (
                 <>
                     <div>

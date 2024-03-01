@@ -45,7 +45,7 @@ const LoggedInDropdown = () => {
         {/*<Button>bottom</Button>*/}
         <p
           className={
-            "text-white font-semibold decoration-white text-lg cursor-pointer"
+            "text-white font-semibold decoration-white text-lg cursor-pointer border border-transparent rounded-lg hover:border-white px-2 py-1"
           }
           onClick={() => router.push(paths.profile)}
         >

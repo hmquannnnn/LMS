@@ -52,7 +52,8 @@ const DocumentIdPage = ({ params }) => {
     const NEXT_PUBLIC_FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL;
     const postTime = useRef<String>();
     const documentTitle = useRef();
-    const favoriteDocuments = useRef();
+    // const favoriteDocuments = useRef();
+    const [favoriteDocuments, setFavoriteDocuments] = useState();
     const documentId = params.documentId;
     const pathName = usePathname()
     // const [user, setUser] = useState();
@@ -83,14 +84,16 @@ const DocumentIdPage = ({ params }) => {
         fetchData();
     }, [documentId]);
 
-    useEffect(() => {
-        const fetchFavoriteData = async (userId: String) => {
-            try {
-                favoriteDocuments.current = await callGetPageFavoriteDocuments(userId, 0, 5);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+    const fetchFavoriteData = async (userId: String) => {
+        try {
+            let response = await callGetPageFavoriteDocuments(userId, 0, 5);
+            setFavoriteDocuments(response)
+            console.log(favoriteDocuments)
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
+    }
+    useEffect(() => {
         if (user?.id != '0') {
             fetchFavoriteData(user?.id);
         }
@@ -108,6 +111,9 @@ const DocumentIdPage = ({ params }) => {
             console.error('Error fetching data:', error)
             setIsLiked(false);
         });
+        if (user?.id != '0') {
+            fetchFavoriteData(user?.id);
+        }
     }
 
     const onUnLike = async () => {
@@ -118,6 +124,9 @@ const DocumentIdPage = ({ params }) => {
             console.error('Error fetching data:', error)
             setIsLiked(true);
         });
+        if (user?.id != '0') {
+            fetchFavoriteData(user?.id);
+        }
     }
 
     const handleCancelModal = () => {
@@ -177,7 +186,7 @@ const DocumentIdPage = ({ params }) => {
                     }}>Danh sách yêu thích</span>
 
                     <ul className="pl-2">
-                        {favoriteDocuments.current && favoriteDocuments.current.data.map((document, index) => {
+                        {favoriteDocuments && favoriteDocuments.data.map((document, index) => {
                             return (
                                 <li
                                     key={document.id}

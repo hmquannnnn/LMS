@@ -70,9 +70,9 @@ const Header = () => {
 
     return (
         <>
-            <Row className={"sticky top-0 bg-[#b8e6f6] h-12 px-3 w-full"} style={{ zIndex: "1000" }}>
-                <Col md={18} className={"h-fit my-auto"}>
-                    <Row>
+            <div className={"sticky top-0 bg-[#b8e6f6] flex items-center justify-between h-12 px-3 w-full"} style={{ zIndex: "1000" }}>
+                <div className={"h-fit my-auto w-1/2"}>
+                    <div className='flex items-center '>
                         {/*<Dropdown className={"my-auto"} menu={{items}}>*/}
                         <button
                             className={"border-[1px] text-center border-white text-white font-semibold h-8 rounded my-auto px-2 text-lg"}
@@ -84,32 +84,32 @@ const Header = () => {
                                 }
                             }
                         >
-                            <Row>
+                            <div className='flex'>
                                 <GiHamburgerMenu className={"mr-2.5 text-xl my-auto"} />
                                 <p className={"text-lg"}>Topic</p>
-                            </Row>
+                            </div>
                         </button>
-                        <Drawer title="Basic Drawer" placement={"left"} onClose={onClose} open={open}>
+                        {/* <Drawer title="Basic Drawer" placement={"left"} onClose={onClose} open={open}>
                             <p>Some contents...</p>
                             <p>Some contents...</p>
                             <p>Some contents...</p>
-                        </Drawer>
+                        </Drawer> */}
                         {/*</Dropdown>*/}
                         <input
-                            className={"h-8 rounded border-[1px] border-gray-200 pl-2 my-auto ml-2 outline-none w-1/2"}
+                            className={"h-8 rounded border-[1px] w-full border-gray-200 pl-2 my-auto ml-2 outline-none "}
                             type={"text"} placeholder={"Search"} />
-                    </Row>
-                </Col>
+                    </div>
+                </div>
 
-                <Col md={5} className={"h-fit my-auto flex justify-between hover:text-white"}>
-                    <Link href={"/library"} className={"text-white font-semibold decoration-white text-lg"}>Library</Link>
-                    <Link href={"/my-classes"} className={"text-white font-semibold text-lg"}>My Classes</Link>
+                <div className={"h-fit my-auto flex w-1/2 justify-end gap-5 items-center hover:text-white"}>
+                    <Link href={"/library"} className={"text-white font-semibold decoration-white border border-transparent rounded-lg hover:border-white px-2 py-1 text-lg"}>Library</Link>
+                    <Link href={"/my-classes"} className={"text-white font-semibold border border-transparent rounded-lg hover:border-white px-2 py-1 text-lg"}>My Classes</Link>
                     {/*<Link href={"/profile"} className={"text-white font-semibold text-lg"}>Profile</Link>*/}
                     {isAuthenticated ? <LoggedInDropdown /> : <DefaultDropdown />}
-                </Col>
+                </div>
 
 
-            </Row>
+            </div>
         </>
     )
 }
