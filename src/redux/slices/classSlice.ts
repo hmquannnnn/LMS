@@ -78,6 +78,9 @@ export const classSlice = createSlice({
         }));
       }
     },
+    getMembersWithoutStatusAction: (state, action) => {
+      state.currentClass.members = action.payload;
+    },
     getPendingPostsAction: (state, action) => {
       state.currentClass.pendingPosts.total = action.payload.length;
       state.currentClass.pendingPosts.postsList = action.payload;
@@ -97,6 +100,7 @@ export const {
   getNotificationsAction,
   getPendingPostsAction,
   getCurrentAssignment,
+  getMembersWithoutStatusAction,
 } = classSlice.actions;
 
 export default classSlice.reducer;

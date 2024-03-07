@@ -4,13 +4,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { Orientations, ROLE_STUDENT, ROLE_TEACHER } from "@/utils/constant";
 import {
   callGetAssigment,
-  callGetAssignmentStatusStudent,
+  callGetStudentsList,
   callSubmitAssignment,
 } from "@/apis/classAPI";
-import { getCurrentAssignment } from "@/redux/slices/classSlice";
+import {
+  getCurrentAssignment,
+  getMembersWithoutStatusAction,
+} from "@/redux/slices/classSlice";
 import React, { useEffect, useRef, useState } from "react";
-import { Col, Row } from "antd";
+import { Avatar, Col, Dropdown, Menu, MenuProps, Row } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
+import { UserOutlined } from "@ant-design/icons";
+import { MdOutlineCancel } from "react-icons/md";
+
+interface MembersItem {
+  key: number;
+  label: JSX.Element;
+}
+
+type Teammate = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  role: string;
+  dateOfBirth: string;
+  avatarId: string;
+};
 
 const SubmissionPage = (props: any) => {
   const classId = Number(props.params.classId);
@@ -20,12 +41,38 @@ const SubmissionPage = (props: any) => {
     (state) =>
       state?.classes?.currentClass?.assignments?.currentAssignment || {},
   );
+  const members = useSelector(
+    (state) => state?.classes?.currentClass?.members?.student || [],
+  );
+  // console.log(members);
+  console.log(currentAssignment);
   const dispatch = useDispatch();
   const [showSubmitForm, setShowSubmitForm] = useState(false);
+  const [membersMenu, setMembersMenu] = useState([]);
+  const [isUpdate, setIsUpdate] = useState(false);
+  // const [teammate, setTeammate] = useState([]);
+  const teammate = useRef([]);
+  // console.log(">>>check team: ", teammate);
+
+  const handleAddTeammate = (member: Teammate) => {
+    // console.log(member);
+    teammate.current = [...teammate.current, member];
+    setIsUpdate((prev) => !prev);
+    // console.log(teammate);
+  };
+
+  const handleDeleteTeammate = (memberId: number) => {
+    teammate.current = teammate.current.filter(
+      (member) => member.id != memberId,
+    );
+    console.log(teammate.current, memberId);
+    setIsUpdate((prev) => !prev);
+  };
 
   const getAssignmentDetails = async () => {
     if (user.role === ROLE_TEACHER) {
       const res = await callGetAssigment(classId);
+      console.log("check res: ", res);
       const currentAssignment = res.find(
         (assignment) => assignment.id == assignmentId,
       );
@@ -33,12 +80,42 @@ const SubmissionPage = (props: any) => {
       dispatch(getCurrentAssignment(currentAssignment));
     }
     if (user.role === ROLE_STUDENT) {
-      const res = await callGetAssignmentStatusStudent(classId);
+      const res = await callGetAssigment(classId);
+      console.log("check res: ", res);
+      const membersList = await callGetStudentsList(classId);
+      const menu = await membersList.map((member, index) => ({
+        key: index,
+        label: (
+          <div
+            className={"flex flex-row items-center"}
+            onClick={() => handleAddTeammate(member)}
+          >
+            <Avatar
+              size={30}
+              icon={<UserOutlined />}
+              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${member.avatarId}`}
+              className="mr-3 border-black border-[1px]"
+            />
+            <div>
+              <p className={"font-medium"}>
+                {member.lastName + " " + member.firstName}
+              </p>
+              <p className={"text-grey_2"}>
+                {member.email != null ? member.email : "No email"}
+              </p>
+            </div>
+          </div>
+        ),
+      }));
+      await setMembersMenu(menu);
       const currentAssignment = res.find(
         (assignment) => assignment.id == assignmentId,
       );
-      console.log(currentAssignment);
+      // console.log(currentAssignment);
       dispatch(getCurrentAssignment(currentAssignment));
+      dispatch(
+        getMembersWithoutStatusAction({ student: membersList, status: null }),
+      );
     }
   };
 
@@ -64,20 +141,33 @@ const SubmissionPage = (props: any) => {
     const title = formData.get("title") as string;
     const files = formData.getAll("files") as FileList;
     const caption = editorRef.current.getContent();
-    const orientation = formData.get("orientation") as string;
+    const orientation = currentAssignment.isForGroup
+      ? Orientations.MANAGEMENT
+      : (formData.get("orientation") as string);
 
     const formDataWithFiles = new FormData();
     formDataWithFiles.append("title", title);
     formDataWithFiles.append("caption", caption);
     formDataWithFiles.append("orientation", orientation);
+    if (currentAssignment.isForGroup) {
+      teammate.current.map((member, index) =>
+        formDataWithFiles.append("member-ids", member.id),
+      );
+    }
+
     for (let i = 0; i < files.length; i++) {
       formDataWithFiles.append("files", files[i]);
     }
-
+    console.log(formDataWithFiles);
     const res = await callSubmitAssignment(assignmentId, formDataWithFiles);
   };
 
   const editorRef = useRef(null);
+
+  const items: MenuProps["items"] = membersMenu.map((member) => ({
+    key: member.key.toString(),
+    label: member.label,
+  }));
 
   return (
     <>
@@ -108,6 +198,55 @@ const SubmissionPage = (props: any) => {
                       placeholder={"Title"}
                       className={"mb-2 rounded border-[1px]"}
                     />
+                  </div>
+                  <div className={"flex flex-row items-center"}>
+                    <label>Choose your teammates: </label>
+                    {teammate.current.length < 2 && (
+                      <Dropdown
+                        trigger={"click"}
+                        overlay={<Menu items={items} />}
+                        placement={"bottom"}
+                      >
+                        <div className={"border-[1px] rounded px-4 py-1 h-fit"}>
+                          Members
+                        </div>
+                      </Dropdown>
+                    )}
+
+                    <div className={"flex flex-row items-center"}>
+                      {teammate.current.length > 0 &&
+                        teammate.current.map((member: Teammate) => (
+                          <div
+                            key={member.id}
+                            className={
+                              "flex flex-row items-center bg-gray-100 rounded-3xl px-3 py-1 mx-2.5"
+                            }
+                          >
+                            <Avatar
+                              size={30}
+                              icon={<UserOutlined />}
+                              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${member.avatarId}`}
+                              className="mr-3 border-black border-[1px]"
+                            />
+                            <div>
+                              <p className={"font-medium"}>
+                                {member.lastName + " " + member.firstName}
+                              </p>
+                              <p className={"text-grey_2"}>
+                                {member.email != null
+                                  ? member.email
+                                  : "No email"}
+                              </p>
+                            </div>
+                            <MdOutlineCancel
+                              className={
+                                "text-red-600 cursor-pointer ml-5 text-lg"
+                              }
+                              onClick={() => handleDeleteTeammate(member.id)}
+                            />
+                          </div>
+                        ))}
+                    </div>
                   </div>
 
                   <div>

@@ -4,10 +4,11 @@ import { callGetAllPosts, callHandlePendingPost } from "@/apis/classAPI";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { callFetchUserById } from "@/apis/userAPI";
+import { callFetchUserById, callGetGroup } from "@/apis/userAPI";
 import paths from "@/app/paths";
 import { getPendingPostsAction } from "@/redux/slices/classSlice";
 import { assignmentStatus } from "@/utils/constant";
+import { displayGroupAuthor, isManagementPost } from "@/utils/checkOrientation";
 
 export const filterPostsByStatus = async (status: string, classId: number) => {
   const res = await callGetAllPosts(classId);
@@ -16,7 +17,9 @@ export const filterPostsByStatus = async (status: string, classId: number) => {
     const promises = res
       .filter((post) => post.type === status)
       .map(async (post) => {
-        const user = await callFetchUserById(post.authorId);
+        const user = isManagementPost(post)
+          ? await callGetGroup(post.authorId)
+          : await callFetchUserById(post.authorId);
         return { ...post, user };
       });
 
@@ -80,7 +83,9 @@ const PendingPosts = (props: any) => {
                 <td className={"border border-slate-400"}>{index + 1}</td>
                 <td className={"border border-slate-400"}>{post.title}</td>
                 <td className={"border border-slate-400"}>
-                  {post.user.lastName + " " + post.user.firstName}
+                  {isManagementPost(post)
+                    ? displayGroupAuthor(post)
+                    : post.user.lastName + " " + post.user.firstName}
                 </td>
                 <td className={"border border-slate-400"}>
                   <button

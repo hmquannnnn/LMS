@@ -12,7 +12,7 @@ import {
   getCurrentClassAction,
   getNotificationsAction,
 } from "@/redux/slices/classSlice";
-import { Avatar, Col, Divider, Row } from "antd";
+import { Avatar, Col, Divider, message, Row } from "antd";
 import { FormatDate, FormatDateTime } from "@/utils/formatDate";
 import {
   callGetAllNotificationComments,
@@ -20,6 +20,7 @@ import {
 } from "@/apis/commentsAPI";
 import { colors } from "@/utils/constant";
 import { IoPeopleSharp } from "react-icons/io5";
+import { FaRegCopy } from "react-icons/fa";
 
 type CommentInputs = {
   [key: number]: string;
@@ -149,16 +150,34 @@ const ClassNotification = (props: any) => {
     }
   };
 
+  const handleCopy = async (classCode: string) => {
+    try {
+      await navigator.clipboard.writeText(classCode);
+      message.success("copy successfully");
+      console.log("Text copied to clipboard successfully!");
+    } catch (error) {
+      console.error("Failed to copy text to clipboard:", error);
+    }
+  };
+
   return (
     <>
       <div className={"w-3/5 mx-auto"}>
         <Row>
           <Col className={"h-28 place-items-start pr-5"} span={5}>
-            <div className={"border-[1px] h-full pt-2 pl-4 rounded-xl"}>
+            <div className={"border-[1px] h-full pt-2 px-4 rounded-xl"}>
               <p className={"text-lg font-semibold mb-6"}>Class code</p>
-              <p className={"text-2xl font-bold text-blue_5"}>
-                {classInfo.code}
-              </p>
+              <div className={"flex justify-between items-center"}>
+                <p className={"text-2xl font-bold text-blue_5"}>
+                  {classInfo.code}
+                </p>
+                <FaRegCopy
+                  className={"cursor-pointer text-blue_5 text-xl"}
+                  onClick={() => handleCopy(classInfo.code)}
+                >
+                  Copy
+                </FaRegCopy>
+              </div>
             </div>
           </Col>
           <Col span={19}>

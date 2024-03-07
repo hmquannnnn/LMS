@@ -129,7 +129,7 @@ const Cropper = ({ imgSrc }) => {
       {/*  <h1>React Avatar Cropper</h1>*/}
       {/*  <hr />*/}
       {/*</header>*/}
-      <div className="container">
+      <div className="container w-full">
         <CropperModal
           modalOpen={modalOpen}
           src={src}

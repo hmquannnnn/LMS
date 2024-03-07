@@ -61,6 +61,7 @@ const ClassAssignment = (props: any) => {
       // }
       if (userRole === ROLE_TEACHER) {
         const assignmentList = await callGetAssigment(classId);
+        console.log(assignmentList);
         assignmentList.sort((a: object, b: object) => {
           return new Date(a.id) - new Date(b.id);
         });
@@ -88,7 +89,7 @@ const ClassAssignment = (props: any) => {
     // const content = e.target.elements.content.value;
     const content = editorRef.current.getContent();
     const dueDateTime = e.target.elements.dueDateTime.value;
-    const isForGroup = false;
+    const isForGroup = e.target.elements.isForGroup.value;
     const assignmentReq = {
       title: title,
       content: content,
@@ -226,6 +227,10 @@ const ClassAssignment = (props: any) => {
                     }}
                   />
                   <input type={"datetime-local"} name={"dueDateTime"} />
+                  <select name={"isForGroup"}>
+                    <option value={"false"}>Personal</option>
+                    <option value={"true"}>Group</option>
+                  </select>
                   <button
                     type={"submit"}
                     className="border-[1px] bg-red-500 text-white rounded w-full text-center py-1 font-bold"
