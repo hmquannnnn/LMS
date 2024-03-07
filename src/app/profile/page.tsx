@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import UserInfo from "@/components/userInfo";
 import { ROLE_STUDENT } from "@/utils/constant";
 import Cropper from "@/components/Cropper";
+import "./profile.scss";
 
 const Profile = () => {
   const user = useSelector((state) => state.account.user);
@@ -27,14 +28,17 @@ const Profile = () => {
 
   return (
     <>
-      <div className="min-h-[82vh] grid grid-cols-12">
+      <div
+        className="min-h-[95vh] grid grid-cols-12 h-fit"
+        style={{ backgroundImage: "url(/sky.png)" }}
+      >
         {/*{user.id}*/}
         {/*<Cropper />*/}
         <div className={"col-span-3"}></div>
-        <div className={"col-span-9"}>
+        <div className={"col-span-9 pr-10 h-fit"}>
           <h3 className={"font-bold text-2xl"}>My profile</h3>
-          <div className={"grid grid-cols-5 mt-3"}>
-            <div className={"col-span-2"}>
+          <div className={"grid " + "grid-cols-5 " + "mt-3 profile-user"}>
+            <div className={"" + "col-span-3 " + "user-info"}>
               <UserInfo
                 label={"Name: "}
                 value={user.lastName + " " + user.firstName}
@@ -51,7 +55,7 @@ const Profile = () => {
                 value={user.role === ROLE_STUDENT ? "Student" : "Teacher"}
               />
             </div>
-            <div className={"col-span-1"}>
+            <div className={"" + "col-span-2 " + "user-avatar"}>
               <Cropper
                 imgSrc={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${user.avatarId}`}
               />

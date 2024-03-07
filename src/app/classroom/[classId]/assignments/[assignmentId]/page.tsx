@@ -7,7 +7,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentAssignment } from "@/redux/slices/classSlice";
 import React, { useEffect } from "react";
-import { assignmentStatus, ROLE_STUDENT, ROLE_TEACHER } from "@/utils/constant";
+import { ROLE_STUDENT, ROLE_TEACHER } from "@/utils/constant";
 import { FormatDate } from "@/utils/formatDate";
 import { useRouter } from "next/navigation";
 
@@ -93,18 +93,18 @@ const AssignmentDetails = (props: any) => {
               <th
                 className={"border border-collapse font-normal text-left px-5"}
               >
-                {currentAssignment.status === assignmentStatus.NOT_SUBMITTED ? (
-                  <button
-                    className={
-                      "rounded bg-blue_8 px-3 py-1 font-semibold text-white"
-                    }
-                    onClick={() => router.push(`${assignmentId}/submit`)}
-                  >
-                    Submit
-                  </button>
-                ) : (
-                  <p>See post</p>
-                )}
+                {/*{currentAssignment.status === assignmentStatus.NOT_SUBMITTED ? (*/}
+                <button
+                  className={
+                    "rounded bg-blue_8 px-3 py-1 font-semibold text-white"
+                  }
+                  onClick={() => router.push(`${assignmentId}/submit`)}
+                >
+                  Submit
+                </button>
+                {/*) : (*/}
+                {/*  <p>See post</p>*/}
+                {/*)}*/}
               </th>
             </tr>
           </table>

@@ -4,14 +4,6 @@ export const callCommentToPost = (postId: number, content: string) => {
   return instance.post(`comments/post/${postId}`, content);
 };
 
-export const callLikePost = (postId: number) => {
-  return instance.put(`posts/${postId}/like`);
-};
-
-export const callUnlikePost = (postId: number) => {
-  return instance.put(`posts/${postId}/unlike`);
-};
-
 export const callHandleLikePost = (postId: number, type: string) => {
   return instance.put(`posts/${postId}/${type}`);
 };

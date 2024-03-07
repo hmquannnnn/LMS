@@ -10,6 +10,7 @@ import { getAllClassAction } from "@/redux/slices/classSlice";
 import { useRouter } from "next/navigation";
 import paths from "@/app/paths";
 import { ROLE_TEACHER } from "@/utils/constant";
+import "../profile/profile.scss";
 
 const MyClasses = () => {
   const userRole = useSelector((state) => state.account.user.role);
@@ -49,7 +50,7 @@ const MyClasses = () => {
         <Row className={"flex flex-wrap"}>
           {classesList.map((classItem) => {
             return (
-              <div key={classItem.id} className={"relative w-1/6 pb-[8%] "}>
+              <div key={classItem.id} className={"relative w-1/5 pb-[16%] "}>
                 <div
                   className={
                     "bg-blue_1 text-blue_5 rounded-xl px-5 py-4 cursor-pointer place-items-end grid"
@@ -72,12 +73,16 @@ const MyClasses = () => {
                     )
                   }
                 >
+                  <img src={"/classroom.png"} alt={"classroom thumnail"} />
                   <p className={"font-semibold text-xl"}>{classItem.name}</p>
                 </div>
               </div>
             );
           })}
         </Row>
+        <div id="one">
+          <div id="two">&nbsp;</div>
+        </div>
       </div>
     </>
   );

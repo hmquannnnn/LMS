@@ -70,11 +70,11 @@ const OrientationPostsList = (props: any) => {
   console.log(postsList);
   return (
     <>
-      <div className={"h-full lg:mx-auto w-4/6 flex mb-8"}>
+      <div className={"h-full w-full 2xl:w-4/6 mx-auto flex mb-8"}>
         <div className={"px-10"}>
           <div
             className={
-              "min-h-full bg-green_5 rounded-xl flex justify-center items-center shadow-xl px-3 h-[850px]"
+              "min-h-full bg-green_5 rounded-xl flex justify-center items-center shadow-xl px-3 h-[600px] 2xl:h-[600px]"
             }
           >
             <div
@@ -132,13 +132,13 @@ const OrientationPostsList = (props: any) => {
                     ></div>
                     <div
                       className={
-                        "h-full w-full bg-green_6 rounded-2xl px-3 max-w-full text-ellipsis overflow-hidden flex  items-center"
+                        "h-full w-full bg-green_6 rounded-2xl px-3 max-w-full text-ellipsis overflow-hidden flex items-center"
                       }
                       // style={{ height: "12%" }}
                     >
                       <p
                         className={
-                          "uppercase text-green_3 font-semibold text-lg max-h-full truncate h-fit leading-none"
+                          "uppercase text-green_3 font-medium truncate leading-none max-h-fit text-base 2xl:text-lg"
                         }
                       >
                         {post.title}
@@ -150,7 +150,7 @@ const OrientationPostsList = (props: any) => {
                       }
                       // style={{ height: "12%" }}
                     >
-                      <p className={"text-green_3"}>
+                      <p className={"text-green_3 text-sm 2xl:text-base"}>
                         {post.user.lastName + " " + post.user.firstName}
                       </p>
                     </div>

@@ -6,3 +6,4 @@ import paths from "@/app/paths";
 export async function navigate() {
   redirect(`${paths.library}`);
 }
+

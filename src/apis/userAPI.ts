@@ -30,3 +30,7 @@ export const callGetPageFavoriteDocuments = (
     `/users/${userId}/favourite-documents/page?page=${page}&pageSize=${pageSize}`,
   );
 };
+
+export const callGetGroup = (groupId: number) => {
+  return instance.get(`groups/${groupId}`);
+};
