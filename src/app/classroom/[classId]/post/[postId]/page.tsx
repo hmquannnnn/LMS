@@ -275,13 +275,6 @@ const PostDetails = (props: any) => {
           className="flex items-center mb-2 text-lg"
           style={{ color: `${colors.green_3}` }}
         >
-          {/*<FaUser className="mr-2" />*/}
-          {/*<Avatar*/}
-          {/*  size={40}*/}
-          {/*  icon={<UserOutlined />}*/}
-          {/*  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${author.avatarId}`}*/}
-          {/*  className="mr-3"*/}
-          {/*/>*/}
           {isManagementPost(post) ? (
             author?.students?.length &&
             author.students.map((student, index: number) =>
@@ -290,9 +283,17 @@ const PostDetails = (props: any) => {
                 : student.lastName + " " + student.firstName,
             )
           ) : (
-            <p className="inline-block text-green-3">
-              {/*{post.author.lastName + " " + post.author.firstName}*/}1
-            </p>
+            <>
+              <Avatar
+                size={40}
+                icon={<UserOutlined />}
+                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${author.avatarId}`}
+                className="mr-3"
+              />
+              <p className="inline-block text-green-3">
+                {author.lastName + " " + author.firstName}
+              </p>
+            </>
           )}
           <p className="inline-block text-green-3">
             {/*{isManagementPost(post)*/}
