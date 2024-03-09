@@ -4,6 +4,7 @@ import { callGetDocuments } from "@/apis/documentsAPI";
 import DocumentPreview from "@/app/library/documentPreview";
 import { Spin } from "antd";
 import HeaderWithLogo from "@/components/headerWithLogo";
+import Image from "next/image";
 
 const MEDIA_URL = process.env.NEXT_PUBLIC_BACKEND_URL + "/media/";
 const Library = () => {
@@ -11,7 +12,7 @@ const Library = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        callGetDocuments(null).then((res) => {
+        callGetDocuments(null, null).then((res) => {
           setData(res);
           console.log(res);
         });
@@ -26,6 +27,8 @@ const Library = () => {
     <>
       <div className={"bg-sky"}>
         <HeaderWithLogo />
+
+        <Image src="/public\image\background_home.png" width={1920} height={1080} alt="library-background" />
 
         {data.length == 0 && (
           <div className="w-full flex justify-center h-screen mt-[50vh]">
