@@ -26,9 +26,10 @@ const Library = () => {
   return (
     <>
       <div className={"bg-sky"}>
-        <HeaderWithLogo />
-
-        <Image src="/public\image\background_home.png" width={1920} height={1080} alt="library-background" />
+        {/* <HeaderWithLogo /> */}
+        <div className="w-full ">
+          <Image className="object-contain" src="/images/background_home.png" width={1920} height={1080} alt="library-background" />
+        </div>
 
         {data.length == 0 && (
           <div className="w-full flex justify-center h-screen mt-[50vh]">

@@ -72,7 +72,7 @@ const Header = () => {
 
     return (
         <>
-            <div className={"sticky top-0 h-24 flex justify-center"} style={{ zIndex: "1000" }}>
+            <div className={"sticky top-0 py-4 flex justify-center"} style={{ zIndex: "1000" }}>
                 <div className='flex items-center justify-between w-2/3'>
 
                     <div className={"h-fit my-auto flex-1"}>

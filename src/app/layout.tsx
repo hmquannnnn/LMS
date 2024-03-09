@@ -8,6 +8,7 @@ import paths from "@/app/paths";
 import Header from "@/components/header/header";
 import { Suspense } from "react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +22,25 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    // just trigger this so that the initial state 
+    // is updated as soon as the component is mounted
+    // related: https://stackoverflow.com/a/63408216
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const router = useRouter();
   const pathName = usePathname();
   const notShowHeaderAndFooter = () => {
@@ -31,6 +51,12 @@ export default function RootLayout({
       pathName != paths.verifyEmail
     );
   };
+
+  const isHeaderFixed = () => {
+    return (
+      pathName === paths.library
+    );
+  }
   // console.log(pathName);
   return (
     <StoreProvider>
@@ -39,7 +65,7 @@ export default function RootLayout({
       <html lang="en">
         {/*{window.location.pathname === paths.logIn ? <></> : <Header></Header>}*/}
 
-        <body className={inter.className}>
+        <body className={inter.className + "relative"}>
           <Link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;600;700&display=swap"
@@ -52,7 +78,9 @@ export default function RootLayout({
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
           ></Link>
-          {notShowHeaderAndFooter() && <Header />}
+          <div className={`${isHeaderFixed() ? 'fixed' : 'sticky top-0'} w-full bg-white/${Math.min(100, parseInt((scrollY - 100) / 5 + '.0', 10) * 5)} bg-white/`}>
+            {notShowHeaderAndFooter() && <Header />}
+          </div>
           <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
           {/*{notShowHeaderAndFooter() && <Footer />}*/}
         </body>
