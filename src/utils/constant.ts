@@ -15,13 +15,15 @@ export const colors = {
   blue_7: "#126b8c",
   blue_8: "#4fc1e9",
   blue_9: "#b6cff9",
+  blue_10: "#0b4582",
   pink_1: "#fec5b9",
   pink_2: "#f49ba2",
   pink_3: "#f8bbc1",
-  pink_4: "#920f1d",
+  pink_4: "#ed5565",
   pink_5: "#aa280e",
   yellow_1: "#ffe5b5",
   yellow_2: "#a26900",
+  yellow_3: "#fff2da",
   green_1: "#c6e5a4",
   green_2: "#0fb251",
   green_3: "#517b23",
@@ -29,7 +31,7 @@ export const colors = {
   green_5: "#d9eec3",
   green_6: "#ecf4d0",
   grey_1: "#d9d9d9",
-  grey_2: "#7f7f7f",
+  grey_2: "#404040",
 };
 
 export const assignmentStatus: AssignmentStatus = {

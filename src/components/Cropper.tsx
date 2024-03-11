@@ -129,7 +129,7 @@ const Cropper = ({ imgSrc }) => {
       {/*  <h1>React Avatar Cropper</h1>*/}
       {/*  <hr />*/}
       {/*</header>*/}
-      <div className="container w-full">
+      <div className="container w-full rounded bg-blue_1 h-full flex items-center justify-center flex-col">
         <CropperModal
           modalOpen={modalOpen}
           src={src}
@@ -163,7 +163,7 @@ const Cropper = ({ imgSrc }) => {
           href="/"
           onClick={handleInputClick}
           className={
-            "bg-blue_6 text-blue_5 py-2 px-6 rounded mx-auto block w-[60%] text-center"
+            "bg-[#95daf2] text-blue_5 py-2 px-6 rounded mx-auto block w-[60%] text-center"
           }
         >
           {/*<FcAddImage className="add-icon" />*/}
