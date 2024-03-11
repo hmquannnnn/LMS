@@ -377,8 +377,7 @@ const PostDetails = (props: any) => {
               /> */}
           </div>
           <div>
-            {commentsList?.length &&
-              commentsList.length > 0 &&
+            {commentsList?.length > 0 &&
               commentsList.map((comment) => (
                 <div className="my-1.5 bg-green_6 text-green_3 rounded-2xl p-2 w-full">
                   <Row>
