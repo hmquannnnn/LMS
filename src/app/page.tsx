@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import paths from "@/app/paths";
 
+
 export default function Home() {
   const dispatch = useDispatch();
   const [avatar, setAvatar] = useState("");
@@ -23,5 +24,7 @@ export default function Home() {
     router.push(`${paths.library}`);
   }, []);
 
-  return <></>;
+  return <>
+
+  </>;
 }
