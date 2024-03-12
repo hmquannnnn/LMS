@@ -4,6 +4,9 @@ import { callGetDocuments } from "@/apis/documentsAPI";
 import DocumentPreview from "@/app/library/documentPreview";
 import { Spin } from "antd";
 import HeaderWithLogo from "@/components/headerWithLogo";
+import Image from "next/image";
+import { MainTitle } from "./MainTitle";
+import Link from "next/link";
 
 const MEDIA_URL = process.env.NEXT_PUBLIC_BACKEND_URL + "/media/";
 const Library = () => {
@@ -11,7 +14,7 @@ const Library = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        callGetDocuments(null).then((res) => {
+        callGetDocuments(null, null).then((res) => {
           setData(res);
           console.log(res);
         });
@@ -25,7 +28,31 @@ const Library = () => {
   return (
     <>
       <div className={"bg-sky"}>
-        <HeaderWithLogo />
+        {/* <HeaderWithLogo /> */}
+        <div className="w-full relative flex justify-end">
+          {/* <div className="absolute bottom-0 left-0">
+            <div className="font-iciel flex text-purple_1">
+              <div className="flex items-center">
+                <div className="text-[200px] leading-[65px]">TH</div>
+              </div>
+              <div className="flex flex-col justify-end">
+                <div className="text-[65px] leading-[65px]">
+                  Ư VIỆN
+                </div>
+                <div className="text-[65px] leading-[65px]">
+                  ÔNG TIN
+                </div>
+              </div>
+            </div>
+          </div> */}
+          <div className="absolute bottom-[42%] left-[10%]">
+            <MainTitle />
+          </div>
+          <div className="w-3/4">
+            <Image className="object-contain" src="/images/background_home.png" width={1920} height={1080} alt="library-background" />
+          </div>
+        </div>
+
 
         {data.length == 0 && (
           <div className="w-full flex justify-center h-screen mt-[50vh]">
@@ -33,13 +60,13 @@ const Library = () => {
           </div>
         )}
         {data.length > 0 && (
-          <div className="flex flex-wrap justify-between  px-[15vw]">
-            <div className="w-min text-xs">
+          <div className="flex flex-wrap justify-between mt-16">
+            <div className="">
               {data
-                .filter((item, index) => index >= 1 && index <= 3)
-                .map((item) => {
+                // .filter((item, index) => index >= 1 && index <= 3)
+                .map((item, index) => {
                   return (
-                    <div key={item.id} className="mb-14">
+                    <div key={item.id} className="mb-16">
                       <DocumentPreview
                         props={{
                           data: item,
@@ -48,13 +75,14 @@ const Library = () => {
                           imgUrl: item?.thumbnail?.id
                             ? MEDIA_URL + item?.thumbnail?.id
                             : "https://placehold.co/300x200",
+                          isOddIndex: (index % 2 !== 0)
                         }}
                       ></DocumentPreview>
                     </div>
                   );
                 })}
             </div>
-            <div className="w-min text-center text-md">
+            {/* <div className="w-min text-center text-md">
               {data
                 .filter((item, index) => index >= 4 && index <= 5)
                 .map((item) => {
@@ -93,7 +121,7 @@ const Library = () => {
                     </div>
                   );
                 })}
-            </div>
+            </div> */}
           </div>
         )}
       </div>

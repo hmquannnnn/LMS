@@ -12,6 +12,7 @@ import DefaultDropdown from "@/components/header/accountManagement/default";
 import { useRouter } from "next/navigation";
 import { callFetchUser } from "@/apis/userAPI";
 import { doGetAccountAction } from "@/redux/slices/accountSlice";
+import { usePathname } from 'next/navigation';
 
 const items: MenuProps['items'] = [
     {
@@ -44,6 +45,7 @@ const Header = () => {
     const isAuthenticated = useSelector(state => state.account.isAuthenticated);
     const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated);
     // console.log(isAuthenticated);
+    const pathName = usePathname();
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
     const router = useRouter();
@@ -70,11 +72,13 @@ const Header = () => {
 
     return (
         <>
-            <div className={"sticky top-0 bg-[#b8e6f6] flex items-center justify-between h-12 px-3 w-full"} style={{ zIndex: "1000" }}>
-                <div className={"h-fit my-auto w-1/2"}>
-                    <div className='flex items-center '>
-                        {/*<Dropdown className={"my-auto"} menu={{items}}>*/}
-                        <button
+            <div className={"sticky top-0 py-4 flex justify-center"} style={{ zIndex: "1000" }}>
+                <div className='flex items-center justify-between w-2/3'>
+
+                    <div className={"h-fit my-auto flex-1"}>
+                        <div className='flex items-center'>
+                            {/*<Dropdown className={"my-auto"} menu={{items}}>*/}
+                            {/* <button
                             className={"border-[1px] text-center border-white text-white font-semibold h-8 rounded my-auto px-2 text-lg"}
                             // onClick={(e) => e.preventDefault()}
                             onClick={
@@ -84,31 +88,37 @@ const Header = () => {
                                 }
                             }
                         >
-                            <div className='flex'>
-                                <GiHamburgerMenu className={"mr-2.5 text-xl my-auto"} />
-                                <p className={"text-lg"}>Topic</p>
+                        </button> */}
+                            <div className='flex items-center'>
+                                {/* <GiHamburgerMenu className={"mr-2.5 text-xl my-auto"} /> */}
+                                <p className={"text-purple_1 font-bold"}>DANH MỤC</p>
                             </div>
-                        </button>
-                        {/* <Drawer title="Basic Drawer" placement={"left"} onClose={onClose} open={open}>
+                            {/* <Drawer title="Basic Drawer" placement={"left"} onClose={onClose} open={open}>
                             <p>Some contents...</p>
                             <p>Some contents...</p>
                             <p>Some contents...</p>
                         </Drawer> */}
-                        {/*</Dropdown>*/}
-                        <input
-                            className={"h-8 rounded border-[1px] w-full border-gray-200 pl-2 my-auto ml-2 outline-none "}
-                            type={"text"} placeholder={"Search"} />
+                            {/*</Dropdown>*/}
+                            <div className='bg-purple_2 flex items-center px-2 border rounded-lg ml-[3vh] w-2/3'>
+                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 30 30" fill="white">
+                                    <path d="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z"></path>
+                                </svg>
+                                <input
+                                    className={"h-8 rounded border-0 bg-purple_2  caret-white border-0 focus:outline-none border-gray-200 pl-2 my-auto ml-2 outline-none "}
+                                    type={"text"} placeholder={""} />
+                            </div>
+                        </div>
+                    </div>
+                    <div className={"h-fit my-auto flex justify-end gap-5 items-center"}>
+                        {pathName.includes("/library") ?
+                            <Link href={"/my-classes"} className={"font-semibold border border-transparent rounded-lg hover:border-white px-4 py-1 text-lg text-purple_1"}>Lớp học</Link>
+                            :
+                            <Link href={"/library"} className={"font-semibold decoration-white border border-transparent rounded-lg hover:border-white px-4 py-1 text-lg text-purple_1"}>Thư viện</Link>
+                        }
+                        {/*<Link href={"/profile"} className={"font-semibold text-lg"}>Profile</Link>*/}
+                        {isAuthenticated ? <LoggedInDropdown /> : <DefaultDropdown />}
                     </div>
                 </div>
-
-                <div className={"h-fit my-auto flex w-1/2 justify-end gap-5 items-center hover:text-white"}>
-                    <Link href={"/library"} className={"text-white font-semibold decoration-white border border-transparent rounded-lg hover:border-white px-2 py-1 text-lg"}>Library</Link>
-                    <Link href={"/my-classes"} className={"text-white font-semibold border border-transparent rounded-lg hover:border-white px-2 py-1 text-lg"}>My Classes</Link>
-                    {/*<Link href={"/profile"} className={"text-white font-semibold text-lg"}>Profile</Link>*/}
-                    {isAuthenticated ? <LoggedInDropdown /> : <DefaultDropdown />}
-                </div>
-
-
             </div>
         </>
     )

@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'IcielLa Chic Pro Shad';
+    src: url('/fonts/iCiel LaChicProShaded.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
 body {
     margin: 0;
 }
