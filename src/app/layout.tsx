@@ -66,6 +66,11 @@ export default function RootLayout({
         {/*{window.location.pathname === paths.logIn ? <></> : <Header></Header>}*/}
 
         <body className={inter.className + "relative"}>
+          {/* <Link rel="preconnect" href="https://fonts.googleapis.com" />
+          <Link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" /> */}
+          <link
+            href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+            rel="stylesheet" ></link>
           <Link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;600;700&display=swap"
@@ -78,7 +83,7 @@ export default function RootLayout({
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
           ></Link>
-          <div className={`${isHeaderFixed() ? 'fixed' : 'sticky top-0'} w-full bg-white/${Math.min(100, parseInt((scrollY - 100) / 5 + '.0', 10) * 5)} bg-white/`}>
+          <div className={`${isHeaderFixed() ? 'fixed' : 'sticky top-0'} w-full z-[9999] bg-white/${Math.min(100, parseInt((scrollY - 100) / 5 + '.0', 10) * 5)} bg-white/`}>
             {notShowHeaderAndFooter() && <Header />}
           </div>
           <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>

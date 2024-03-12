@@ -13,6 +13,8 @@ const config: Config = {
       headingOpenSans: ['"OpenSans"', "sans-serif"],
       vollkorn: ['"Vollkorn"', "serif"],
       timesNewRoman: ['"Times New Roman"', "serif"],
+      josefin: ['"Josefin Sans"', "sans-serif"],
+      iciel: ['"IcielLa Chic Pro Shad"', "sans-serif"],
     },
     extend: {
       backgroundImage: {
