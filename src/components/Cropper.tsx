@@ -129,7 +129,7 @@ const Cropper = ({ imgSrc }) => {
       {/*  <h1>React Avatar Cropper</h1>*/}
       {/*  <hr />*/}
       {/*</header>*/}
-      <div className="container w-full rounded bg-blue_1 h-full flex items-center justify-center flex-col">
+      <div className="container max-w-full rounded bg-blue_1 h-full flex items-center justify-center flex-col">
         <CropperModal
           modalOpen={modalOpen}
           src={src}
@@ -144,26 +144,33 @@ const Cropper = ({ imgSrc }) => {
               imgSrc
             }
             alt=""
-            width="200"
-            height="200"
+            className={
+              "2xl:w-44 2xl:h-44 xl:w-24 xl:h-24 lg:w-24 lg:h-24 sm:w-24 sm:h-24 md:w-24 md:h-24 2xl:mb-2 mb-1"
+            }
+            // width="200"
+            // height="200"
             style={{
               borderRadius: "50%",
-              border: "2px solid black",
-              height: "200px",
-              width: "200px",
+              // border: "2px solid black",
+              // height: "200px",
+              // width: "200px",
               margin: "auto",
-              marginBottom: "10px",
+              // marginBottom: "10px",
             }}
           />
         </div>
-        <p className={"text-center font-semibold text-lg mb-2"}>
+        <p
+          className={
+            "text-center font-semibold 2xl:text-lg text-sm 2xl:mb-2 mb-1"
+          }
+        >
           {user.lastName + " " + user.firstName}
         </p>
         <a
           href="/"
           onClick={handleInputClick}
           className={
-            "bg-[#95daf2] text-blue_5 py-2 px-6 rounded mx-auto block w-[60%] text-center"
+            "bg-[#95daf2] text-blue_5 2xl:py-2 2xl:px-6 rounded mx-auto block w-[60%] text-center text-sm py-1 px-4"
           }
         >
           {/*<FcAddImage className="add-icon" />*/}
