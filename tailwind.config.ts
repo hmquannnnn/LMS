@@ -46,7 +46,7 @@ const config: Config = {
         green_5: "#d9eec3",
         green_6: "#ecf4d0",
         grey_1: "#d9d9d9",
-        grey_2: "#7f7f7f",
+        grey_2: "#404040",
         purple_1: "#367ff0",
         purple_2: "#b3cbfb",
         purple_3: "#6d9ef3",

@@ -21,6 +21,13 @@ const STATUS = {
   REJECTED: -1,
 };
 
+export const sortByFirstName = (student) => {
+  console.log(student);
+  return student.sort((a, b) => {
+    return a.firstName.localeCompare(b.firstName);
+  });
+};
+
 const ClassMember = (props: any) => {
   const classId = props.params.classId;
   const dispatch = useDispatch();
@@ -43,7 +50,7 @@ const ClassMember = (props: any) => {
       dispatch(
         getMembersAction({
           // classInfo,
-          students: res.students,
+          students: sortByFirstName(res.students),
           status: res.status,
         }),
       );
@@ -98,15 +105,17 @@ const ClassMember = (props: any) => {
                   <p className={"h-fit ml-4"}>Rejected</p>
                 </div>
               </div>
-              <table className={"font-normal"}>
+              <table className={"font-normal max-w-full overflow-x-scroll"}>
                 <thead>
                   <tr className={"border border-collapse py-1 px-1"}>
-                    <th className={"border px-1.5 font-semibold"}>No</th>
-                    <th className={"border font-semibold"}>Name</th>
+                    <th className={"border px-1.5 font-semibold sticky"}>No</th>
+                    <th className={"border font-semibold sticky min-w-fit"}>
+                      Name
+                    </th>
                     {userRole === ROLE_TEACHER &&
                       Array.from({ length: total }).map((_, index) => (
-                        <th key={index} className={"border px-4 font-semibold"}>
-                          Assignment {index + 1}
+                        <th key={index} className={"border w-10 font-semibold"}>
+                          {index + 1}
                         </th>
                       ))}
                   </tr>
@@ -114,10 +123,12 @@ const ClassMember = (props: any) => {
                 <tbody>
                   {membersList.map((student: object, index: number) => (
                     <tr key={index} className={"px-2 py-1 font-normal"}>
-                      <th className={"border font-normal px-2 py-1"}>
+                      <th className={"border font-normal py-1 sticky w-10"}>
                         {index + 1}
                       </th>
-                      <th className={"border px-4 font-normal"}>
+                      <th
+                        className={"border px-4 font-normal sticky min-w-fit"}
+                      >
                         {student.studentInfo.lastName +
                           " " +
                           student.studentInfo.firstName}
@@ -125,7 +136,7 @@ const ClassMember = (props: any) => {
                       {userRole === ROLE_TEACHER &&
                         student.assignmentStatus.map(
                           (status: number, index: number) => (
-                            <th className={"border"} key={index}>
+                            <th className={"border w-10"} key={index}>
                               {status === STATUS.APPROVED ? (
                                 <FaCheck className={"text-green-500 mx-auto"} />
                               ) : status === STATUS.PENDING ? (
