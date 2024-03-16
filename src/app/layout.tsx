@@ -83,7 +83,7 @@ export default function RootLayout({
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
           ></Link>
-          <div className={`${isHeaderFixed() ? 'fixed' : 'sticky top-0'} w-full z-[9999] bg-white/${Math.min(100, parseInt((scrollY - 100) / 5 + '.0', 10) * 5)} bg-white/`}>
+          <div className={`${isHeaderFixed() ? `fixed  bg-white/${Math.min(100, parseInt((scrollY - 100) / 5 + '.0', 10) * 5)}` : ` sticky top-0 bg-white `} z-[500] w-full  `}>
             {notShowHeaderAndFooter() && <Header />}
           </div>
           <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>

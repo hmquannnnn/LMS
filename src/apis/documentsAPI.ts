@@ -28,6 +28,20 @@ export const callGetDocuments = (type: String | null, topic: String | null) => {
   return instance.get(`${documentUrl}`);
 };
 
+export const callGetDocumentsDetail = (
+  type: String | null,
+  topic: String | null
+) => {
+  if (type != null && topic != null) {
+    return instance.get(`${documentUrl}/detail?type=${type}&topic=${topic}`);
+  } else if (type != null) {
+    return instance.get(`${documentUrl}/detail?type=${type}`);
+  } else if (topic != null) {
+    return instance.get(`${documentUrl}/detail?topic=${topic}`);
+  }
+  return instance.get(`${documentUrl}/detail`);
+};
+
 export const callGetDocumentById = (documentId: string) => {
   return instance.get(`${documentUrl}/detail/${documentId}`);
 };

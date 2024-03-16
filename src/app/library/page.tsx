@@ -1,20 +1,24 @@
 "use client";
 import { useEffect, useState } from "react";
-import { callGetDocuments } from "@/apis/documentsAPI";
+import { callGetDocumentsDetail } from "@/apis/documentsAPI";
 import DocumentPreview from "@/app/library/documentPreview";
 import { Spin } from "antd";
-import HeaderWithLogo from "@/components/headerWithLogo";
 import Image from "next/image";
 import { MainTitle } from "./MainTitle";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const MEDIA_URL = process.env.NEXT_PUBLIC_BACKEND_URL + "/media/";
+// const MEDIA_URL = "/api/v1/media/";
+
 const Library = () => {
+
   const [data, setData] = useState([]);
+  const router = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        callGetDocuments(null, null).then((res) => {
+        callGetDocumentsDetail(null, null).then((res) => {
           setData(res);
           console.log(res);
         });
@@ -24,6 +28,7 @@ const Library = () => {
     };
     fetchData();
   }, []);
+
 
   return (
     <>
@@ -49,7 +54,7 @@ const Library = () => {
             <MainTitle />
           </div>
           <div className="w-3/4">
-            <Image className="object-contain" src="/images/background_home.png" width={1920} height={1080} alt="library-background" />
+            <Image className="object-contain" src="/images/background_home.svg" width={1920} height={1080} alt="library-background" />
           </div>
         </div>
 
@@ -59,14 +64,15 @@ const Library = () => {
             <Spin />
           </div>
         )}
+
         {data.length > 0 && (
-          <div className="flex flex-wrap justify-between mt-16">
+          <div className="flex flex-wrap justify-between mt-24">
             <div className="">
               {data
                 // .filter((item, index) => index >= 1 && index <= 3)
                 .map((item, index) => {
                   return (
-                    <div key={item.id} className="mb-16">
+                    <div key={item.id} className="mb-28">
                       <DocumentPreview
                         props={{
                           data: item,

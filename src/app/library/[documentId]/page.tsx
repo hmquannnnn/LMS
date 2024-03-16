@@ -11,13 +11,13 @@ import {
   HeartLikeIcon,
   HeartUnLikeIcon,
   TwitterIcon,
-} from "./component/sidebarIcon";
+} from "../../../components/sidebarIcon";
 import { callGetPageFavoriteDocuments } from "@/apis/userAPI";
 import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import "@/style/notion.css";
 // import "prismjs/themes/prism-tomorrow.css";
-import { Button, Modal, Spin } from "antd";
+import { Button, Modal, Spin, Breadcrumb } from "antd";
 
 function formatVietnameseDateTime(dateTime: Date) {
   const days = [
@@ -71,6 +71,13 @@ function isJwtExpired(token: String) {
   return decodedPayload.exp < currentTime;
 }
 
+const topicMapping = {
+  "SOCIAL": "Xã hội",
+  "CULTURE": "Văn hóa",
+  "SPORT": "Thể thao",
+  "TOURISM": "Du lịch"
+}
+
 const DocumentIdPage = ({ params }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -79,6 +86,7 @@ const DocumentIdPage = ({ params }) => {
   const [openRemindLoginModal, setOpenRemindLoginModal] = useState(false);
   const NEXT_PUBLIC_FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL;
   const postTime = useRef<String>();
+  const [currentDocument, setCurrentDocument] = useState();
   const documentTitle = useRef();
   // const favoriteDocuments = useRef();
   const [favoriteDocuments, setFavoriteDocuments] = useState();
@@ -91,6 +99,7 @@ const DocumentIdPage = ({ params }) => {
     const fetchData = async () => {
       try {
         const document: any = await callGetDocumentById(documentId);
+        setCurrentDocument(document);
         const notionPageId = document.notionPageId;
         postTime.current = formatVietnameseDateTime(
           new Date(document.postTime),
@@ -114,6 +123,11 @@ const DocumentIdPage = ({ params }) => {
 
     fetchData();
   }, [documentId]);
+
+  const pathname = usePathname();
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, [pathname]);
 
   const fetchFavoriteData = async (userId: String) => {
     try {
@@ -191,7 +205,7 @@ const DocumentIdPage = ({ params }) => {
 
   return (
     <>
-      <div className=" fixed flex  flex-col h-[90vh] gap-10 w-[18%] mt-8  pl-10">
+      <div className=" fixed flex  flex-col h-[90vh] gap-10 w-[18%] mt-4  pl-10">
         {/* bg-gradient-to-br from-pink_1 to-yellow_1 */}
         {/* <div className="h-40 border-2  rounded-xl "></div> */}
         <div className="h-full border-2 rounded-xl pl-4 pt-4 pr-6">
@@ -245,8 +259,8 @@ const DocumentIdPage = ({ params }) => {
           onClick={() => {
             window.open(
               "https://www.facebook.com/sharer/sharer.php?u=" +
-                NEXT_PUBLIC_FRONTEND_URL +
-                pathName,
+              NEXT_PUBLIC_FRONTEND_URL +
+              pathName,
               "facebook-share-dialog",
               "width=600,height=600",
             );
@@ -256,8 +270,8 @@ const DocumentIdPage = ({ params }) => {
           onClick={() => {
             window.open(
               "https://twitter.com/intent/tweet?url=" +
-                NEXT_PUBLIC_FRONTEND_URL +
-                pathName,
+              NEXT_PUBLIC_FRONTEND_URL +
+              pathName,
               "twitter-share-dialog",
               "width=600,height=600",
             );
@@ -272,9 +286,33 @@ const DocumentIdPage = ({ params }) => {
       </div>
 
       <div className="flex justify-start mx-auto ml-[20vw] pr-[5vw] mr-[4vw] ">
-        <div className=" pl-10 pr-20">
+
+        <div className=" pl-10 pr-20 mt-4">
+          <Breadcrumb
+            items={[
+              {
+                href: '/library',
+                title: <div className="flex group " >
+                  <svg className="group-hover:fill-black" xmlns="http://www.w3.org/2000/svg" fill="#AAA" x="0px" y="0px" width="20" height="20" viewBox="0 0 24 24">
+                    <path d="M 12 2.0996094 L 1 12 L 4 12 L 4 21 L 11 21 L 11 15 L 13 15 L 13 21 L 20 21 L 20 12 L 23 12 L 12 2.0996094 z M 12 4.7910156 L 18 10.191406 L 18 11 L 18 19 L 15 19 L 15 13 L 9 13 L 9 19 L 6 19 L 6 10.191406 L 12 4.7910156 z"></path>
+                  </svg>
+                  &nbsp;
+                  <span>Thư viện</span>
+                </div>,
+              },
+              {
+                href: '/library/topics/' + currentDocument?.topic,
+                title: (
+                  <>
+                    {/* <UserOutlined /> */}
+                    <span>{topicMapping[currentDocument?.topic]}</span>
+                  </>
+                ),
+              }
+            ]}
+          />
           {data && (
-            <div className="font-headingOpenSans font-[550] mx-auto my-0  text-[2.5rem] mt-[0.75em] mb-[0.25em]">
+            <div className="font-headingOpenSans font-[550] mx-auto my-0  text-[2.5rem] mt-[0.25em] mb-[0.25em]">
               {documentTitle.current}
             </div>
           )}
@@ -283,31 +321,34 @@ const DocumentIdPage = ({ params }) => {
               {postTime.current}
             </p>
           )}
+
           {data && <NotionRenderer blockMap={data} fullPage hideHeader />}
         </div>
         <div></div>
       </div>
 
-      <Modal
-        open={openRemindLoginModal}
-        title="Bạn chưa đăng nhập"
-        onCancel={handleCancelModal}
-        footer={[
-          <Button key="back" onClick={handleCancelModal}>
-            Cancel
-          </Button>,
-          <Button
-            className="bg-blue_3 text-white hover:bg-white"
-            key="submit"
-            loading={loading}
-            onClick={handleGoToLogin}
-          >
-            Login
-          </Button>,
-        ]}
-      >
-        <div>Vui lòng đăng nhập để thực hiện hành động.</div>
-      </Modal>
+      <div className="z-[1000]">
+        <Modal
+          open={openRemindLoginModal}
+          title="Bạn chưa đăng nhập"
+          onCancel={handleCancelModal}
+          footer={[
+            <Button key="back" onClick={handleCancelModal}>
+              Hủy
+            </Button>,
+            <Button
+              className="bg-blue_3 text-white hover:bg-white"
+              key="submit"
+              loading={loading}
+              onClick={handleGoToLogin}
+            >
+              Đăng nhập
+            </Button>,
+          ]}
+        >
+          <div>Vui lòng đăng nhập để thực hiện hành động.</div>
+        </Modal>
+      </div>
 
       {/* </StickyContainer> */}
     </>
