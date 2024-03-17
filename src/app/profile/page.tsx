@@ -124,7 +124,7 @@ const Profile = () => {
               className={" col-span-2 user-avatar"}
               style={{
                 display: "grid",
-                gridTemplateRows: "30% 70%",
+                gridTemplateRows: "40% 60%",
                 // gap: "calc((100% - (70% + 12% + 12%)) / 2)",
               }}
             >
