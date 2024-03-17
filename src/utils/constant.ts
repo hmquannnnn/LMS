@@ -1,5 +1,6 @@
 import Orientations from "@/types/orientations";
 import AssignmentStatus from "@/types/assignmentStatus";
+import testTypes from "@/types/testTypes";
 
 export const ROLE_TEACHER: string = "ROLE_TEACHER";
 export const ROLE_STUDENT: string = "ROLE_STUDENT";
@@ -48,4 +49,9 @@ export const Orientations: Orientations = {
   ART: "ART",
   MANAGEMENT: "MANAGEMENT",
   MAJOR: "MAJOR",
+};
+
+export const testTypes: testTypes = {
+  MULTIPLE_CHOICE: "MULTIPLE_CHOICE",
+  WRITING: "WRITING",
 };

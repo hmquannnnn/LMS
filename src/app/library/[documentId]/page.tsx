@@ -19,7 +19,7 @@ import "@/style/notion.css";
 // import "prismjs/themes/prism-tomorrow.css";
 import { Button, Modal, Spin, Breadcrumb } from "antd";
 
-function formatVietnameseDateTime(dateTime: Date) {
+export function formatVietnameseDateTime(dateTime: Date) {
   const days = [
     "Chủ Nhật",
     "Thứ Hai",

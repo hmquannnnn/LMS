@@ -1,0 +1,48 @@
+/* Khởi tạo kiểu cho checkbox */
+input[type="checkbox"] {
+  display: none; /* Ẩn checkbox mặc định */
+}
+
+/* Kiểu cho checkbox tùy thuộc vào trạng thái checked */
+input[type="checkbox"] + label span:before {
+  cursor: pointer;
+  content: "";
+  display: inline-block;
+  //vertical-align: middle;
+  width: 16px; /* Đường kính của checkbox */
+  height: 16px; /* Đường kính của checkbox */
+  border: 1px solid black; /* Viền của checkbox */
+  border-radius: 50%; /* Làm tròn checkbox */
+  margin-right: 8px; /* Khoảng cách giữa checkbox và nội dung */
+}
+
+/* Kiểu cho checkbox khi được chọn */
+input[type="checkbox"]:checked + label span:before {
+  box-shadow: 0 0 0 1px white, 0 0 0 2px black;
+  width: 13px;
+  height: 13px;
+  background-color: black; /* Màu nền của checkbox khi được chọn */
+  border-color: black; /* Màu viền của checkbox khi được chọn */
+  position: relative;
+  left: 1.5px;
+  margin-right: 11px;
+  //vertical-align: middle;
+}
+
+/* Kiểu cho checkbox khi được chọn và được focus */
+input[type="checkbox"]:checked:focus + label span:before {
+  box-shadow: 0 0 0 3px rgba(20, 96, 200, 0.3); /* Đổ bóng khi checkbox được focus */
+}
+
+/* Không hiển thị đường viền khi checkbox được focus */
+input[type="checkbox"]:focus + label span:before {
+  outline: none; /* Xóa đường viền khi checkbox được focus */
+}
+
+.scrollable-column {
+  overflow-y: visible; /* Cho phép thanh cuộn dọc chỉ hiển thị khi cần thiết */
+}
+
+.test-page {
+  overflow-y: hidden;
+}
