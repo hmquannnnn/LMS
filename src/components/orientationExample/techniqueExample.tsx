@@ -138,7 +138,11 @@ const TechniqueExample = ({ color }) => {
             </p>
           </div>
         </div>
-        <img src="/images/kithuat/diendientu.svg" alt="" className={"w-5/12"} />
+        <img
+          src="/images/kithuat/nongnghiepthucpham.svg"
+          alt=""
+          className={"w-5/12"}
+        />
       </div>
     </>
   );
