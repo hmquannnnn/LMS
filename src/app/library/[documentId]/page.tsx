@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import "@/style/notion.css";
 // import "prismjs/themes/prism-tomorrow.css";
 import { Button, Modal, Spin, Breadcrumb } from "antd";
+import paths from "@/app/paths";
 
 export function formatVietnameseDateTime(dateTime: Date) {
   const days = [
@@ -203,6 +204,10 @@ const DocumentIdPage = ({ params }) => {
     );
   }
 
+  const handleDirectToTest = (testType: string) => {
+    router.push(`${paths.library}/${documentId}/${testType}`);
+  };
+
   return (
     <>
       <div className=" fixed flex  flex-col h-[90vh] gap-10 w-[18%] mt-4  pl-10">
@@ -285,7 +290,7 @@ const DocumentIdPage = ({ params }) => {
         {isLiked && <HeartUnLikeIcon onClick={() => onUnLike()} />}
       </div>
 
-      <div className="flex justify-start mx-auto ml-[20vw] pr-[5vw] mr-[4vw] ">
+      <div className="flex justify-start flex-col mx-auto ml-[20vw] pr-[5vw] mr-[4vw] ">
 
         <div className=" pl-10 pr-20 mt-4">
           <Breadcrumb
@@ -324,7 +329,22 @@ const DocumentIdPage = ({ params }) => {
 
           {data && <NotionRenderer blockMap={data} fullPage hideHeader />}
         </div>
-        <div></div>
+        <div className={"flex flex-row justify-end mb-5"}>
+          <button
+            className={
+              "bg-blue_9 text-white font-semibold px-4 py-1 rounded mr-5"
+            }
+            onClick={() => handleDirectToTest("READING")}
+          >
+            Đọc hiểu
+          </button>
+          <button
+            className={"bg-blue_9 text-white font-semibold px-4 py-1 rounded"}
+            onClick={() => handleDirectToTest("WRITING")}
+          >
+            Viết
+          </button>
+        </div>
       </div>
 
       <div className="z-[1000]">
