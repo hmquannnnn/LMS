@@ -14,6 +14,7 @@ import { callFetchUser } from "@/apis/userAPI";
 import { doGetAccountAction } from "@/redux/slices/accountSlice";
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { Popover } from 'antd';
 
 const items: MenuProps['items'] = [
     {
@@ -67,6 +68,30 @@ const Header = () => {
         setOpen(false);
     };
 
+    const showTopics = (
+        <div className=''>
+            <div className='flex gap-4'>
+                <Link href={"/library/topics/culture"} className={"text-lg flex group group-hover:text-purple_1"}>
+                    {/* <div className='h-full w-[1px] mr-2 my-[2px] bg-black group-hover:bg-purple_1'></div> */}
+                    Văn hóa
+
+                </Link>
+                <Link href={"/library/topics/sport"} className={"text-lg flex group group-hover:text-purple_1"}>
+                    <div className='h-full w-[1px] mr-2 my-[2px] bg-black group-hover:bg-purple_1'></div>
+                    Thể thao
+                </Link>
+                <Link href={"/library/topics/social"} className={"text-lg flex group group-hover:text-purple_1"}>
+                    <div className='h-full w-[1px] mr-2 my-[2px] bg-black group-hover:bg-purple_1'></div>
+                    Xã hội
+                </Link>
+                <Link href={"/library/topics/tourism"} className={"text-lg flex group group-hover:text-purple_1"}>
+                    <div className='h-full w-[1px] mr-2 my-[2px] bg-black group-hover:bg-purple_1'></div>
+                    Du lịch
+                </Link>
+            </div>
+        </div>
+    )
+
     useEffect(() => {
         setIsLoggedIn(isAuthenticated);
     }, [isAuthenticated]);
@@ -94,10 +119,13 @@ const Header = () => {
                             }
                         >
                         </button> */}
-                            <div className='flex items-center'>
-                                {/* <GiHamburgerMenu className={"mr-2.5 text-xl my-auto"} /> */}
-                                <p className={"text-purple_1 font-bold"}>DANH MỤC</p>
-                            </div>
+                            <Popover placement="bottom" content={showTopics}>
+                                <div className='flex items-center cursor-pointer'>
+                                    {/* <GiHamburgerMenu className={"mr-2.5 text-xl my-auto"} /> */}
+                                    <p className={"text-purple_1 font-bold"}>DANH MỤC</p>
+                                </div>
+                            </Popover>
+
                             {/* <Drawer title="Basic Drawer" placement={"left"} onClose={onClose} open={open}>
                             <p>Some contents...</p>
                             <p>Some contents...</p>

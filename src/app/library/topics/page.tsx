@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import HeaderWithLogo from "@/components/headerWithLogo";
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 const MenuItem = ({ label, imageSrc, href, topicName }) => {
@@ -48,7 +47,6 @@ const Menu = () => {
 
     return (
         <>
-            <HeaderWithLogo />
             <div className="flex items-center gap-10 justify-center h-[60vh]">
                 <button className="p-2 " onClick={() => handlePrev()}>
                     <svg className="h-12 w-12 hover:h-[4rem] hover:w-[4rem] duration-300 ease-in-out" fill="none" viewBox="0 0 24 24" stroke="currentColor">

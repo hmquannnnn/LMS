@@ -7,6 +7,7 @@ export interface DocumentInput {
   veryFirstText: string;
   type: string;
   notionPageId: string;
+  topic: string
 }
 
 export const callPostDocument = (document: FormData) => {

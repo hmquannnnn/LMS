@@ -72,7 +72,7 @@ const Library = () => {
                 // .filter((item, index) => index >= 1 && index <= 3)
                 .map((item, index) => {
                   return (
-                    <div key={item.id} className="mb-28">
+                    <div key={item.id} className="mb-28 px-[8vw]">
                       <DocumentPreview
                         props={{
                           data: item,
