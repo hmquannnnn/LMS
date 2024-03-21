@@ -1,25 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  currentReadingTest: {},
-  currentWritingTest: {},
+  currentTest: {},
 };
 
 export const testSlice = createSlice({
   name: "test",
   initialState,
   reducers: {
-    getCurrentReadingTest: (state, action) => {
-      state.currentReadingTest = action.payload;
-    },
-    getCurrentWritingTest: (state, action) => {
-      state.currentWritingTest = action.payload;
+    getCurrentTest: (state, action) => {
+      state.currentTest = action.payload;
     },
   },
   extraReducers: (builder) => {},
 });
 
-export const { getCurrentReadingTest, getCurrentWritingTest } =
-  testSlice.actions;
+export const { getCurrentTest } = testSlice.actions;
 
 export default testSlice.reducer;
