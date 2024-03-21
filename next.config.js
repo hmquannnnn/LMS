@@ -22,7 +22,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "placehold.co",
+        hostname: "placeholder.co",
         port: "",
         pathname: "/**",
       },
@@ -48,6 +48,12 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "i.pinimg.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "**",
         port: "",
         pathname: "/**",
       },
