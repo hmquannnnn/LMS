@@ -39,10 +39,14 @@ input[type="checkbox"]:focus + label span:before {
   outline: none; /* Xóa đường viền khi checkbox được focus */
 }
 
-.scrollable-column {
-  overflow-y: visible; /* Cho phép thanh cuộn dọc chỉ hiển thị khi cần thiết */
-}
-
-.test-page {
-  overflow-y: hidden;
-}
+//.scrollable-column {
+//  overflow-y: scroll; /* Cho phép thanh cuộn dọc chỉ hiển thị khi cần thiết */
+//}
+//
+//.test-page {
+//  overflow: hidden;
+//}
+//
+//body {
+//  overflow: hidden;
+//}

@@ -4,11 +4,13 @@ import { callGetTestByDocument } from "@/apis/testAPI";
 import { testTypes } from "@/utils/constant";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentReadingTest } from "@/redux/slices/testSlice";
+import { getCurrentTest } from "@/redux/slices/testSlice";
 import "./test.scss";
 import { NotionRenderer } from "react-notion";
 import { callGetDocumentById } from "@/apis/documentsAPI";
 import { formatVietnameseDateTime } from "@/app/library/[documentId]/page";
+import { FaCheck } from "react-icons/fa";
+import { MdCancel } from "react-icons/md";
 
 const Test = ({ params }) => {
   const documentId = params.documentId;
@@ -16,22 +18,21 @@ const Test = ({ params }) => {
   const dispatch = useDispatch();
   const postTime = useRef();
   const documentTitle = useRef();
+  const contentRef = useRef(null);
   const [data, setData] = useState(null);
   const [userAnswers, setUserAnswers] = useState([]);
   const [correctAnswer, setCorrectAnswer] = useState([]);
   const [score, setScore] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showTest, setShowTest] = useState(true);
-  const contentRef = useRef(null);
   const [isRerendered, setIsRerendered] = useState(false);
+  const [showHints, setShowHints] = useState(true);
+  const [showAnswerHints, setShowAnswerHints] = useState(false);
+  const [writingAnswerValues, setWritingAnswerValues] = useState([]);
 
   const questionCollection = useSelector(
-    (state) => state?.test?.currentReadingTest?.questions || [],
+    (state) => state?.test?.currentTest?.questions || [],
   );
-
-  const indexToAlphabet = (index) => {
-    return String.fromCharCode(65 + index);
-  };
 
   const initializeCorrectAnswer = (questions) => {
     const initialAnswers = questions.map((question) => ({
@@ -49,64 +50,63 @@ const Test = ({ params }) => {
     setUserAnswers(initialAnswers);
   };
 
-  const handleAnswerSelection = (questionIndex, choiceIndex) => {
-    setUserAnswers((prevAnswers) => {
-      const updatedAnswers = [...prevAnswers];
-      updatedAnswers[questionIndex] = {
-        ...updatedAnswers[questionIndex],
-        answers: updatedAnswers[questionIndex].answers.map((answer, index) =>
-          index === choiceIndex ? !answer : answer,
-        ),
-      };
-      return updatedAnswers;
-    });
+  const initializeReadingAnswers = (questions) => {
+    initializeUserAnswers(questions);
+    initializeCorrectAnswer(questions);
   };
 
-  const compareCorrectAnswer = (questionIndex: number, choiceIndex: number) => {
-    console.log(
-      "question: ",
-      questionIndex,
-      "choice: ",
-      choiceIndex,
-      "result: ",
-      userAnswers[questionIndex].answers[choiceIndex] ===
-        correctAnswer[questionIndex].answers[choiceIndex],
-    );
-    return (
-      userAnswers[questionIndex].answers[choiceIndex] ===
-      correctAnswer[questionIndex].answers[choiceIndex]
+  const initializeWritingAnswer = (questions) => {
+    const initialValues = questions.map((question) => ({
+      id: question.id,
+      value: "",
+    }));
+    setWritingAnswerValues(initialValues);
+  };
+
+  const handleChangeWritingAnswer = (e, questionId) => {
+    const { value } = e.target;
+    setWritingAnswerValues((prevValues) =>
+      prevValues.map((item) =>
+        item.id === questionId ? { ...item, value: value } : item,
+      ),
     );
   };
 
   const handleSubmit = () => {
     setShowTest(false);
     setIsSubmitted(true);
+    setShowAnswerHints(true);
+    setShowHints(false);
     window.scrollTo({
-      top: contentRef.current.offsetTop - 64,
+      top: contentRef.current ? contentRef.current.offsetTop - 64 : 0,
       behavior: "smooth",
     });
-    let score = 0;
-    // console.log(userAnswers);
-    userAnswers.forEach((userAnswer, index) => {
-      const correctAnswer = questionCollection[index].choices.map(
-        (choice) => choice.isAnswer,
-      );
-      // console.log("correct: ", correctAnswer);
-      if (
-        JSON.stringify(userAnswer.answers) === JSON.stringify(correctAnswer)
-      ) {
-        score++;
-      }
-    });
-    setScore(score);
+    if (testType === "READING") {
+      let score = 0;
+      userAnswers.forEach((userAnswer, index) => {
+        const correctAnswer = questionCollection[index].choices.map(
+          (choice) => choice.isAnswer,
+        );
+        if (
+          JSON.stringify(userAnswer.answers) === JSON.stringify(correctAnswer)
+        ) {
+          score++;
+        }
+      });
+      setScore(score);
+    }
   };
 
   const handleRefresh = () => {
     setShowTest(true);
     setIsRerendered(true);
     setIsSubmitted(false);
+    setShowHints(true);
+    setShowAnswerHints(false);
+    initializeUserAnswers(questionCollection);
+    initializeWritingAnswer(questionCollection);
     window.scrollTo({
-      top: contentRef.current.offsetTop - 64,
+      top: contentRef.current ? contentRef.current.offsetTop - 64 : 0,
       behavior: "smooth",
     });
   };
@@ -118,7 +118,8 @@ const Test = ({ params }) => {
     formData.append("documentId", documentId);
     formData.append("type", type);
     const res = await callGetTestByDocument(formData);
-    dispatch(getCurrentReadingTest(res));
+
+    dispatch(getCurrentTest(res));
   };
 
   useEffect(() => {
@@ -147,19 +148,28 @@ const Test = ({ params }) => {
   }, []);
 
   useEffect(() => {
-    if (questionCollection.length > 0) {
-      initializeUserAnswers(questionCollection);
-      initializeCorrectAnswer(questionCollection);
-    }
-    // console.log("correct list: ", correctAnswer[0]?.answers[0]);
+    testType === "READING"
+      ? initializeReadingAnswers(questionCollection)
+      : initializeWritingAnswer(questionCollection);
   }, [questionCollection, isRerendered]);
+
+  const indexToAlphabet = (index) => {
+    return String.fromCharCode(65 + index);
+  };
+
+  const compareCorrectAnswer = (questionIndex, choiceIndex) => {
+    return (
+      userAnswers[questionIndex].answers[choiceIndex] ===
+      correctAnswer[questionIndex].answers[choiceIndex]
+    );
+  };
 
   return (
     <>
-      <div className={"grid grid-cols-2 min-h-[85vh] test-page"}>
+      <div className={"grid grid-cols-2 h-full test-page"}>
         <div
           className={
-            "border-r-[1px] col-span-1 border-blue_3 min-h-full scrollable-column"
+            "border-r-[1px] col-span-1 h-full border-blue_3 scrollable-column"
           }
         >
           {/*<div className="flex justify-start mx-auto ml-[20vw] pr-[5vw] mr-[4vw] ">*/}
@@ -179,109 +189,228 @@ const Test = ({ params }) => {
           <div></div>
           {/*</div>*/}
         </div>
-        <div className={"min-h-full pl-5 scrollable-column"} ref={contentRef}>
-          {showTest && (
-            <div>
-              <h3 className={"mb-2 font-semibold"}>
-                Đọc văn bản và thực hiện các yêu cầu bên dưới bằng cách chọn đáp
-                án đúng:
-              </h3>
-              {questionCollection?.length > 0 &&
-                questionCollection.map((question, questionIndex: number) => (
-                  <div key={question.id}>
-                    <h4>
-                      Câu hỏi {questionIndex + 1}: {question.question}
-                    </h4>
-                    {question.choices.map((choice, choiceIndex: number) => (
-                      <div
-                        key={choice.id}
-                        className={"my-1 px-2 py-1 rounded-2xl"}
-                        style={
-                          isSubmitted
-                            ? userAnswers[questionIndex]?.answers[choiceIndex]
-                              ? compareCorrectAnswer(questionIndex, choiceIndex)
-                                ? { backgroundColor: "#99f090" }
-                                : { backgroundColor: "#f09090" }
-                              : correctAnswer[questionIndex]?.answers[
-                                    choiceIndex
-                                  ] === true
-                                ? { backgroundColor: "#99f090" }
-                                : null
-                            : null
-                        }
-                      >
-                        {" "}
-                        {/* Added a wrapper div */}
-                        {isSubmitted === false && (
-                          <input
-                            type="checkbox"
-                            id={`${choice.id}`}
-                            onChange={() =>
-                              handleAnswerSelection(questionIndex, choiceIndex)
-                            }
-                          />
-                        )}
-                        <label
-                          htmlFor={`${choice.id}`}
+        {testType === "READING" ? (
+          <div
+            className={"min-h-full h-full pl-5 scrollable-column"}
+            ref={contentRef}
+          >
+            {showTest && (
+              <div>
+                <h3 className={"mb-2 font-semibold"}>
+                  Đọc văn bản và thực hiện các yêu cầu bên dưới bằng cách chọn
+                  đáp án đúng:
+                </h3>
+                {questionCollection?.length > 0 &&
+                  questionCollection.map((question, questionIndex: number) => (
+                    <div key={question.id}>
+                      <div className={"flex flex-row items-center"}>
+                        <p>
+                          <b>Câu hỏi {questionIndex + 1}:</b>
+                          {question.question}
+                        </p>
+                        {isSubmitted === true ? (
+                          JSON.stringify(userAnswers[questionIndex]) ===
+                          JSON.stringify(correctAnswer[questionIndex]) ? (
+                            <FaCheck className={"text-green-500 text-xl"} />
+                          ) : (
+                            <MdCancel className={"text-red-600 text-xl"} />
+                          )
+                        ) : null}
+                      </div>
+
+                      {question.choices.map((choice, choiceIndex: number) => (
+                        <div
+                          key={choice.id}
+                          className={"my-1 px-2 py-1 rounded-2xl"}
                           style={
                             isSubmitted
                               ? userAnswers[questionIndex]?.answers[choiceIndex]
-                                ? { fontWeight: "bold" }
-                                : null
+                                ? compareCorrectAnswer(
+                                    questionIndex,
+                                    choiceIndex,
+                                  )
+                                  ? { backgroundColor: "#99f090" }
+                                  : { backgroundColor: "#f09090" }
+                                : correctAnswer[questionIndex]?.answers[
+                                      choiceIndex
+                                    ] === true
+                                  ? { backgroundColor: "#99f090" }
+                                  : null
                               : null
                           }
                         >
-                          <span>
-                            {indexToAlphabet(choiceIndex)}. {choice.content}
-                          </span>
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                ))}
-            </div>
-          )}
+                          {" "}
+                          {/* Added a wrapper div */}
+                          {isSubmitted === false && (
+                            <input
+                              type="checkbox"
+                              id={`${choice.id}`}
+                              onChange={() =>
+                                handleAnswerSelection(
+                                  questionIndex,
+                                  choiceIndex,
+                                )
+                              }
+                            />
+                          )}
+                          <label
+                            htmlFor={`${choice.id}`}
+                            style={
+                              isSubmitted
+                                ? userAnswers[questionIndex]?.answers[
+                                    choiceIndex
+                                  ]
+                                  ? { fontWeight: "bold" }
+                                  : null
+                                : null
+                            }
+                          >
+                            <span>
+                              {indexToAlphabet(choiceIndex)}. {choice.content}
+                            </span>
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+              </div>
+            )}
 
-          {showTest ? (
-            isSubmitted === false ? (
-              <button
-                onClick={handleSubmit}
-                className={
-                  "bg-blue_9 text-white font-semibold px-4 py-1 rounded"
-                }
-              >
-                Nộp bài
-              </button>
+            {showTest ? (
+              isSubmitted === false ? (
+                <button
+                  onClick={handleSubmit}
+                  className={
+                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded"
+                  }
+                >
+                  Nộp bài
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleRefresh()}
+                  className={
+                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded"
+                  }
+                >
+                  Làm lại
+                </button>
+              )
             ) : (
-              <button
-                onClick={() => handleRefresh()}
-                className={
-                  "bg-blue_9 text-white font-semibold px-4 py-1 rounded"
-                }
-              >
-                Làm lại
-              </button>
-            )
-          ) : (
-            <div>
-              <p>
-                <p className={"text-2xl font-bold"}>
-                  BẠN ĐÃ HOÀN THÀNH BỘ ĐỀ ĐỌC HIỂU!
-                </p>{" "}
-                <br />
-                Số câu đúng: {score}/{questionCollection?.length}
-              </p>
-              <button
-                onClick={() => setShowTest(true)}
-                className={
-                  "bg-blue_9 text-white font-semibold px-4 py-1 rounded"
-                }
-              >
-                Xem lại
-              </button>
-            </div>
-          )}
-        </div>
+              <div>
+                <p>
+                  <p className={"text-2xl font-bold"}>
+                    BẠN ĐÃ HOÀN THÀNH BỘ ĐỀ ĐỌC HIỂU!
+                  </p>{" "}
+                  <br />
+                  Số câu đúng: {score}/{questionCollection?.length}
+                </p>
+                <button
+                  onClick={() => setShowTest(true)}
+                  className={
+                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded"
+                  }
+                >
+                  Xem lại
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className={"min-h-full pl-5 scrollable-column"}>
+            {showTest && (
+              <div>
+                <h3 className={"mb-2 font-semibold"}>
+                  Đọc văn bản và thực hiện các yêu cầu dưới đây:
+                </h3>
+                {questionCollection?.length > 0 &&
+                  questionCollection.map((question, questionIndex: number) => (
+                    <div>
+                      <p>
+                        {" "}
+                        <b>Câu {questionIndex + 1}:</b> {question.question}
+                      </p>
+                      {showHints && (
+                        <div className={"italic text-gray-500"}>
+                          <p>Gợi ý: </p>
+                          {question?.hints?.length > 0 &&
+                            question.hints.map((hint) => (
+                              <p>- {hint.content}</p>
+                            ))}
+                        </div>
+                      )}
+
+                      <textarea
+                        className={
+                          "border-[2px] border-black w-full rounded-xl px-2 py-2"
+                        }
+                        onChange={(e) =>
+                          handleChangeWritingAnswer(e, question.id)
+                        }
+                        value={
+                          writingAnswerValues.find(
+                            (item) => item.id === question.id,
+                          )?.value || ""
+                        }
+                        disabled={isSubmitted}
+                        name={question.id}
+                        id={question.id}
+                        cols="30"
+                        rows="10"
+                        placeholder={"Nhập câu trả lời ..."}
+                      />
+                      {showAnswerHints && (
+                        <div className={"italic text-red-500"}>
+                          <p>Đáp án gợi ý: </p>
+                          {question?.answerHints?.length > 0 &&
+                            question.answerHints.map((answerHint) => (
+                              <p>- {answerHint.content}</p>
+                            ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+              </div>
+            )}
+            {showTest ? (
+              isSubmitted === false ? (
+                <button
+                  onClick={handleSubmit}
+                  className={
+                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded"
+                  }
+                >
+                  Nộp bài
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleRefresh()}
+                  className={
+                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded"
+                  }
+                >
+                  Làm lại
+                </button>
+              )
+            ) : (
+              <div>
+                <p>
+                  <p className={"text-2xl font-bold"}>
+                    BẠN ĐÃ HOÀN THÀNH BỘ ĐỀ VIẾT!
+                  </p>{" "}
+                </p>
+                <button
+                  onClick={() => setShowTest(true)}
+                  className={
+                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded"
+                  }
+                >
+                  Xem lại
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </>
   );
