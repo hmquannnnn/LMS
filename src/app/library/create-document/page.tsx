@@ -183,7 +183,7 @@ const Index = () => {
                 <div className='flex flex-col  pl-4 '>
                     <div className='flex-1 flex mb-4'>
                         <div className='flex-1 flex  mr-2'>
-                            <div className='mr-2 font-bold'>Notion page's Id:</div>
+                            <div className='mr-2 font-bold'>Notion page&apos;s Id:</div>
                             <input
                                 className='flex-auto border-b-[1px] border-black focus:outline-none'
                                 type="text"

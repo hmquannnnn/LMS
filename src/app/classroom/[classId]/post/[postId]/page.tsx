@@ -378,8 +378,8 @@ const PostDetails = (props: any) => {
           </div>
           <div>
             {commentsList?.length > 0 &&
-              commentsList.map((comment) => (
-                <div className="my-1.5 bg-green_6 text-green_3 rounded-2xl p-2 w-full">
+              commentsList.map((comment, index) => (
+                <div className="my-1.5 bg-green_6 text-green_3 rounded-2xl p-2 w-full" key={index}>
                   <Row>
                     <Avatar
                       size={42}

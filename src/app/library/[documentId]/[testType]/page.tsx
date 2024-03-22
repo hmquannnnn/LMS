@@ -210,7 +210,7 @@ const Test = ({ params }) => {
                         </p>
                         {isSubmitted === true ? (
                           JSON.stringify(userAnswers[questionIndex]) ===
-                          JSON.stringify(correctAnswer[questionIndex]) ? (
+                            JSON.stringify(correctAnswer[questionIndex]) ? (
                             <FaCheck className={"text-green-500 text-xl"} />
                           ) : (
                             <MdCancel className={"text-red-600 text-xl"} />
@@ -226,14 +226,14 @@ const Test = ({ params }) => {
                             isSubmitted
                               ? userAnswers[questionIndex]?.answers[choiceIndex]
                                 ? compareCorrectAnswer(
-                                    questionIndex,
-                                    choiceIndex,
-                                  )
+                                  questionIndex,
+                                  choiceIndex,
+                                )
                                   ? { backgroundColor: "#99f090" }
                                   : { backgroundColor: "#f09090" }
                                 : correctAnswer[questionIndex]?.answers[
-                                      choiceIndex
-                                    ] === true
+                                  choiceIndex
+                                ] === true
                                   ? { backgroundColor: "#99f090" }
                                   : null
                               : null
@@ -258,8 +258,8 @@ const Test = ({ params }) => {
                             style={
                               isSubmitted
                                 ? userAnswers[questionIndex]?.answers[
-                                    choiceIndex
-                                  ]
+                                  choiceIndex
+                                ]
                                   ? { fontWeight: "bold" }
                                   : null
                                 : null
@@ -325,7 +325,7 @@ const Test = ({ params }) => {
                 </h3>
                 {questionCollection?.length > 0 &&
                   questionCollection.map((question, questionIndex: number) => (
-                    <div>
+                    <div key={questionIndex}>
                       <p>
                         {" "}
                         <b>Câu {questionIndex + 1}:</b> {question.question}
@@ -334,8 +334,8 @@ const Test = ({ params }) => {
                         <div className={"italic text-gray-500"}>
                           <p>Gợi ý: </p>
                           {question?.hints?.length > 0 &&
-                            question.hints.map((hint) => (
-                              <p>- {hint.content}</p>
+                            question.hints.map((hint, hintIndex) => (
+                              <p key={hintIndex}>- {hint.content}</p>
                             ))}
                         </div>
                       )}
@@ -363,8 +363,8 @@ const Test = ({ params }) => {
                         <div className={"italic text-red-500"}>
                           <p>Đáp án gợi ý: </p>
                           {question?.answerHints?.length > 0 &&
-                            question.answerHints.map((answerHint) => (
-                              <p>- {answerHint.content}</p>
+                            question.answerHints.map((answerHint, answerIndex) => (
+                              <p key={answerIndex}>- {answerHint.content}</p>
                             ))}
                         </div>
                       )}

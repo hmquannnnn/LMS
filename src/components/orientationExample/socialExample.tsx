@@ -154,7 +154,7 @@ const SocialExample = ({ color }) => {
               chọn review những sản phẩm, dịch vụ, ... tương thích với sở trường
               và đam mê của em. Ngoài ra khi review cần chú ý đưa ra những đánh
               giá khách quan nhất có thể, không đồng nhất tính chất nghề này với
-              "chuyên gia")
+              &quot;chuyên gia&quot;)
             </p>
           </div>
         </div>
