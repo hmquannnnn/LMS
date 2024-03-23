@@ -321,29 +321,29 @@ const DocumentIdPage = ({ params }) => {
               {documentTitle.current}
             </div>
           )}
-          {postTime.current && (
+          {/* {postTime.current && (
             <p className="mx-auto my-0  text-sm text-gray-500">
               {postTime.current}
             </p>
-          )}
+          )} */}
 
           {data && <NotionRenderer blockMap={data} fullPage hideHeader />}
         </div>
         <div className={"flex flex-row justify-end mb-5"}>
-          <button
+          <Button
             className={
-              "bg-blue_9 text-white font-semibold px-4 py-1 rounded mr-5"
+              "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
             }
             onClick={() => handleDirectToTest("READING")}
           >
-            Đọc hiểu
-          </button>
-          <button
-            className={"bg-blue_9 text-white font-semibold px-4 py-1 rounded"}
+            Nói và nghe
+          </Button>
+          <Button
+            className={"bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded"}
             onClick={() => handleDirectToTest("WRITING")}
           >
             Viết
-          </button>
+          </Button>
         </div>
       </div>
 

@@ -34,7 +34,7 @@ const nextConfig = {
       },
       {
         protocol: "http",
-        hostname: "www.minhupro.xyz",
+        hostname: "densach.edu.vn",
         port: "",
         pathname: "/**",
       },

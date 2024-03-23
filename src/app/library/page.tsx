@@ -12,7 +12,6 @@ const MEDIA_URL = process.env.NEXT_PUBLIC_BACKEND_URL + "/media/";
 // const MEDIA_URL = "/api/v1/media/";
 
 const Library = () => {
-
   const [data, setData] = useState([]);
   const router = useRouter();
   useEffect(() => {
