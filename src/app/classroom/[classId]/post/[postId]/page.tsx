@@ -98,6 +98,8 @@ const PostDetails = (props: any) => {
       const sortedComment = await comment.sort((a, b) => {
         return new Date(b.postTime) - new Date(a.postTime);
       });
+
+
       await setCommentsList(comment);
       // console.log("comment: ", comment);
       setIsUpdate(false);
@@ -235,9 +237,15 @@ const PostDetails = (props: any) => {
         <div className={"w-full relative flex-col items-center"}>
           <div
             className={
-              "my-auto absolute w-full px-10 flex items-center justify-center h-full z-[2]"
+              "my-auto absolute w-full flex items-center justify-center h-full z-[2]"
             }
           >
+
+            <button className="p-2 " onClick={() => handleImageSlider(buttonType.PREV)}>
+              <svg className="h-12 w-12 hover:h-[4rem] hover:w-[4rem] duration-300 ease-in-out" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
             {media[mediaIndex].type.includes("image") ? (
               <Image
                 alt="post's picture"
@@ -273,7 +281,7 @@ const PostDetails = (props: any) => {
             ) : media[mediaIndex].type.includes("pdf") ? (
               <div className="w-full h-full ">
                 <GoogleDocsViewer
-                  width="60%"
+                  width="90%"
                   height="78vh"
                   // className={"h-full w-full overflow-y-scroll"}
                   // fileUrl={"http://www.minhupro.xyz/api/v1/media/fda06ddb-a7f7-4030-b22c-11f146813b91"}
@@ -283,20 +291,26 @@ const PostDetails = (props: any) => {
             ) : (
               <p>Unsupported media type</p>
             )}
+            <button className="p-2" onClick={() => handleImageSlider(buttonType.NEXT)}>
+              <svg className="h-12 w-12 hover:h-[4rem] hover:w-[4rem] duration-300 ease-in-out" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
           </div>
           <div className="absolute w-full h-full px-10 flex justify-center items-center z-[1]">
             <Spin />
           </div>
           <div className={"flex mx-auto justify-center text-lg mt-[62%]"}>
-            <button onClick={() => handleImageSlider(buttonType.PREV)}>
+            {/* <button onClick={() => handleImageSlider(buttonType.PREV)}>
               <IoIosArrowBack />
-            </button>
+            </button> */}
             <p className={"mx-3"}>
               {mediaIndex + 1} / {media.length}
             </p>
-            <button onClick={() => handleImageSlider(buttonType.NEXT)}>
+            {/* <button onClick={() => handleImageSlider(buttonType.NEXT)}>
               <IoIosArrowForward />
-            </button>
+            </button> */}
           </div>
         </div>
       )}
