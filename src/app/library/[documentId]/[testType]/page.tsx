@@ -72,6 +72,19 @@ const Test = ({ params }) => {
     );
   };
 
+  const handleAnswerSelection = (questionIndex, choiceIndex) => {
+    setUserAnswers((prevAnswers) => {
+      const updatedAnswers = [...prevAnswers];
+      updatedAnswers[questionIndex] = {
+        ...updatedAnswers[questionIndex],
+        answers: updatedAnswers[questionIndex].answers.map((answer, index) =>
+          index === choiceIndex ? !answer : answer,
+        ),
+      };
+      return updatedAnswers;
+    });
+  };
+
   const handleSubmit = () => {
     setShowTest(false);
     setIsSubmitted(true);
@@ -210,7 +223,7 @@ const Test = ({ params }) => {
                         </p>
                         {isSubmitted === true ? (
                           JSON.stringify(userAnswers[questionIndex]) ===
-                            JSON.stringify(correctAnswer[questionIndex]) ? (
+                          JSON.stringify(correctAnswer[questionIndex]) ? (
                             <FaCheck className={"text-green-500 text-xl"} />
                           ) : (
                             <MdCancel className={"text-red-600 text-xl"} />
@@ -226,14 +239,14 @@ const Test = ({ params }) => {
                             isSubmitted
                               ? userAnswers[questionIndex]?.answers[choiceIndex]
                                 ? compareCorrectAnswer(
-                                  questionIndex,
-                                  choiceIndex,
-                                )
+                                    questionIndex,
+                                    choiceIndex,
+                                  )
                                   ? { backgroundColor: "#99f090" }
                                   : { backgroundColor: "#f09090" }
                                 : correctAnswer[questionIndex]?.answers[
-                                  choiceIndex
-                                ] === true
+                                      choiceIndex
+                                    ] === true
                                   ? { backgroundColor: "#99f090" }
                                   : null
                               : null
@@ -258,8 +271,8 @@ const Test = ({ params }) => {
                             style={
                               isSubmitted
                                 ? userAnswers[questionIndex]?.answers[
-                                  choiceIndex
-                                ]
+                                    choiceIndex
+                                  ]
                                   ? { fontWeight: "bold" }
                                   : null
                                 : null
@@ -363,9 +376,11 @@ const Test = ({ params }) => {
                         <div className={"italic text-red-500"}>
                           <p>Đáp án gợi ý: </p>
                           {question?.answerHints?.length > 0 &&
-                            question.answerHints.map((answerHint, answerIndex) => (
-                              <p key={answerIndex}>- {answerHint.content}</p>
-                            ))}
+                            question.answerHints.map(
+                              (answerHint, answerIndex) => (
+                                <p key={answerIndex}>- {answerHint.content}</p>
+                              ),
+                            )}
                         </div>
                       )}
                     </div>
