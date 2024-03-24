@@ -1,12 +1,12 @@
 "use client";
 
-import {useSelector} from "react-redux";
-import {useEffect, useState} from "react";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import UserInfo from "@/components/userInfo";
-import {ROLE_STUDENT} from "@/utils/constant";
+import { ROLE_STUDENT } from "@/utils/constant";
 import Cropper from "@/components/Cropper";
-import {callGetPageFavoriteDocuments} from "@/apis/userAPI";
-import {formatDocumentTitle} from "@/app/library/[documentId]/page";
+import { callGetPageFavoriteDocuments } from "@/apis/userAPI";
+import { formatDocumentTitle } from "@/app/library/[documentId]/page";
 // import "./profile.scss";
 
 const Profile = () => {
@@ -44,7 +44,7 @@ const Profile = () => {
   }, [user]);
   return (
     <div className={"block mx-auto w-[90%]"}>
-      <h3 className={"font-bold text-2xl text-blue_8"}>Personal Information</h3>
+      <h3 className={"font-bold text-2xl text-blue_8"}>THÔNG TIN CÁ NHÂN</h3>
       <div className={"bg-blue_8 h-[1px] my-3 w-[70%]"} />
       <div
         className="min-h-[85vh] grid grid-cols-12 h-fit"
@@ -92,7 +92,7 @@ const Profile = () => {
           </div>
         </div>
 
-        <div className={"col-span-9 h-fit h-full"}>
+        <div className={"col-span-9 h-full"}>
           <div className={"grid grid-cols-5 profile-user h-full"}>
             <div
               className={
@@ -100,22 +100,22 @@ const Profile = () => {
               }
             >
               <h2 className={"text-blue_8 font-bold text-2xl mt-5"}>
-                MY PROFILE
+                HỒ SƠ CỦA TÔI
               </h2>
               <div className={"pl-5"}>
                 <UserInfo
-                  label={"Name: "}
+                  label={"Họ và tên: "}
                   value={user.lastName + " " + user.firstName}
                 />
                 <UserInfo label={"Email: "} value={user.email} />
-                <UserInfo label={"Username: "} value={user.username} />
+                <UserInfo label={"Tên tài khoản: "} value={user.username} />
                 <UserInfo
-                  label={"Date of birth: "}
+                  label={"Ngày sinh: "}
                   value={user.dateOfBirth.split("").reverse().join("")}
                 />
-                <UserInfo label={"Gender: "} value={user.gender} />
+                <UserInfo label={"Giới tính: "} value={user.gender} />
                 <UserInfo
-                  label={"Role: "}
+                  label={"Vai trò: "}
                   value={user.role === ROLE_STUDENT ? "Student" : "Teacher"}
                 />
               </div>
@@ -124,7 +124,7 @@ const Profile = () => {
               className={" col-span-2 user-avatar"}
               style={{
                 display: "grid",
-                gridTemplateRows: "40% 60%",
+                gridTemplateRows: "45% 55%",
                 // gap: "calc((100% - (70% + 12% + 12%)) / 2)",
               }}
             >

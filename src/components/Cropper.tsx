@@ -1,11 +1,11 @@
 "use client";
 
-import {useRef, useState} from "react";
+import { useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
-import {Modal, Slider} from "antd";
-import {callChangeAvatar} from "@/apis/userAPI";
-import {useDispatch, useSelector} from "react-redux";
-import {doGetAccountAction} from "@/redux/slices/accountSlice";
+import { Modal, Slider } from "antd";
+import { callChangeAvatar } from "@/apis/userAPI";
+import { useDispatch, useSelector } from "react-redux";
+import { doGetAccountAction } from "@/redux/slices/accountSlice";
 // import "antd/dist/antd.css";
 
 const boxStyle = {
@@ -145,7 +145,7 @@ const Cropper = ({ imgSrc }) => {
             }
             alt=""
             className={
-              "2xl:w-44 2xl:h-44 xl:w-24 xl:h-24 lg:w-24 lg:h-24 sm:w-24 sm:h-24 md:w-24 md:h-24 2xl:mb-2 mb-1"
+              "largelaptop:h-44 largelaptop:w-44 2xl:w-36 2xl:h-36 h-32 w-32 2xl:mb-2 mb-1"
             }
             // width="200"
             // height="200"
@@ -174,7 +174,7 @@ const Cropper = ({ imgSrc }) => {
           }
         >
           {/*<FcAddImage className="add-icon" />*/}
-          Choose avatar
+          Chọn ảnh đại diện
         </a>
         {/*<small>Click to select image</small>*/}
         <input

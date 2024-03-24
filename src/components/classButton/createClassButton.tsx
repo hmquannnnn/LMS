@@ -52,15 +52,15 @@ const CreateClassButton = ({ onUpdate }) => {
       <button
         type={"submit"}
         className={
-          "bg-blue_6 text-blue_5 rounded-lg px-5 py-1.5 shadow hover:shadow-lg font-semibold"
+          "bg-blue_9 text-white rounded-lg px-5 py-1.5 shadow hover:shadow-lg font-bold"
         }
         onClick={showModal}
       >
         {" "}
-        Create class
+        Tạo lớp học
       </button>
       <Modal
-        title="Create a new class"
+        title="Tạo lớp học"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -68,11 +68,11 @@ const CreateClassButton = ({ onUpdate }) => {
       >
         <form onSubmit={(e) => handleCreateClass(e)}>
           <Col>
-            <label>Enter your class name</label>
+            <label>Nhập tên lớp muốn tạo</label>
             <br />
             <input
               type={"text"}
-              name={"className"}
+              name={"Tên lớp học"}
               value={inputValue}
               placeholder={"className"}
               onChange={handleChangeValue}
@@ -85,7 +85,7 @@ const CreateClassButton = ({ onUpdate }) => {
                 "bg-blue_6 rounded px-10 py-1.5 font-semibold text-blue_5"
               }
             >
-              Create
+              Tạo lớp học
             </button>
           </Col>
         </form>
@@ -96,12 +96,12 @@ const CreateClassButton = ({ onUpdate }) => {
         onCancel={() => setOpenSuccessAlert(false)}
         footer={null}
       >
-        <p>Your class code: {classCode}</p>
+        <p>Mã lớp của bạn: {classCode}</p>
         <button
           className={"bg-blue_6 rounded px-10 py-1.5 font-semibold text-blue_5"}
           onClick={() => setOpenSuccessAlert(false)}
         >
-          Done
+          Xong
         </button>
       </Modal>
     </>

@@ -14,7 +14,7 @@
 
   /* Thiết lập track */
   &::-webkit-scrollbar-track {
-    border: 1px solid #517b23;
+    border: 1px solid var(--orientation-color);
     border-radius: 10px;
     margin: 100px;
     padding: 0 2px;
@@ -22,7 +22,7 @@
 
   /* Thiết lập handle */
   &::-webkit-scrollbar-thumb {
-    background: #517b23;
+    background: var(--orientation-color);
     border-radius: 10px;
     width: 90%;
   }

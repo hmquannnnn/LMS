@@ -65,7 +65,7 @@ const ClassMember = (props: any) => {
     <>
       <div className={"w-[90%] mx-auto"}>
         <div className={"mb-20"}>
-          <p className={"font-bold text-xl"}>Teacher</p>
+          <p className={"font-bold text-xl"}>Giáo viên</p>
           <Divider className={"border-blue_3 my-1"} />
           <div className={"flex flex-row items-center px-3"}>
             <Avatar
@@ -81,8 +81,10 @@ const ClassMember = (props: any) => {
         </div>
         <div>
           <div className={"flex flex-row items-center"}>
-            <p className={"font-bold text-xl h-fit"}>Students list &nbsp;</p>
-            <p className={"h-fit"}>({membersList?.length || 0} students)</p>
+            <p className={"font-bold text-xl h-fit"}>
+              Danh sách học sinh &nbsp;
+            </p>
+            <p className={"h-fit"}>({membersList?.length || 0} học sinh)</p>
           </div>
 
           <Divider className={"border-blue_3 my-1"} />
@@ -90,27 +92,29 @@ const ClassMember = (props: any) => {
             <>
               <div className={"my-5"}>
                 <p className={"text-red-600 flex flex-row font-semibold"}>
-                  *<p className={"text-black"}>Note</p>
+                  *<p className={"text-black"}>Chú thích</p>
                 </p>
                 <div className={"flex flex-row items-center"}>
                   <FaCheck className={"text-green-500"} />
-                  <p className={"h-fit ml-4"}>Approved</p>
+                  <p className={"h-fit ml-4"}>Đạt</p>
                 </div>
                 <div className={"flex flex-row items-center"}>
                   <MdPending className={"text-yellow-400"} />
-                  <p className={"h-fit ml-4"}>Pending</p>
+                  <p className={"h-fit ml-4"}>Chờ duyệt</p>
                 </div>
                 <div className={"flex flex-row items-center"}>
                   <MdCancel className={"text-red-600"} />
-                  <p className={"h-fit ml-4"}>Rejected</p>
+                  <p className={"h-fit ml-4"}>Chưa đạt</p>
                 </div>
               </div>
               <table className={"font-normal max-w-full overflow-x-scroll"}>
                 <thead>
                   <tr className={"border border-collapse py-1 px-1"}>
-                    <th className={"border px-1.5 font-semibold sticky"}>No</th>
+                    <th className={"border px-1.5 font-semibold sticky"}>
+                      STT
+                    </th>
                     <th className={"border font-semibold sticky min-w-fit"}>
-                      Name
+                      Họ và tên
                     </th>
                     {userRole === ROLE_TEACHER &&
                       Array.from({ length: total }).map((_, index) => (
@@ -159,6 +163,7 @@ const ClassMember = (props: any) => {
           )}
 
           {userRole === ROLE_STUDENT &&
+            membersList?.length > 0 &&
             membersList.map((student: object, index: number) => (
               <div key={index} className={"flex flex-row px-3 my-2.5"}>
                 <p className={"mr-10 w-3"}>{index + 1}</p>

@@ -190,12 +190,12 @@ const SubmissionPage = (props: any) => {
               <Col>
                 <div className={"my-2"}>
                   <div>
-                    <label htmlFor={"title"}>Title: </label>
+                    <label htmlFor={"title"}>Tiêu đề: </label>
                     <input
                       name={"title"}
                       id={"title"}
                       type={"text"}
-                      placeholder={"Title"}
+                      placeholder={"Tiêu đề"}
                       className={"mb-2 rounded border-[1px]"}
                     />
                   </div>
@@ -208,7 +208,7 @@ const SubmissionPage = (props: any) => {
                         placement={"bottom"}
                       >
                         <div className={"border-[1px] rounded px-4 py-1 h-fit"}>
-                          Members
+                          Chọn thành viên
                         </div>
                       </Dropdown>
                     )}
@@ -249,34 +249,36 @@ const SubmissionPage = (props: any) => {
                     </div>
                   </div>
 
-                  <div>
-                    <label htmlFor="orientation">Select orientation: </label>
-                    <select
-                      name="orientation"
-                      id="orientation"
-                      className={"border-[1px] px-2 p-0.5 rounded ml-2"}
-                    >
-                      <option value={`${Orientations.TECHNIQUE}`}>
-                        TECHNIQUE
-                      </option>
-                      <option value={`${Orientations.MAJOR}`}>MAJOR</option>
-                      <option value={`${Orientations.RESEARCH}`}>
-                        RESEARCH
-                      </option>
-                      <option value={`${Orientations.SOCIAL}`}>SOCIAL</option>
-                      <option value={`${Orientations.MANAGEMENT}`}>
-                        MANAGEMENT
-                      </option>
-                      <option value={`${Orientations.ART}`}> ART</option>
-                    </select>
-                  </div>
+                  {currentAssignment?.isForGroup === false && (
+                    <div>
+                      <label htmlFor="orientation">Chọn định hướng: </label>
+                      <select
+                        name="orientation"
+                        id="orientation"
+                        className={"border-[1px] px-2 p-0.5 rounded ml-2"}
+                      >
+                        <option value={`${Orientations.TECHNIQUE}`}>
+                          KĨ THUẬT
+                        </option>
+                        <option value={`${Orientations.MAJOR}`}>
+                          NGHIỆP VỤ
+                        </option>
+                        <option value={`${Orientations.RESEARCH}`}>
+                          NGHIÊN CỨU
+                        </option>
+                        <option value={`${Orientations.SOCIAL}`}>XÃ HỘI</option>
+
+                        <option value={`${Orientations.ART}`}> XÃ HỘI</option>
+                      </select>
+                    </div>
+                  )}
                 </div>
 
                 <Editor
                   name="caption"
                   apiKey="ty6mn9smak440qi6gv53qqivqdulai6ja9wl6ao0bt12odwr"
                   onInit={(evt, editor) => (editorRef.current = editor)}
-                  initialValue="<p>This is the initial content of the editor.</p>"
+                  initialValue="<p>Nhập nội dung</p>"
                   init={{
                     height: 500,
                     menubar: false,
@@ -316,7 +318,7 @@ const SubmissionPage = (props: any) => {
                   type="submit"
                   className="bg-blue_6 rounded mt-2 text-blue_5 font-bold text-base py-2 px-4"
                 >
-                  Submit
+                  Nộp bài
                 </button>
               </Col>
             </form>

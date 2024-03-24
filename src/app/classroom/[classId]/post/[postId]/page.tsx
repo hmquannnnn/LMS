@@ -1,13 +1,13 @@
 "use client";
-import { callGetPost } from "@/apis/classAPI";
-import { useEffect, useRef, useState } from "react";
+import { callGetPost, callHandlePendingPost } from "@/apis/classAPI";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getCurrentAuthors,
   getCurrentPostAction,
 } from "@/redux/slices/postSlice";
-import { colors } from "@/utils/constant";
-import { Avatar, Col, Row, Spin } from "antd";
+import { assignmentStatus } from "@/utils/constant";
+import { Avatar, Col, Spin } from "antd";
 import { callFetchUserById, callGetGroup } from "@/apis/userAPI";
 import {
   IoIosArrowBack,
@@ -20,12 +20,16 @@ import {
   callCommentToPost,
   callGetPostComments,
   callHandleLikePost,
+  callTeacherComment,
 } from "@/apis/postAPI";
-import Image from "next/image";
 import GoogleDocsViewer from "react-google-docs-viewer";
 import { FormatDateTime } from "@/utils/formatDate";
 import "./postDetails.scss";
 import { isManagementPost } from "@/utils/checkOrientation";
+import { AiFillPushpin, AiOutlinePushpin } from "react-icons/ai";
+import { callPinComment, callUnpinComment } from "@/apis/commentsAPI";
+import { FaRegPaperPlane } from "react-icons/fa";
+import { theme } from "@/app/classroom/[classId]/orientations/[orientationName]/page";
 
 interface button {
   PREV: string;
@@ -141,14 +145,39 @@ const PostDetails = (props: any) => {
     setCommentInput(value);
   };
 
-  const handleEnter = async (e) => {
+  const handleComment = async (e) => {
     e.preventDefault();
-    const res = await callCommentToPost(post.id, commentInput);
+    const formData = new FormData();
+    formData.append("postId", postId);
+    formData.append("comment", commentInput);
+    const req = {
+      postId: post.id,
+      comment: commentInput,
+    };
+    const res =
+      post.type === assignmentStatus.PENDING
+        ? await callTeacherComment(post.id, req)
+        : await callCommentToPost(post.id, commentInput);
     setIsUpdate(true);
     // console.log(res);
     // console.log("press Enter");
     setCommentInput("");
   };
+
+  const handlePost = async (postId: number, action: string) => {
+    const res = await callHandlePendingPost(postId, action);
+    setIsUpdate(true);
+    console.log(">> check res: ", res);
+  };
+
+  const handlePinComment = async (commentId: number, type: string) => {
+    type === "pin"
+      ? await callPinComment(commentId)
+      : await callUnpinComment(commentId);
+    setIsUpdate(true);
+  };
+
+  console.log(theme[post.orientation]);
 
   return (
     <div
@@ -156,7 +185,16 @@ const PostDetails = (props: any) => {
       className={
         "flex justify-center max-h-[80vh] h-[80vh] mx-[2vw] my-5 rounded-2xl pr-5 "
       }
-      style={{ backgroundColor: `${colors.green_1}` }}
+      // style={{
+      //   border: `1px solid ${theme[post.orientation]?.textColor}`,
+      //   color: `${theme[post.orientation]?.textColor}`,
+      //   --orientation-color: theme[post.orientation]?.textColor
+      // }}
+      style={{
+        "--orientation-color": theme[post.orientation]?.textColor,
+        color: `${theme[post.orientation]?.textColor}`,
+        border: `1px solid ${theme[post.orientation]?.textColor}`,
+      }}
     >
       {/* <Document className={"h-full overflow-y-scroll"} file={file.url} onLoadSuccess={onDocumentLoadSuccess}> */}
       {/* <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} canvasBackground='white' /> */}
@@ -201,7 +239,7 @@ const PostDetails = (props: any) => {
             }
           >
             {media[mediaIndex].type.includes("image") ? (
-              <Image
+              <img
                 alt="Author's avatar"
                 className={
                   "h-fit w-fit mx-auto rounded-2xl max-h-[100%] max-w-[100%] object-contain"
@@ -249,11 +287,7 @@ const PostDetails = (props: any) => {
           <div className="absolute w-full h-full px-10 flex justify-center items-center z-[1]">
             <Spin />
           </div>
-          <div
-            className={
-              "flex mx-auto justify-center text-green_3  text-lg mt-[62%]"
-            }
-          >
+          <div className={"flex mx-auto justify-center text-lg mt-[62%]"}>
             <button onClick={() => handleImageSlider(buttonType.PREV)}>
               <IoIosArrowBack />
             </button>
@@ -268,137 +302,180 @@ const PostDetails = (props: any) => {
       )}
       <div
         className={
-          "max-w-[800px] min-w-[30vw] min-h-[80vh] w-max overflow-auto px-10 py-10 pr-20 post-detail"
+          "max-w-[800px] min-w-[30vw] h-[80vh] max-h-[80vh] w-max overflow-auto px-10 py-10 pr-20 post-detail flex flex-col"
         }
       >
-        <div
-          className="flex items-center mb-2 text-lg"
-          style={{ color: `${colors.green_3}` }}
-        >
-          {isManagementPost(post) ? (
-            author?.students?.length &&
-            author.students.map((student, index: number) =>
-              index != author.students.length - 1
-                ? student.lastName + " " + student.firstName + ", "
-                : student.lastName + " " + student.firstName,
-            )
-          ) : (
-            <>
+        <div className="flex flex-col relative max-h-full" style={{ flex: 1 }}>
+          <div
+            className="flex items-center mb-2 text-lg"
+            // style={{ color: `${colors.green_3}` }}
+          >
+            {isManagementPost(post) ? (
+              author?.students?.length &&
+              author.students.map((student, index: number) =>
+                index != author.students.length - 1
+                  ? student.lastName + " " + student.firstName + ", "
+                  : student.lastName + " " + student.firstName,
+              )
+            ) : (
+              <>
+                <Avatar
+                  size={40}
+                  icon={<UserOutlined />}
+                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${author.avatarId}`}
+                  className="mr-3"
+                />
+                <p className="inline-block ">
+                  {author.lastName + " " + author.firstName}
+                </p>
+              </>
+            )}
+            <p className="inline-block ">
+              {/*{isManagementPost(post)*/}
+              {/*  ? displayGroupAuthor(post)*/}
+              {/*  : post.user.lastName + " " + post.user.firstName}*/}
+            </p>
+          </div>
+          <h4
+            className={"uppercase font-bold text-2xl text-center my-5"}
+            // style={{ color: `${colors.green_3}` }}
+          >
+            {post.title}
+          </h4>
+
+          <div
+            className={"text-lg text-justify inline-block post-detail"}
+            style={{ overflowY: "scroll" }}
+            dangerouslySetInnerHTML={{ __html: post.caption }}
+          />
+
+          {post.type === assignmentStatus.PENDING && (
+            <div className={"flex flex-row"}>
+              <button
+                className="bg-red-500 text-white px-3 py-1 mr-2 rounded"
+                onClick={() => handlePost(post.id, "reject")}
+              >
+                CHƯA ĐẠT
+              </button>
+              <button
+                className="bg-green-500 text-white px-3 py-1 mr-2 rounded"
+                onClick={() => handlePost(post.id, "approve")}
+              >
+                DUYỆT
+              </button>
+            </div>
+          )}
+          <div
+            className="flex flex-col relative max-w-full"
+            style={{ flex: 1 }}
+          >
+            <div className="flex">
+              {post.type != assignmentStatus.PENDING && post.isLiked ? (
+                <IoIosHeart
+                  className={"w-6 h-6"}
+                  style={{ color: `${theme[post.orientation]?.textColor}` }}
+                  onClick={handleLikePost}
+                />
+              ) : (
+                <IoIosHeartEmpty
+                  className={"w-6 h-6"}
+                  style={{ color: `${theme[post.orientation]?.textColor}` }}
+                  onClick={handleLikePost}
+                />
+              )}
+              <p className={" text-base ml-2"}>{post.numberOfLikes}</p>
+            </div>
+            <div className={"max-h-[50%] overflow-y-scroll"}>
+              {post.type != assignmentStatus.PENDING &&
+                commentsList?.length > 0 &&
+                commentsList.map((comment) => (
+                  <div
+                    className={`my-1.5 bg-${theme[post.orientation]?.lightColor} rounded-2xl p-2 w-full text-wrap break-words overflow-y-scroll`}
+                    style={{
+                      backgroundColor: `${theme[post.orientation]?.lightColor}`,
+                    }}
+                  >
+                    <div className={"flex flex-row justify-between"}>
+                      <div className={"flex flex-row"}>
+                        <Avatar
+                          size={42}
+                          icon={<UserOutlined />}
+                          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${comment.userAvatarId}`}
+                          className="mr-2.5"
+                        />
+                        <Col>
+                          <p className="font-semibold text-base">
+                            {comment.userLastName + " " + comment.userFirstName}
+                          </p>
+                          <p className="text-gray-500">
+                            {FormatDateTime(comment.postTime)}
+                          </p>
+                        </Col>
+                      </div>
+                      {comment?.isPinned === true ? (
+                        <AiFillPushpin
+                          className={"cursor-pointer h-5 w-5"}
+                          onClick={() => handlePinComment(comment.id, "unpin")}
+                        />
+                      ) : (
+                        <AiOutlinePushpin
+                          className={"cursor-pointer h-5 w-5"}
+                          onClick={() => handlePinComment(comment.id, "pin")}
+                        />
+                      )}
+                    </div>
+                    <p
+                      className={"mt-3  ml-12 max-w-full"}
+                      style={{ textWrap: "wrap" }}
+                    >
+                      {comment.content}
+                    </p>
+                  </div>
+                ))}
+            </div>
+
+            <div
+              className={"mb-7 flex w-full mt-auto items-end"}
+              // style={{
+              //   position: "absolute",
+              //   bottom: "2.5rem",
+              //   // right: "5rem",
+              // }}
+            >
               <Avatar
                 size={40}
                 icon={<UserOutlined />}
-                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${author.avatarId}`}
+                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${user.avatarId}`}
                 className="mr-3"
               />
-              <p className="inline-block text-green-3">
-                {author.lastName + " " + author.firstName}
-              </p>
-            </>
-          )}
-          <p className="inline-block text-green-3">
-            {/*{isManagementPost(post)*/}
-            {/*  ? displayGroupAuthor(post)*/}
-            {/*  : post.user.lastName + " " + post.user.firstName}*/}
-          </p>
-        </div>
-        <h4
-          className={"uppercase font-bold text-2xl text-center my-5"}
-          style={{ color: `${colors.green_3}` }}
-        >
-          {post.title}
-        </h4>
-        <div className="">
-          <div
-            className={"text-lg text-justify inline-block"}
-            dangerouslySetInnerHTML={{ __html: post.caption }}
-          />
-        </div>
-        <div
-          className=" justify-between"
-          style={{
-            bottom: "1rem",
-            left: "1rem",
-            width: "100%",
-            padding: "20px",
-            backgroundColor: `transparent`,
-          }}
-        >
-          <div className="flex">
-            {post.isLiked ? (
-              <IoIosHeart
-                className={"w-6 h-6"}
-                style={{ color: `${colors.green_3}` }}
-                onClick={handleLikePost}
-              />
-            ) : (
-              <IoIosHeartEmpty
-                className={"w-6 h-6"}
-                style={{ color: `${colors.green_3}` }}
-                onClick={handleLikePost}
-              />
-            )}
-            <p className={"text-green_3 text-base ml-2"}>
-              {post.numberOfLikes}
-            </p>
-          </div>
-          <div className={"mt-2 mb-7 flex"}>
-            <Avatar
-              size={40}
-              icon={<UserOutlined />}
-              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${user.avatarId}`}
-              className="mr-3"
-            />
-            <textarea
-              ref={textAreaRef}
-              value={commentInput}
-              onInput={handleInput}
-              className={
-                "w-full  bg-transparent rounded-3xl py-2 px-7 text-black placeholder-black outline-none"
-              }
-              style={{
-                border: `1px solid ${colors.green_3}`,
-                height: textAreaHeight,
-                overflow: "hidden",
-              }}
-              placeholder="Thêm bình luận..."
-              onChange={(e) => handleChangeCommentInput(e)}
-              // onKeyPress={}
-              onKeyDown={(e) => e.key === "Enter" && handleEnter(e)}
-            />
-            {/* <textarea
-                value={commentInput}
-                placeholder={"Comment"}
-                onChange={}
-                onKeyPress={(e) => e.key === "Enter" && handleEnter()}
-                className={
-                  "w-4/5 bg-transparent rounded-3xl py-2 px-7 text-black placeholder-black outline-none"
-                }
-                style={{ border: `1px solid ${colors.green_3}` }}
-              /> */}
-          </div>
-          <div>
-            {commentsList?.length > 0 &&
-              commentsList.map((comment) => (
-                <div className="my-1.5 bg-green_6 text-green_3 rounded-2xl p-2 w-full">
-                  <Row>
-                    <Avatar
-                      size={42}
-                      icon={<UserOutlined />}
-                      src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${comment.userAvatarId}`}
-                      className="mr-2.5"
-                    />
-                    <Col>
-                      <p className="font-semibold text-base">
-                        {comment.userLastName + " " + comment.userFirstName}
-                      </p>
-                      <p className="text-gray-500">
-                        {FormatDateTime(comment.postTime)}
-                      </p>
-                    </Col>
-                  </Row>
-                  <p className={"mt-3  ml-12"}>{comment.content}</p>
-                </div>
-              ))}
+              <div className={"flex flex-row items-end w-full sticky"}>
+                <textarea
+                  ref={textAreaRef}
+                  value={commentInput}
+                  onInput={handleInput}
+                  className={
+                    "w-[90%]  bg-transparent rounded-3xl py-2 px-7 text-black placeholder-black outline-none"
+                  }
+                  style={{
+                    border: `1px solid ${theme[post.orientation]?.textColor}`,
+                    height: textAreaHeight,
+                    overflow: "hidden",
+                  }}
+                  placeholder={
+                    post.type === assignmentStatus.PENDING
+                      ? "Thêm góp ý cho bài nộp của học sinh..."
+                      : "Thêm bình luận..."
+                  }
+                  onChange={(e) => handleChangeCommentInput(e)}
+                  // onKeyPress={}
+                  // onKeyDown={(e) => e.key === "Enter" && handleEnter(e)}
+                />
+                <FaRegPaperPlane
+                  className={`w-8 h-8 ml-3 cursor-pointer text-{${theme[post.orientation]?.textColor}}`}
+                  onClick={(e) => handleComment(e)}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

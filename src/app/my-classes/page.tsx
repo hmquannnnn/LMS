@@ -11,6 +11,8 @@ import { useRouter } from "next/navigation";
 import paths from "@/app/paths";
 import { ROLE_TEACHER } from "@/utils/constant";
 import "../profile/profile.scss";
+import { FaChalkboardTeacher } from "react-icons/fa";
+import { FaPeopleLine } from "react-icons/fa6";
 
 const MyClasses = () => {
   const userRole = useSelector((state) => state.account.user.role);
@@ -36,7 +38,7 @@ const MyClasses = () => {
       <div className={" min-h-[84vh] mt-5 w-[90%] mx-auto"}>
         <div>
           <div className={"flex justify-between items-center"}>
-            <p className={"h-fit font-bold text-2xl"}>Classes list</p>
+            <p className={"h-fit font-bold text-2xl"}>Chào mừng em đến với</p>
             {userRole === ROLE_TEACHER ? (
               <CreateClassButton onUpdate={handleUpdate} />
             ) : (
@@ -44,45 +46,87 @@ const MyClasses = () => {
             )}
           </div>
 
-          <Divider className={"border-blue_3 my-1"} />
+          <Divider className={"border-blue_9 my-1"} />
         </div>
 
         <Row className={"flex flex-wrap"}>
-          {classesList.map((classItem) => {
-            return (
-              <div key={classItem.id} className={"relative w-1/5 pb-[16%] "}>
+          {classesList?.length > 0 &&
+            classesList.map((classItem) => {
+              return (
                 <div
-                  className={
-                    "bg-blue_1 text-blue_5 rounded-xl px-5 py-4 cursor-pointer place-items-end grid"
-                  }
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: "92%",
-                    height: "88%",
-                    // display: "grid",
-                    // gridTemplateRows: "70% 12% 12%",
-                    // gap: "calc((100% - (70% + 12% + 12%)) / 2)",
-                  }}
                   key={classItem.id}
-                  onClick={() =>
-                    router.push(
-                      `${paths.classroom}/${classItem.id}/notifications`,
-                    )
+                  className={
+                    "relative largelaptop:w-1/5 largelaptop:pb-[17%] w-1/4 pb-[19%] "
                   }
                 >
-                  <img src={"/classroom.png"} alt={"classroom thumnail"} />
-                  <p className={"font-semibold text-xl"}>{classItem.name}</p>
+                  <div
+                    className={
+                      " text-blue_5 rounded-xl px-5 py-4 cursor-pointer place-items-end grid shadow-2xl"
+                    }
+                    style={{
+                      backgroundColor: "#f2f2f2",
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      width: "92%",
+                      height: "88%",
+                      // display: "grid",
+                      // gridTemplateRows: "50% 18% 20%",
+                      // gap: "calc((100% - 88%) / 2)",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                    key={classItem.id}
+                    onClick={() =>
+                      router.push(
+                        `${paths.classroom}/${classItem.id}/notifications`,
+                      )
+                    }
+                  >
+                    <div style={{ flex: 2 }} className={"mb-2"}>
+                      <img
+                        src={"/classroom.png"}
+                        alt={"classroom thumnail"}
+                        className={"2xl:h-full w-full max-h-[50%] "}
+                      />
+                    </div>
+
+                    <div
+                      className={
+                        "font-semibold flex justify-start flex-col w-full"
+                      }
+                      style={{ flex: 1 }}
+                    >
+                      <div className={"flex flex-row items-center"}>
+                        <FaChalkboardTeacher className={"mr-1"} />
+                        <p className={"h-fit 2xl:text-base text-xs"}>
+                          {classItem.teacherLastName +
+                            " " +
+                            classItem.teacherFirstName}
+                        </p>
+                      </div>
+                      <div
+                        className={
+                          "flex flex-row items-center 2xl:text-base text-xs"
+                        }
+                      >
+                        <FaPeopleLine className={"mr-1"} />
+                        <p className={"h-fit"}>
+                          {classItem.numberOfStudents} thành viên
+                        </p>
+                      </div>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <p className={"font-bold 2xl:text-xl text-base"}>
+                        {classItem.name}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </Row>
-        <div id="one">
-          <div id="two">&nbsp;</div>
-        </div>
       </div>
     </>
   );
