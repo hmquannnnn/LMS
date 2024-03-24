@@ -153,7 +153,7 @@ const ClassNotification = (props: any) => {
   const handleCopy = async (classCode: string) => {
     try {
       await navigator.clipboard.writeText(classCode);
-      message.success("copy successfully");
+      message.success("Sao chép thành công");
       console.log("Text copied to clipboard successfully!");
     } catch (error) {
       console.error("Failed to copy text to clipboard:", error);
@@ -166,7 +166,7 @@ const ClassNotification = (props: any) => {
         <Row>
           <Col className={"h-28 place-items-start pr-5"} span={5}>
             <div className={"border-[1px] h-full pt-2 px-4 rounded-xl"}>
-              <p className={"text-lg font-semibold mb-6"}>Class code</p>
+              <p className={"text-lg font-semibold mb-6"}>Mã lớp học</p>
               <div className={"flex justify-between items-center"}>
                 <p className={"text-2xl font-bold text-blue_5"}>
                   {classInfo.code}
@@ -183,7 +183,7 @@ const ClassNotification = (props: any) => {
           <Col span={19}>
             <input
               type={"text"}
-              placeholder={"Announce something to your class"}
+              placeholder={"Thông báo đến lớp học của bạn"}
               value={notification}
               onChange={handleInputChange}
               onKeyPress={(e) => e.key === "Enter" && handleEnter()}
@@ -246,7 +246,7 @@ const ClassNotification = (props: any) => {
                               handleSeeAllComments(notification.id)
                             }
                           >
-                            See all comments
+                            Xem tất cả bình luận
                           </div>
                         </Row>
                       </>
@@ -321,7 +321,7 @@ const ClassNotification = (props: any) => {
                       </>
                     ) : null}
                     <input
-                      placeholder="Add comment"
+                      placeholder="Thêm bình luận"
                       type="text"
                       value={comment[notification.id] || ""}
                       onChange={(e) => handleChangeComment(e, notification.id)}

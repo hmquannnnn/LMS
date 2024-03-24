@@ -43,7 +43,7 @@ const LogIn = () => {
       };
       dispatch(doLoginAction(res));
       router.push("/");
-      message.success("Log in successfully!");
+      message.success("Đăng nhập thành công!");
     } else {
       if (res?.response?.status === 409) {
         notification.info({
@@ -54,7 +54,7 @@ const LogIn = () => {
       } else {
         notification.error({
           message: "Failed",
-          description: "Wrong username or password",
+          description: "Sai tên tài khoản hoặc mật khẩu",
           duration: 2,
         });
       }
@@ -65,25 +65,25 @@ const LogIn = () => {
     <>
       {/*<div className={"bg-gray-500 min-w-full min-h-full"}>*/}
       <div className="m-auto w-5/6 lg:w-1/4 sm:w-1/2 shadow px-2 py-3 absolute top-1/4 right-1/2 translate-x-2/4 rounded">
-        <p className={"text-center mb-4 text-3xl font-bold"}>Log in</p>
+        <p className={"text-center mb-4 text-3xl font-bold"}>ĐĂNG NHẬP</p>
         <form className={"m-auto flex flex-col"} onSubmit={handleLogIn}>
           <input
             className={"border-[1px] pl-4 rounded py-1.5 mb-4"}
             type="text"
             name="username"
-            placeholder="Username"
+            placeholder="Tên tài khoản"
           />
           <input
             className={"border-[1px] pl-4 rounded py-1.5 mb-4"}
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder="Mật khẩu"
           />
           <button
-            className={"bg-rose-100 rounded py-1.5 font-medium mb-4"}
+            className={"bg-blue_9 rounded py-1.5 font-medium mb-4"}
             type="submit"
           >
-            Log in
+            Đăng nhập
           </button>
         </form>
         {/*<form onSubmit={handleSubmit(onSubmit)}>*/}
@@ -97,9 +97,9 @@ const LogIn = () => {
         {/*    <input type="submit" />*/}
         {/*</form>*/}
         <p>
-          {"Don\'t have an account? "}
+          {"Chưa có tài khoản? "}
           <Link className={"text-blue-700"} href={paths.register}>
-            Register
+            Đăng ký
           </Link>
         </p>
       </div>

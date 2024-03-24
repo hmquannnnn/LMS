@@ -28,6 +28,32 @@ import { FaCheck } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import paths from "@/app/paths";
 
+export const statusPriority = {
+  APPROVED: 4,
+  PENDING: 3,
+  REJECTED: 2,
+  NOT_SUBMITTED: 1,
+};
+
+export const filterAndRemoveDuplicateAssignments = (assignments) => {
+  const assignmentsMap = {};
+
+  assignments.forEach((assignment) => {
+    if (!assignmentsMap[assignment.id]) {
+      assignmentsMap[assignment.id] = assignment;
+    } else {
+      const currentStatus = assignmentsMap[assignment.id].status;
+      const newStatus = assignment.status;
+      if (statusPriority[newStatus] > statusPriority[currentStatus]) {
+        assignmentsMap[assignment.id] = assignment;
+      }
+    }
+  });
+
+  const filteredAssignments = Object.values(assignmentsMap);
+  return filteredAssignments;
+};
+
 const ClassAssignment = (props: any) => {
   const classId = props.params.classId;
   const dispatch = useDispatch();
@@ -52,16 +78,9 @@ const ClassAssignment = (props: any) => {
 
     if (classInfo?.id) {
       dispatch(getCurrentClassAction(classInfo));
-      // let assignmentList: object = {};
-      // if (userRole === ROLE_TEACHER) {
-      //   assignmentList = await callGetAssigment(classId);
-      // }
-      // if (userRole === ROLE_STUDENT) {
-      //   assignmentList = await callGetAssignmentStatusStudent(classId);
-      // }
       if (userRole === ROLE_TEACHER) {
         const assignmentList = await callGetAssigment(classId);
-        console.log(assignmentList);
+        // console.log(assignmentList);
         assignmentList.sort((a: object, b: object) => {
           return new Date(a.id) - new Date(b.id);
         });
@@ -69,10 +88,13 @@ const ClassAssignment = (props: any) => {
       }
       if (userRole === ROLE_STUDENT) {
         const assignmentList = await callGetAssignmentStatusStudent(classId);
-        assignmentList.sort((a: object, b: object) => {
+        const filteredAssignment =
+          filterAndRemoveDuplicateAssignments(assignmentList);
+        console.log("filter: ", filteredAssignment);
+        filteredAssignment.sort((a: object, b: object) => {
           return new Date(a.id) - new Date(b.id);
         });
-        dispatch(getAssignmentsAction(assignmentList));
+        dispatch(getAssignmentsAction(filteredAssignment));
       }
 
       setUpdateFlag(true);
@@ -85,7 +107,7 @@ const ClassAssignment = (props: any) => {
 
   const handleCreateAssignment = async (e) => {
     e.preventDefault();
-    const title = `ASSIGNMENT ${assignmentsList.length + 1}: ${e.target.elements.title.value}`;
+    const title = `BÀI TẬP ${assignmentsList.length + 1}: ${e.target.elements.title.value}`;
     // const content = e.target.elements.content.value;
     const content = editorRef.current.getContent();
     const dueDateTime = e.target.elements.dueDateTime.value;
@@ -167,10 +189,10 @@ const ClassAssignment = (props: any) => {
               }
               onClick={showModal}
             >
-              Add assignment
+              Thêm bài tập
             </button>
             <Modal
-              title={"Add assignment"}
+              title={"Thêm bài tập"}
               open={isModalOpen}
               onCancel={handleCancel}
               footer={null}
@@ -180,7 +202,7 @@ const ClassAssignment = (props: any) => {
                   <input
                     type={"text"}
                     name={"title"}
-                    placeholder={"Title"}
+                    placeholder={"Tiêu đề"}
                     className="border-[1px] rounded w-full px-4 py-1 mb-3"
                   />
                   {/*<input*/}
@@ -193,7 +215,7 @@ const ClassAssignment = (props: any) => {
                     name="caption"
                     apiKey="ty6mn9smak440qi6gv53qqivqdulai6ja9wl6ao0bt12odwr"
                     onInit={(evt, editor) => (editorRef.current = editor)}
-                    initialValue="<p>This is the initial content of the editor.</p>"
+                    initialValue="<p>Nhập nội dung ở đây</p>"
                     init={{
                       height: 500,
                       menubar: false,
@@ -228,14 +250,14 @@ const ClassAssignment = (props: any) => {
                   />
                   <input type={"datetime-local"} name={"dueDateTime"} />
                   <select name={"isForGroup"}>
-                    <option value={"false"}>Personal</option>
-                    <option value={"true"}>Group</option>
+                    <option value={"false"}>Cá nhân</option>
+                    <option value={"true"}>Nhóm</option>
                   </select>
                   <button
                     type={"submit"}
                     className="border-[1px] bg-red-500 text-white rounded w-full text-center py-1 font-bold"
                   >
-                    Submit
+                    Tạo
                   </button>
                 </div>
               </form>
@@ -247,10 +269,10 @@ const ClassAssignment = (props: any) => {
           {userRole === ROLE_STUDENT && (
             <Row className={"mb-5 w-full"}>
               <Col span={21} className={"flex items-center justify-center"}>
-                <p>Assignments</p>
+                <p>Bài tập</p>
               </Col>
               <Col span={3} className={"flex items-center justify-center"}>
-                <p>Status</p>
+                <p>Tình trạng</p>
               </Col>
             </Row>
           )}

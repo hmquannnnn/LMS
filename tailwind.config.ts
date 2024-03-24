@@ -51,6 +51,19 @@ const config: Config = {
         purple_2: "#b3cbfb",
         purple_3: "#6d9ef3",
       },
+      screens: {
+        tablet: "640px",
+        // => @media (min-width: 640px) { ... }
+
+        laptop: "1024px",
+        // => @media (min-width: 1024px) { ... }
+
+        laptop125percent: "1400px",
+        largelaptop: "1600px",
+
+        desktop: "1280px",
+        // => @media (min-width: 1280px) { ... }
+      },
     },
   },
   plugins: [],

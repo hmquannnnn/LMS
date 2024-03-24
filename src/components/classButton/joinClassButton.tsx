@@ -50,27 +50,27 @@ const JoinClassButton = ({ onUpdate }) => {
       <button
         type={"submit"}
         className={
-          "bg-blue_6 text-blue_5 rounded-lg px-5 py-1.5 shadow hover:shadow-lg font-semibold"
+          "bg-blue_9 text-white rounded-lg px-5 py-1.5 shadow hover:shadow-lg font-bold"
         }
         onClick={showModal}
       >
         {" "}
-        Join class
+        Tham gia lớp học
       </button>
       <Modal
-        title="Join a class"
+        title="Nhập mã lớp để tham gia lớp học"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
         footer={null}
       >
         <form onSubmit={(e) => handleJoinClass(e)}>
-          <label>Enter your class code</label>
+          <label>Nhập mã lớp</label>
           <br />
           <input
             className={"border-[1px] px-3 py-1 rounded w-full my-2"}
             name={"classCode"}
-            placeholder={"classCode"}
+            placeholder={"Mã lớp học"}
             type={"text"}
             value={inputValue}
             onChange={handleChangeValue}
@@ -82,7 +82,7 @@ const JoinClassButton = ({ onUpdate }) => {
               "bg-blue_6 rounded px-10 py-1.5 font-semibold text-blue_5"
             }
           >
-            Join
+            Tham gia
           </button>
         </form>
       </Modal>
@@ -92,12 +92,12 @@ const JoinClassButton = ({ onUpdate }) => {
         onCancel={() => setOpenSuccessAlert(false)}
         footer={null}
       >
-        <p>Your class name: {className}</p>
+        <p>Tên lớp: {className}</p>
         <button
           className={"bg-blue_6 rounded px-10 py-1.5 font-semibold text-blue_5"}
           onClick={() => setOpenSuccessAlert(false)}
         >
-          Done
+          Xong
         </button>
       </Modal>
     </>

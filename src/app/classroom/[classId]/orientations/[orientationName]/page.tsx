@@ -19,9 +19,10 @@ import ManagementExample from "@/components/orientationExample/managementExample
 // const authorHeight = "12%";
 // const totalContentHeight = thumbnailHeight + titleHeight + authorHeight;
 // const gapHeight = 1 - totalContentHeight;
-const theme = {
+export const theme = {
   // GREEN
   SOCIAL: {
+    vietnameseName: "XÃ HỘI",
     textColor: colors.green_3,
     mainColor: colors.green_1,
     lightColor: colors.green_6,
@@ -50,6 +51,7 @@ const theme = {
   },
   // BLUE
   RESEARCH: {
+    vietnameseName: "NGHIÊN CỨU",
     textColor: colors.blue_10,
     mainColor: "#bed5fa",
     lightColor: "#dbe7fc",
@@ -79,6 +81,7 @@ const theme = {
   },
   // YELLOW
   TECHNIQUE: {
+    vietnameseName: "KĨ THUẬT",
     textColor: colors.yellow_2,
     mainColor: "#ffd78f",
     lightColor: "#fff2da",
@@ -116,6 +119,7 @@ const theme = {
   },
   // LIGHT PINK
   ART: {
+    vietnameseName: "NGHỆ THUẬT",
     textColor: colors.pink_4,
     mainColor: "#f8bbc1",
     lightColor: "#fbdde0",
@@ -147,6 +151,7 @@ const theme = {
   },
   // PINK
   MANAGEMENT: {
+    vietnameseName: "QUẢN LÝ",
     textColor: colors.pink_5,
     mainColor: "#fda897",
     lightColor: "#fee2dc",
@@ -181,6 +186,7 @@ const theme = {
   },
   // GRAY
   MAJOR: {
+    vietnameseName: "NGHIỆP VỤ",
     textColor: colors.grey_2,
     mainColor: "#bfbfbf",
     lightColor: "#f2f2f2",
@@ -268,7 +274,10 @@ const OrientationPostsList = (props: any) => {
   console.log(postsList);
   return (
     <>
-      <div className={"h-full w-full mx-auto flex mb-8"}>
+      <div
+        className={"h-full w-full mx-auto flex mb-8"}
+        // style={{ overflowY: "scroll" }}
+      >
         <div className={"px-10"}>
           <div
             className={
@@ -284,7 +293,7 @@ const OrientationPostsList = (props: any) => {
               }}
             >
               {/*{mappingArray[orientationName][0].toUpperCase()}*/}
-              {orientationName}
+              {theme[orientationName].vietnameseName}
             </div>
           </div>
         </div>

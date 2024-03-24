@@ -15,3 +15,19 @@ export const FormatDateTime = (timeString: string) => {
 
   return formattedTime;
 };
+
+export const convertDateTime = (dateTimeString) => {
+  const dateTime = new Date(dateTimeString);
+  console.log(dateTime);
+  const hours = dateTime.getHours();
+  const minutes = dateTime.getMinutes();
+
+  const day = dateTime.getDate();
+  const month = dateTime.getMonth() + 1;
+  const year = dateTime.getFullYear();
+
+  // Định dạng lại chuỗi ngày giờ
+  const formattedDateTime = `${hours}:${minutes} ${day}/${month}/${year}`;
+
+  return formattedDateTime;
+};

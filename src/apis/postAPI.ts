@@ -15,3 +15,15 @@ export const callGetPostStatus = (postId: number) => {
 export const callGetPostComments = (postId: number) => {
   return instance.get(`posts/${postId}/comments`);
 };
+
+export const callTeacherComment = (postId: number, req) => {
+  instance.defaults.headers.common = {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    "Content-Type": "multipart/form-data",
+  };
+  return instance.post(`posts/${postId}/teacher-comment`, req);
+};
+
+export const callGetPostByAssignmentId = (assignmentId: number) => {
+  return instance.get(`assignments/${assignmentId}/posts`);
+};
