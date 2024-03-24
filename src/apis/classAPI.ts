@@ -3,7 +3,7 @@ import instance from "@/utils/axiosCustomize";
 const classUrl = "/classrooms";
 
 export const callCreaterNewClass = (className: string) => {
-  return instance.post(`${classUrl}?className=${className}`);
+  return instance.post(`${classUrl}`, { className });
 };
 
 export const callJoinClass = (classCode: string) => {
