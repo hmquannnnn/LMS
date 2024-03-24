@@ -19,6 +19,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    domains: ["densach.edu.vn"],
     remotePatterns: [
       {
         protocol: "https",

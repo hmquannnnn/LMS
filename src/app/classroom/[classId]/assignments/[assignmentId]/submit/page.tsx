@@ -83,7 +83,10 @@ const SubmissionPage = (props: any) => {
       const res = await callGetAssigment(classId);
       console.log("check res: ", res);
       const membersList = await callGetStudentsList(classId);
-      const menu = await membersList.map((member, index) => ({
+      const filteredMemberList = membersList.filter(
+        (student) => student.id != user.id,
+      );
+      const menu = await filteredMemberList.map((member, index) => ({
         key: index,
         label: (
           <div
@@ -114,7 +117,10 @@ const SubmissionPage = (props: any) => {
       // console.log(currentAssignment);
       dispatch(getCurrentAssignment(currentAssignment));
       dispatch(
-        getMembersWithoutStatusAction({ student: membersList, status: null }),
+        getMembersWithoutStatusAction({
+          student: filteredMemberList,
+          status: null,
+        }),
       );
     }
   };
