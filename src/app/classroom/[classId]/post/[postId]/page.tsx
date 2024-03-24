@@ -98,6 +98,8 @@ const PostDetails = (props: any) => {
       const sortedComment = await comment.sort((a, b) => {
         return new Date(b.postTime) - new Date(a.postTime);
       });
+
+
       await setCommentsList(comment);
       // console.log("comment: ", comment);
       setIsUpdate(false);
@@ -236,9 +238,15 @@ const PostDetails = (props: any) => {
           <div className={"w-full relative flex-col items-center"}>
             <div
               className={
-                "my-auto absolute w-full px-10 flex items-center justify-center h-full z-[2]"
+                "my-auto absolute w-full flex items-center justify-center h-full z-[2]"
               }
             >
+
+              <button className="p-2 " onClick={() => handleImageSlider(buttonType.PREV)}>
+                <svg className="h-12 w-12 hover:h-[4rem] hover:w-[4rem] duration-300 ease-in-out" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
               {media[mediaIndex].type.includes("image") ? (
                 <img
                   alt="post's picture"
@@ -272,32 +280,41 @@ const PostDetails = (props: any) => {
                   controls
                 />
               ) : media[mediaIndex].type.includes("pdf") ? (
-                <div className="w-full h-full ">
-                  <GoogleDocsViewer
-                    width="60%"
-                    height="78vh"
-                    // className={"h-full w-full overflow-y-scroll"}
-                    // fileUrl={"http://www.minhupro.xyz/api/v1/media/fda06ddb-a7f7-4030-b22c-11f146813b91"}
-                    fileUrl={file.url}
-                  />
+                <div className="w-full h-full pl-[4vw]">
+                  <div classNamw="w-min">
+
+                    <GoogleDocsViewer
+                      width="90%"
+                      height="78vh"
+                      // className={"h-full w-full overflow-y-scroll"}
+                      // fileUrl={"http://www.minhupro.xyz/api/v1/media/fda06ddb-a7f7-4030-b22c-11f146813b91"}
+                      fileUrl={file.url}
+                    />
+                  </div>
                 </div>
               ) : (
                 <p>Unsupported media type</p>
               )}
+              <button className="p-2" onClick={() => handleImageSlider(buttonType.NEXT)}>
+                <svg className="h-12 w-12 hover:h-[4rem] hover:w-[4rem] duration-300 ease-in-out" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
             </div>
             <div className="absolute w-full h-full px-10 flex justify-center items-center z-[1]">
               <Spin />
             </div>
             <div className={"flex mx-auto justify-center text-lg mt-[62%]"}>
-              <button onClick={() => handleImageSlider(buttonType.PREV)}>
+              {/* <button onClick={() => handleImageSlider(buttonType.PREV)}>
                 <IoIosArrowBack />
-              </button>
+              </button> */}
               <p className={"mx-3"}>
                 {mediaIndex + 1} / {media.length}
               </p>
-              <button onClick={() => handleImageSlider(buttonType.NEXT)}>
+              {/* <button onClick={() => handleImageSlider(buttonType.NEXT)}>
                 <IoIosArrowForward />
-              </button>
+              </button> */}
             </div>
           </div>
         )}
@@ -312,7 +329,7 @@ const PostDetails = (props: any) => {
           >
             <div
               className="flex items-center mb-2 text-lg"
-              // style={{ color: `${colors.green_3}` }}
+            // style={{ color: `${colors.green_3}` }}
             >
               {isManagementPost(post) ? (
                 author?.students?.length &&
@@ -342,7 +359,7 @@ const PostDetails = (props: any) => {
             </div>
             <h4
               className={"uppercase font-bold text-2xl text-center my-5"}
-              // style={{ color: `${colors.green_3}` }}
+            // style={{ color: `${colors.green_3}` }}
             >
               {post.title}
             </h4>
@@ -433,11 +450,11 @@ const PostDetails = (props: any) => {
 
               <div
                 className={"mb-7 flex w-full mt-auto items-end"}
-                // style={{
-                //   position: "absolute",
-                //   bottom: "2.5rem",
-                //   // right: "5rem",
-                // }}
+              // style={{
+              //   position: "absolute",
+              //   bottom: "2.5rem",
+              //   // right: "5rem",
+              // }}
               >
                 <Avatar
                   size={40}
@@ -464,8 +481,8 @@ const PostDetails = (props: any) => {
                         : "Thêm bình luận..."
                     }
                     onChange={(e) => handleChangeCommentInput(e)}
-                    // onKeyPress={}
-                    // onKeyDown={(e) => e.key === "Enter" && handleEnter(e)}
+                  // onKeyPress={}
+                  // onKeyDown={(e) => e.key === "Enter" && handleEnter(e)}
                   />
                   <FaRegPaperPlane
                     className={`w-8 h-8 ml-3 cursor-pointer text-{${theme[post.orientation]?.textColor}}`}
