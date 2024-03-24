@@ -280,14 +280,17 @@ const PostDetails = (props: any) => {
                   controls
                 />
               ) : media[mediaIndex].type.includes("pdf") ? (
-                <div className="w-full h-full ">
-                  <GoogleDocsViewer
-                    width="90%"
-                    height="78vh"
-                    // className={"h-full w-full overflow-y-scroll"}
-                    // fileUrl={"http://www.minhupro.xyz/api/v1/media/fda06ddb-a7f7-4030-b22c-11f146813b91"}
-                    fileUrl={file.url}
-                  />
+                <div className="w-full h-full pl-[4vw]">
+                  <div classNamw="w-min">
+
+                    <GoogleDocsViewer
+                      width="90%"
+                      height="78vh"
+                      // className={"h-full w-full overflow-y-scroll"}
+                      // fileUrl={"http://www.minhupro.xyz/api/v1/media/fda06ddb-a7f7-4030-b22c-11f146813b91"}
+                      fileUrl={file.url}
+                    />
+                  </div>
                 </div>
               ) : (
                 <p>Unsupported media type</p>
