@@ -61,7 +61,7 @@ const MyClasses = () => {
                 >
                   <div
                     className={
-                      " text-blue_5 rounded-xl px-5 py-4 cursor-pointer place-items-end grid shadow-2xl"
+                      " text-blue_5 rounded-xl px-5 py-4 cursor-pointer place-items-end grid shadow-xl"
                     }
                     style={{
                       backgroundColor: "#f2f2f2",

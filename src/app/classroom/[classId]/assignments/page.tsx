@@ -248,14 +248,29 @@ const ClassAssignment = (props: any) => {
                         "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                     }}
                   />
-                  <input type={"datetime-local"} name={"dueDateTime"} />
-                  <select name={"isForGroup"}>
+                  <label htmlFor="deadline" className={"my-3"}>
+                    Hạn nộp
+                  </label>
+                  <input
+                    id={"deadline"}
+                    type={"datetime-local"}
+                    name={"dueDateTime"}
+                    className={"border-[1px] w-full px-4 py-1 rounded mb-3"}
+                  />
+                  <label htmlFor={"type"} className={"mb-3 w-full my-3"}>
+                    Hình thức
+                  </label>
+                  <select
+                    id={"type"}
+                    name={"isForGroup"}
+                    className={"px-4 py-1 rounded border-[1px]"}
+                  >
                     <option value={"false"}>Cá nhân</option>
                     <option value={"true"}>Nhóm</option>
                   </select>
                   <button
                     type={"submit"}
-                    className="border-[1px] bg-red-500 text-white rounded w-full text-center py-1 font-bold"
+                    className="border-[1px] bg-blue_9 text-white rounded w-full text-center py-1 font-bold mt-3"
                   >
                     Tạo
                   </button>
