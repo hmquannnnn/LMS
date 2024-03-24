@@ -221,12 +221,12 @@ const Header = () => {
                                     <input
                                         className={
                                             "flex-1 text-white font-bold h-8 rounded border-0 bg-purple_2  caret-white focus:outline-none border-gray-200 pl-2 my-auto ml-2 outline-none "
+                                        }
                                         onChange={handleOnChangeSearch}
                                         value={searchValue}
-                      }
-                                    type={"text"}
-                                    placeholder={""}
-                />
+                                        type={"text"}
+                                        placeholder={""}
+                                    />
                                 </div>
                             </Dropdown>
                         </div>

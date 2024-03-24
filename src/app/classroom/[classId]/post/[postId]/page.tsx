@@ -30,7 +30,7 @@ import { AiFillPushpin, AiOutlinePushpin } from "react-icons/ai";
 import { callPinComment, callUnpinComment } from "@/apis/commentsAPI";
 import { FaRegPaperPlane } from "react-icons/fa";
 import { theme } from "@/app/classroom/[classId]/orientations/[orientationName]/page";
-
+import Image from "next/image";
 interface button {
   PREV: string;
   NEXT: string;
@@ -239,8 +239,8 @@ const PostDetails = (props: any) => {
             }
           >
             {media[mediaIndex].type.includes("image") ? (
-              <img
-                alt="Author's avatar"
+              <Image
+                alt="post's picture"
                 className={
                   "h-fit w-fit mx-auto rounded-2xl max-h-[100%] max-w-[100%] object-contain"
                 }
@@ -255,7 +255,7 @@ const PostDetails = (props: any) => {
                 width={"10000"}
                 height={"10000"}
                 src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${media[mediaIndex].id}`}
-              />
+              ></Image>
             ) : media[mediaIndex].type.includes("video") ? (
               <video
                 className={" mx-auto rounded-2xl"}
@@ -390,6 +390,7 @@ const PostDetails = (props: any) => {
                 commentsList?.length > 0 &&
                 commentsList.map((comment) => (
                   <div
+                    key={comment.id}
                     className={`my-1.5 bg-${theme[post.orientation]?.lightColor} rounded-2xl p-2 w-full text-wrap break-words overflow-y-scroll`}
                     style={{
                       backgroundColor: `${theme[post.orientation]?.lightColor}`,
