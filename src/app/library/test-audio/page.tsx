@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import ReactJkMusicPlayer from 'react-jinke-music-player'
-import 'react-jinke-music-player/assets/index.css'
+
 const Visualizer = () => {
     // create audiofile from audio file path
     // const audioFile = new Uint8Array(100);

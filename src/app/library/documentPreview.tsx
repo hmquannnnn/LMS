@@ -8,10 +8,13 @@ import { callLikeDocument, callUnLikeDocument } from '@/apis/documentsAPI';
 import { RemindLoginModal } from '@/components/remindLogin';
 import { FacebookIcon, TwitterIcon } from '@/components/sidebarIcon';
 import { usePathname } from 'next/navigation';
+import { useSelector } from "react-redux";
+
 
 const DocumentPreview = ({ props }) => {
     // const [openRemindLoginModal, setOpenRemindLoginModal] = useState(false);
     // const [loading, setLoading] = useState(false);
+    const isAuthenticated = useSelector(state => state.account.isAuthenticated);
     const document = props.data;
     const [isLiked, setIsLiked] = useState(document?.isLiked);
     const [isModalOpen, setIsModelOpen] = useState(false);
@@ -51,7 +54,16 @@ const DocumentPreview = ({ props }) => {
             });
 
     };
-    const items: MenuProps["items"] = [
+
+    const handleClickOnPractice = (testType: String) => {
+        if (!isAuthenticated) {
+            setIsModelOpen(true);
+        } else {
+            router.push(`/library/${document?.id}/${testType}`);
+        }
+    }
+
+    const socialMediaItems: MenuProps["items"] = [
         {
             key: "1",
             label: (
@@ -90,6 +102,31 @@ const DocumentPreview = ({ props }) => {
                     <TwitterIcon
 
                     />
+                </div>
+
+            ),
+        }
+    ];
+
+    const practiceItems: MenuProps["items"] = [
+        {
+            key: "1",
+            label: (
+                <div className='flex items-center justify-between h-[40px]' onClick={() => {
+                    handleClickOnPractice('READING');
+                }}>
+                    <span>Nói và nghe</span>
+                </div>
+            )
+            ,
+        },
+        {
+            key: "2",
+            label: (
+                <div className='flex items-center justify-between h-[40px]' onClick={() => {
+                    handleClickOnPractice('WRITING');
+                }}>
+                    <span>Viết</span>
                 </div>
 
             ),
@@ -140,15 +177,17 @@ const DocumentPreview = ({ props }) => {
                         <div className="font-josefin font-bold text-white">Yêu thích</div>
                         <div className='font-light text-xs'>Thêm vào bộ sưu tập yêu thích để lưu lại những thông tin hữu ích!</div>
                     </div>
-                    <div className='max-w-[200px] h-min shadow-[rgba(0,0,0,0.15)_3px_3px_7px_1px] sha px-4 py-4 rounded-2xl cursor-pointer hover:shadow-[rgba(0,0,0,0.3)_3px_3px_7px_1px]' onClick={() => setIsModelOpen(true)}>
-                        <div className='mb-2'>
-                            <PracticeIcon />
+                    <Dropdown menu={{ items: practiceItems }} placement="bottom" >
+                        <div className='max-w-[200px] h-min shadow-[rgba(0,0,0,0.15)_3px_3px_7px_1px] sha px-4 py-4 rounded-2xl cursor-pointer hover:shadow-[rgba(0,0,0,0.3)_3px_3px_7px_1px]'>
+                            <div className='mb-2'>
+                                <PracticeIcon />
+                            </div>
+                            <div className="font-josefin font-bold ">Luyện tập</div>
+                            <div className='font-light text-xs'>Thêm vào bộ sưu tập yêu thích để lưu lại những thông tin hữu ích!</div>
                         </div>
-                        <div className="font-josefin font-bold ">Luyện tập</div>
-                        <div className='font-light text-xs'>Thêm vào bộ sưu tập yêu thích để lưu lại những thông tin hữu ích!</div>
-                    </div>
+                    </Dropdown>
 
-                    <Dropdown menu={{ items }} placement="bottom" >
+                    <Dropdown menu={{ items: socialMediaItems }} placement="bottom" >
                         <div className='max-w-[200px] h-min shadow-[rgba(0,0,0,0.15)_3px_3px_7px_1px] sha px-4 py-4 rounded-2xl cursor-pointer hover:shadow-[rgba(0,0,0,0.3)_3px_3px_7px_1px]' >
                             <div className='mb-2'>
                                 <ShareIcon />

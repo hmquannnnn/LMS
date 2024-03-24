@@ -7,8 +7,6 @@ import { Button, Select } from 'antd';
 
 import { NotionRenderer } from "react-notion";
 import DocumentPreview from '@/app/library/documentPreview';
-import { resolve } from 'path';
-import { set } from 'react-hook-form';
 
 const IMAGE_PLACEHOLDER = "https://placehold.co/600x400/png?text=%E1%BA%A2nh\nThumbnail&font=arial"
 const TITLE_PLACEHOLDER = "Tiêu đề"
@@ -22,7 +20,7 @@ const Index = () => {
     const [fileInput, setFileInput] = useState(null);
     const [documentTitle, setDocumentTitle] = useState(TITLE_PLACEHOLDER);
     const [veryFirstText, setVeryFirstText] = useState(SHORT_DESCRIPTION_PLACEHOLDER);
-    const [topic, setTopic] = useState('SOCIAL');
+    const [topic, setTopic] = useState('CULTURE');
     const [type, setType] = useState('');
     const [firstImageUrl, setFirstImageUrl] = useState(IMAGE_PLACEHOLDER);
     // const firstImageUrl = useRef(IMAGE_PLACEHOLDER);
@@ -42,7 +40,7 @@ const Index = () => {
             const response = await fetch(`https://notion-api.splitbee.io/v1/page/${inputValue}`);
             const data = await response.json();
 
-            setDocumentTitle(data[Object.keys(data)[0]]["value"]["properties"]["title"][0][0])
+            // setDocumentTitle(data[Object.keys(data)[0]]["value"]["properties"]["title"][0][0])
 
             let tmpFirstImageUrl = ""
             for (let key in Object.keys(data)) {
@@ -52,32 +50,34 @@ const Index = () => {
                     setFirstImageUrl(tmpFirstImageUrl)
                 }
             }
-            let index = 0;
-            if (data[data[Object.keys(data)[0]]["value"]["content"][0]]["value"]["properties"] !== undefined) {
-                index = Object.keys(data).indexOf(data[Object.keys(data)[0]]["value"]["content"][0])
-            } else {
-                index = 1;
-                for (index; index < Object.keys(data).length; index++) {
-                    const key = Object.keys(data).at(index)
-                    if (data[key]["value"]["properties"] !== undefined) {
-                        break;
-                    }
-                }
-            }
+            // let index = 0;
+            // if (data[data[Object.keys(data)[0]]["value"]["content"][0]]["value"]["properties"]["title"] !== undefined) {
+            //     index = Object.keys(data).indexOf(data[Object.keys(data)[0]]["value"]["content"][0])
+            // } else {
+            //     index = 1;
+            //     for (index; index < Object.keys(data).length; index++) {
+            //         const key = Object.keys(data).at(index)
+            //         if (data[key]["value"]["properties"]["title"] !== undefined) {
+            //             break;
+            //         }
+            //     }
+            // }
 
-            setVeryFirstText("")
-            console.log("key data: ", Object.keys(data).at(index))
-            const key = Object.keys(data).at(index)
-            const block = data[key]["value"]
-            let tmp = ""
-            for (let text of block["properties"]["title"]) {
-                tmp += text[0]
-            }
-            setVeryFirstText(tmp)
+            // setVeryFirstText("")
+            // console.log("key data: ", Object.keys(data).at(index))
+            // const key = Object.keys(data).at(index)
+            // const block = data[key]["value"]
+            // let tmp = ""
+            // for (let text of block["properties"]["title"]) {
+            //     tmp += text[0]
+            // }
+            // setVeryFirstText(tmp)
             setData(data);
             setIsLoading(false);
         } catch (error) {
             console.error('Error fetching data:', error);
+            setIsLoading(false);
+
         }
     };
     const blobUrlToFile = (blobUrl: string): Promise<File> => new Promise((resolve, reject) => {
@@ -156,24 +156,27 @@ const Index = () => {
         }
 
         if (isCanPost) {
-            alert("Đăng bài thành công");
+            // setFileInput(file)
+            setIsLoadingSubmit(true);
+            const response = await callPostDocument(formData).then((res) => {
+                console.log(res);
+                setIsLoadingSubmit(false);
+                alert("Đăng bài thành công");
+                return res
+                // resolve(res);
+            }
+            ).catch((error) => {
+                console.error('Error fetching data:', error);
+                alert("Đăng bài thất bại");
+                setIsLoadingSubmit(false);
+            });
+
+            console.log(response);
+        } else {
+            alert("Đăng bài thất bại. Vui lòng thay đổi link ảnh hoặc tải ảnh lên.");
         }
 
-        // setFileInput(file)
-        // setIsLoadingSubmit(true);
-        // const response = await callPostDocument(formData).then((res) => {
-        //     console.log(res);
-        //     setIsLoadingSubmit(false);
-        //     alert("Đăng bài thành công");
-        //     resolve(res);
-        // }
-        // ).catch((error) => {
-        //     console.error('Error fetching data:', error);
-        //     alert("Đăng bài thất bại");
-        //     setIsLoadingSubmit(false);
-        // });
 
-        // console.log(response);
     }
 
 
@@ -183,7 +186,7 @@ const Index = () => {
                 <div className='flex flex-col  pl-4 '>
                     <div className='flex-1 flex mb-4'>
                         <div className='flex-1 flex  mr-2'>
-                            <div className='mr-2 font-bold'>Notion page's Id:</div>
+                            <div className='mr-2 font-bold'>Notion page&apos;s Id:</div>
                             <input
                                 className='flex-auto border-b-[1px] border-black focus:outline-none'
                                 type="text"
@@ -242,7 +245,17 @@ const Index = () => {
                                 <Select.Option value="TOURISM">Du lịch</Select.Option>
                             </Select>
                         </div>
+                        <div className='flex-1 flex  mr-2'>
+                            <div className='mr-2 font-bold'>Dạng thức</div>
+                            <Select onChange={(val) => setType(val)} defaultValue={'Chữ'}>
+                                <Select.Option value="TEXT">Chữ</Select.Option>
+                                <Select.Option value="AUDIO">Âm thanh</Select.Option>
+                                {/* <Select.Option value="SPORT">Thể thao</Select.Option>
+                                <Select.Option value="TOURISM">Du lịch</Select.Option> */}
+                            </Select>
+                        </div>
                     </div>
+
 
                     <Button type="default"
                         className='text-purple_1 border-purple_1 hover:bg-purple_1 hover:text-white'
@@ -250,7 +263,7 @@ const Index = () => {
                         onClick={() => onPostDocument(
                             {
                                 title: documentTitle,
-                                type: "TEXT",
+                                type: type,
                                 topic: topic,
                                 veryFirstText: veryFirstText,
                                 notionPageId: inputValue

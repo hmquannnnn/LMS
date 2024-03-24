@@ -7,7 +7,7 @@ export interface DocumentInput {
   veryFirstText: string;
   type: string;
   notionPageId: string;
-  topic: string
+  topic: string;
 }
 
 export const callPostDocument = (document: FormData) => {
@@ -45,6 +45,10 @@ export const callGetDocumentsDetail = (
 
 export const callGetDocumentById = (documentId: string) => {
   return instance.get(`${documentUrl}/detail/${documentId}`);
+};
+
+export const callSearchDocumentByTitle = (keyword: string) => {
+  return instance.get(`${documentUrl}/search?keyword=${keyword}`);
 };
 
 export const callLikeDocument = (documentId: string) => {

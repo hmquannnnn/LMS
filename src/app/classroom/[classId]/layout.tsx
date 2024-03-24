@@ -50,7 +50,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
 
             <div className="flex w-1/2 ml-[5vw] ">
 
-              <Tooltip className={"flex justify-center px-[4vw]  hover:bg-slate-200 cursor-pointer py-1"} placement="top" title={"Thông báo"} color={"cyan"} arrow={false}>
+              <Tooltip className={"flex justify-center px-[4vw]  hover:bg-slate-200 cursor-pointer py-1 "} placement="top" title={"Thông báo"} color={"#367ff0"} arrow={false}>
                 <Link
                   href={`${paths.classroom}/${classId}/${paths.classroomNotifications}`}
                 >
@@ -58,7 +58,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                   <IoNotifications className={"h-6 w-6"} />
                 </Link>
               </Tooltip>
-              <Tooltip className={"flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"} placement="top" title={"Bài tập"} color={"cyan"} arrow={false}>
+              <Tooltip className={"flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"} placement="top" title={"Bài tập"} color={"#367ff0"} arrow={false}>
                 <Link
                   href={`${paths.classroom}/${classId}/${paths.classroomAssignments}`}
                 >
@@ -66,7 +66,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                   <MdAssignmentTurnedIn className={"h-6 w-6"} />
                 </Link>
               </Tooltip>
-              <Tooltip className={"flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"} placement="top" title={"Danh sách"} color={"cyan"} arrow={false}>
+              <Tooltip className={"flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"} placement="top" title={"Danh sách"} color={"#367ff0"} arrow={false}>
                 <Link
                   href={`${paths.classroom}/${classId}/${paths.classroomMembers}`}
                 >
@@ -75,7 +75,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                 </Link>
               </Tooltip>
               {user.role === ROLE_TEACHER && (
-                <Tooltip className={"flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"} placement="top" title={"Bài chờ duyệt"} color={"cyan"} arrow={false}>
+                <Tooltip className={"flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"} placement="top" title={"Bài chờ duyệt"} color={"#367ff0"} arrow={false}>
                   <Link
                     href={`${paths.classroom}/${classId}/${paths.pendingPosts}`}
                   >
@@ -84,7 +84,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                   </Link>
                 </Tooltip>
               )}
-              <Tooltip className={"flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"} placement="top" title={"Định hướng"} color={"cyan"} arrow={false}>
+              <Tooltip className={"flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"} placement="top" title={"Định hướng"} color={"#367ff0"} arrow={false}>
                 <Link
                   href={`${paths.classroom}/${classId}/${paths.classroomOrientations}`}
                 >

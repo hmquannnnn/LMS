@@ -213,50 +213,52 @@ const DocumentIdPage = ({ params }) => {
       <div className=" fixed flex  flex-col h-[90vh] gap-10 w-[18%] mt-4  pl-10">
         {/* bg-gradient-to-br from-pink_1 to-yellow_1 */}
         {/* <div className="h-40 border-2  rounded-xl "></div> */}
-        <div className="h-full border-2 rounded-xl pl-4 pt-4 pr-6">
-          <svg
-            aria-label="Unlike"
-            className="x1lliihq x1n2onr6 xxk16z8 inline mr-1 fill-blue_5 cursor-pointer"
-            fill=""
-            height="18"
-            role="img"
-            viewBox="0 0 48 48"
-            width="18"
-          >
-            <title>Unlike</title>
-            <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
-          </svg>
-          <span
-            className="font-headingText text-blue_5 mb-3 inline-block cursor-pointer"
-            onClick={() => {
-              // check token from localStorage if it's not exist or expired, redirect to login page
-              const token = localStorage.getItem("token");
-              if (!token || isJwtExpired(token)) {
-                setOpenRemindLoginModal(true);
-                return;
-              }
-              router.push("/library/favorite");
-            }}
-          >
-            Danh sách yêu thích
-          </span>
+        <div className="h-screen pb-10">
+          <div className="h-full border-2 rounded-xl pl-4 pt-4 pr-6">
+            <svg
+              aria-label="Unlike"
+              className="x1lliihq x1n2onr6 xxk16z8 inline mr-1 fill-blue_5 cursor-pointer"
+              fill=""
+              height="18"
+              role="img"
+              viewBox="0 0 48 48"
+              width="18"
+            >
+              <title>Unlike</title>
+              <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
+            </svg>
+            <span
+              className="font-headingText text-blue_5 mb-3 inline-block cursor-pointer"
+              onClick={() => {
+                // check token from localStorage if it's not exist or expired, redirect to login page
+                const token = localStorage.getItem("token");
+                if (!token || isJwtExpired(token)) {
+                  setOpenRemindLoginModal(true);
+                  return;
+                }
+                router.push("/library/favorite");
+              }}
+            >
+              Danh sách yêu thích
+            </span>
 
-          <ul className="pl-2">
-            {favoriteDocuments &&
-              favoriteDocuments.data.map((document, index) => {
-                return (
-                  <li
-                    key={document.id}
-                    className="hover:text-blue_5 line-clamp-2 text-[0.9rem] mb-2 cursor-pointer"
-                    onClick={() => {
-                      router.push(`/library/${document.id}`);
-                    }}
-                  >
-                    {index + 1 + "."} {formatDocumentTitle(document.title)}
-                  </li>
-                );
-              })}
-          </ul>
+            <ul className="pl-2">
+              {favoriteDocuments &&
+                favoriteDocuments.data.map((document, index) => {
+                  return (
+                    <li
+                      key={document.id}
+                      className="hover:text-blue_5 line-clamp-2 text-[0.9rem] mb-2 cursor-pointer"
+                      onClick={() => {
+                        router.push(`/library/${document.id}`);
+                      }}
+                    >
+                      {index + 1 + "."} {formatDocumentTitle(document.title)}
+                    </li>
+                  );
+                })}
+            </ul>
+          </div>
         </div>
       </div>
       <div className="fixed right-0 flex flex-col gap-2 w-fit  pr-[2vw] pt-56 ">
@@ -321,29 +323,29 @@ const DocumentIdPage = ({ params }) => {
               {documentTitle.current}
             </div>
           )}
-          {postTime.current && (
+          {/* {postTime.current && (
             <p className="mx-auto my-0  text-sm text-gray-500">
               {postTime.current}
             </p>
-          )}
+          )} */}
 
           {data && <NotionRenderer blockMap={data} fullPage hideHeader />}
         </div>
         <div className={"flex flex-row justify-end mb-5"}>
-          <button
+          <Button
             className={
-              "bg-blue_9 text-white font-semibold px-4 py-1 rounded mr-5"
+              "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
             }
             onClick={() => handleDirectToTest("READING")}
           >
-            Đọc hiểu
-          </button>
-          <button
-            className={"bg-blue_9 text-white font-semibold px-4 py-1 rounded"}
+            Nói và nghe
+          </Button>
+          <Button
+            className={"bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded"}
             onClick={() => handleDirectToTest("WRITING")}
           >
             Viết
-          </button>
+          </Button>
         </div>
       </div>
 
