@@ -72,9 +72,9 @@ const CreateClassButton = ({ onUpdate }) => {
             <br />
             <input
               type={"text"}
-              name={"Tên lớp học"}
+              name={"className"}
               value={inputValue}
-              placeholder={"className"}
+              placeholder={"Tên lớp học"}
               onChange={handleChangeValue}
               className={"border-[1px] px-3 py-1 rounded w-full my-2"}
             />
