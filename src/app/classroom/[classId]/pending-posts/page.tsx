@@ -71,10 +71,10 @@ const PendingPosts = (props: any) => {
         <table className={"w-full border-collapse border border-slate-400"}>
           <thead>
             <tr className="bg-gray-200">
-              <th className={"border border-slate-400"}>No</th>
-              <th className={"border border-slate-400"}>Title</th>
-              <th className={"border border-slate-400"}>Author</th>
-              <th className={"border border-slate-400"}>Actions</th>
+              <th className={"border border-slate-400"}>STT</th>
+              <th className={"border border-slate-400"}>Tiêu đề</th>
+              <th className={"border border-slate-400"}>Tác giả</th>
+              <th className={"border border-slate-400"}>Thêm</th>
             </tr>
           </thead>
           <tbody>
@@ -92,13 +92,13 @@ const PendingPosts = (props: any) => {
                     className="bg-green-500 text-white px-3 py-1 mr-2 rounded"
                     onClick={() => handlePost(post.id, "approve")}
                   >
-                    Approve
+                    Đạt
                   </button>
                   <button
                     className="bg-red-500 text-white px-3 py-1 mr-2 rounded"
                     onClick={() => handlePost(post.id, "reject")}
                   >
-                    Reject
+                    Chưa đạt
                   </button>
                   <button
                     className="bg-gray-500 text-white px-3 py-1 rounded"
@@ -108,7 +108,7 @@ const PendingPosts = (props: any) => {
                       )
                     }
                   >
-                    Details
+                    Xem chi tiết
                   </button>
                 </td>
               </tr>

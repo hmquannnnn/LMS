@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { colors, Orientations } from "@/utils/constant";
 import paths from "@/app/paths";
 import OrientationIcon from "@/components/orientationIcon";
+import { theme } from "@/app/classroom/[classId]/orientations/[orientationName]/page";
 
 const backgroundColor = {
   TECHNIQUE: colors.yellow_1,
@@ -28,7 +29,7 @@ const textColor = {
 };
 
 const ClassOrientations = (props: any) => {
-  console.log(window.location.hostname);
+  // console.log(window.location.hostname);
   const classId = props.params.classId;
   const dispatch = useDispatch();
   const router = useRouter();
@@ -46,35 +47,40 @@ const ClassOrientations = (props: any) => {
   }, []);
 
   return (
-    <div className="flex flex-row flex-wrap w-[80%] mx-auto">
-      {Object.entries(Orientations).map(([key, value]) => (
-        <div key={key} className="relative basis-1/3 h-[33%] block pb-[20%] ">
-          <div
-            className={
-              "absolute h-[87%] w-[92%] rounded-xl cursor-pointer shadow-xl  hover:shadow-2xl " +
-              // "flex items-center justify-center flex-row" +
-              "grid content-end 2xl:p-10 xl:p-5 lg:p-3"
-            }
-            style={{
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              color: `${textColor[value]}`,
-              backgroundColor: `${backgroundColor[value]}`,
-            }}
-            onClick={() =>
-              router.push(`${paths.classroomOrientations}/${value}`)
-            }
-          >
-            <div className={"flex flex-row h-fit"}>
-              <OrientationIcon color={textColor[value]} orientation={value} />
-              <p className={"text-3xl font-bold w-fit grid content-end"}>
-                {value}
-              </p>
+    <div>
+      <p className={"text-center font-bold text-3xl"}>
+        CHÀO MỪNG EM KHÁM PHÁ THẾ GIỚI NGHỀ NGHIỆP KÌ THÚ
+      </p>
+      <div className="flex flex-row flex-wrap w-[80%] mx-auto">
+        {Object.entries(Orientations).map(([key, value]) => (
+          <div key={key} className="relative basis-1/3 h-[33%] block pb-[20%] ">
+            <div
+              className={
+                "absolute h-[87%] w-[92%] rounded-xl cursor-pointer shadow-xl  hover:shadow-2xl " +
+                // "flex items-center justify-center flex-row" +
+                "grid content-end 2xl:p-10 xl:p-5 lg:p-3"
+              }
+              style={{
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                color: `${textColor[value]}`,
+                backgroundColor: `${backgroundColor[value]}`,
+              }}
+              onClick={() =>
+                router.push(`${paths.classroomOrientations}/${value}`)
+              }
+            >
+              <div className={"flex flex-row h-fit"}>
+                <OrientationIcon color={textColor[value]} orientation={value} />
+                <p className={"text-3xl font-bold w-fit grid content-end"}>
+                  {theme[value]?.vietnameseName}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

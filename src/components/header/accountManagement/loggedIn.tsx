@@ -19,13 +19,13 @@ const LoggedInDropdown = () => {
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: <Link href={`${paths.profile}`}>Profile</Link>,
+      label: <Link href={`${paths.profile}`}>Hồ sơ cá nhân</Link>,
     },
     {
       key: "2",
       label: (
         <Link href={`${paths.library}/${paths.favoriteDocumentations}`}>
-          Favorite List
+          Danh sách yêu thích
         </Link>
       ),
     },
@@ -33,7 +33,7 @@ const LoggedInDropdown = () => {
       key: "3",
       label: (
         <Link href={`${paths.library}`} onClick={handleLogOut}>
-          Log out
+          Đăng xuất
         </Link>
       ),
     },
@@ -45,11 +45,11 @@ const LoggedInDropdown = () => {
         {/*<Button>bottom</Button>*/}
         <p
           className={
-            "text-purple_1 font-semibold decoration-white text-lg cursor-pointer border border-transparent rounded-lg hover:border-white px-2 py-1"
+            "text-purple_1 font-semibold decoration-white text-lg cursor-pointer border border-transparent rounded-lg px-2 py-1"
           }
-          onClick={() => router.push(paths.profile)}
+          // onClick={() => router.push(paths.profile)}
         >
-          Hello, {user.username}
+          Xin chào, {user.username}
         </p>
       </Dropdown>
     </>

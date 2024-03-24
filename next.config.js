@@ -38,6 +38,12 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "http",
+        hostname: "densach.edu.vn",
+        port: "",
+        pathname: "/**",
+      },
 
       {
         protocol: "https",
