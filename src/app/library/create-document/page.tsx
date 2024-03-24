@@ -156,24 +156,27 @@ const Index = () => {
         }
 
         if (isCanPost) {
-            alert("Đăng bài thành công");
+            // setFileInput(file)
+            setIsLoadingSubmit(true);
+            const response = await callPostDocument(formData).then((res) => {
+                console.log(res);
+                setIsLoadingSubmit(false);
+                alert("Đăng bài thành công");
+                return res
+                // resolve(res);
+            }
+            ).catch((error) => {
+                console.error('Error fetching data:', error);
+                alert("Đăng bài thất bại");
+                setIsLoadingSubmit(false);
+            });
+
+            console.log(response);
+        } else {
+            alert("Đăng bài thất bại. Vui lòng thay đổi link ảnh hoặc tải ảnh lên.");
         }
 
-        // setFileInput(file)
-        // setIsLoadingSubmit(true);
-        // const response = await callPostDocument(formData).then((res) => {
-        //     console.log(res);
-        //     setIsLoadingSubmit(false);
-        //     alert("Đăng bài thành công");
-        //     resolve(res);
-        // }
-        // ).catch((error) => {
-        //     console.error('Error fetching data:', error);
-        //     alert("Đăng bài thất bại");
-        //     setIsLoadingSubmit(false);
-        // });
 
-        // console.log(response);
     }
 
 
@@ -244,11 +247,11 @@ const Index = () => {
                         </div>
                         <div className='flex-1 flex  mr-2'>
                             <div className='mr-2 font-bold'>Dạng thức</div>
-                            <Select onChange={(val) => setTopic(val)} defaultValue={'Văn hóa'}>
-                                <Select.Option value="CULTURE">Văn hóa</Select.Option>
-                                <Select.Option value="SOCIAL">Xã hội</Select.Option>
-                                <Select.Option value="SPORT">Thể thao</Select.Option>
-                                <Select.Option value="TOURISM">Du lịch</Select.Option>
+                            <Select onChange={(val) => setType(val)} defaultValue={'Chữ'}>
+                                <Select.Option value="TEXT">Chữ</Select.Option>
+                                <Select.Option value="AUDIO">Âm thanh</Select.Option>
+                                {/* <Select.Option value="SPORT">Thể thao</Select.Option>
+                                <Select.Option value="TOURISM">Du lịch</Select.Option> */}
                             </Select>
                         </div>
                     </div>
@@ -260,7 +263,7 @@ const Index = () => {
                         onClick={() => onPostDocument(
                             {
                                 title: documentTitle,
-                                type: "TEXT",
+                                type: type,
                                 topic: topic,
                                 veryFirstText: veryFirstText,
                                 notionPageId: inputValue
