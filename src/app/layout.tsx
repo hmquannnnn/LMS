@@ -6,9 +6,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { StoreProvider } from "@/redux/storeProvider";
 import paths from "@/app/paths";
 import Header from "@/components/header/header";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import Link from "next/link";
-import Footer from "@/components/footer";
+import { useEffect, useState } from "react";
+import Head from 'next/head'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +30,7 @@ export default function RootLayout({
       setScrollY(window.scrollY);
     };
 
-    // just trigger this so that the initial state
+    // just trigger this so that the initial state 
     // is updated as soon as the component is mounted
     // related: https://stackoverflow.com/a/63408216
     handleScroll();
@@ -53,8 +54,10 @@ export default function RootLayout({
   };
 
   const isHeaderFixed = () => {
-    return pathName === paths.library;
-  };
+    return (
+      pathName === paths.library
+    );
+  }
   // console.log(pathName);
   return (
     <StoreProvider>
@@ -64,12 +67,18 @@ export default function RootLayout({
         {/*{window.location.pathname === paths.logIn ? <></> : <Header></Header>}*/}
 
         <body className={inter.className + "relative"}>
+          <div>
+            <Head>
+              <title>Đèn sách</title>
+            </Head>
+          </div>
+
+
           {/* <Link rel="preconnect" href="https://fonts.googleapis.com" />
           <Link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" /> */}
           <link
             href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
-            rel="stylesheet"
-          ></link>
+            rel="stylesheet" ></link>
           <Link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;600;700&display=swap"
@@ -82,13 +91,11 @@ export default function RootLayout({
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
           ></Link>
-          <div
-            className={`${isHeaderFixed() ? `fixed  bg-white/${Math.min(100, parseInt((scrollY - 100) / 5 + ".0", 10) * 5)}` : ` sticky top-0 bg-white `} z-[500] w-full  `}
-          >
+          <div className={`${isHeaderFixed() ? `fixed  bg-white/${Math.min(100, parseInt((scrollY - 100) / 5 + '.0', 10) * 5)}` : ` sticky top-0 bg-white `} z-[500] w-full  `}>
             {notShowHeaderAndFooter() && <Header />}
           </div>
           <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
-          {notShowHeaderAndFooter() && <Footer />}
+          {/*{notShowHeaderAndFooter() && <Footer />}*/}
         </body>
       </html>
     </StoreProvider>
