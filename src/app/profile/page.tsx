@@ -44,8 +44,8 @@ const Profile = () => {
   }, [user]);
   return (
     <div className={"block mx-auto w-[90%]"}>
-      <h3 className={"font-bold text-2xl text-blue_8"}>THÔNG TIN CÁ NHÂN</h3>
-      <div className={"bg-blue_8 h-[1px] my-3 w-[70%]"} />
+      <h3 className={"font-bold text-2xl text-purple_5"}>THÔNG TIN CÁ NHÂN</h3>
+      <div className={"bg-purple_5 h-[1px] my-3 w-[70%]"} />
       <div
         className="min-h-[85vh] grid grid-cols-12 h-fit"
         // style={{ backgroundImage: "url(/sky.png)" }}
@@ -56,7 +56,7 @@ const Profile = () => {
         <div className="col-span-3 flex flex-col h-full gap-10 pr-10">
           {/* bg-gradient-to-br from-pink_1 to-yellow_1 */}
           {/* <div className="h-40 border-2  rounded-xl "></div> */}
-          <div className="h-full rounded pl-4 pt-4 pr-6 bg-blue_1">
+          <div className="h-full rounded pl-4 pt-4 pr-6 bg-purple_4">
             <svg
               aria-label="Unlike"
               className="x1lliihq x1n2onr6 xxk16z8 inline mr-1 fill-blue_5 cursor-pointer"
@@ -96,10 +96,10 @@ const Profile = () => {
           <div className={"grid grid-cols-5 profile-user h-full"}>
             <div
               className={
-                "col-span-3 user-info h-full bg-blue_6 rounded-l rounded-tr px-5"
+                "col-span-3 user-info h-full bg-purple_6 rounded-l rounded-tr px-5"
               }
             >
-              <h2 className={"text-blue_8 font-bold text-2xl mt-5"}>
+              <h2 className={"text-purple_5 font-bold text-2xl mt-5"}>
                 HỒ SƠ CỦA TÔI
               </h2>
               <div className={"pl-5"}>
@@ -134,7 +134,7 @@ const Profile = () => {
                 />
               </div>
 
-              <div className={"rounded-r bg-blue_6"} />
+              <div className={"rounded-r bg-purple_6"} />
             </div>
           </div>
         </div>

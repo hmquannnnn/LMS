@@ -5,11 +5,11 @@ import { FaRegHandPointRight } from "react-icons/fa";
 const ArtExample = ({ color }) => {
   return (
     <>
-      <div className={"flex flex-row items-end"}>
-        <img className={"mr-5"} src={"/images/nghethuat/kientruc.png"} />
+      <div className={"flex flex-row items-end my-10"}>
+        <img className={"mr-16"} src={"/images/nghethuat/kientruc.png"} />
         <div>
           <p className={"text-2xl font-bold mb-5"}>KIẾN TRÚC</p>
-          <p>
+          <p className={"mb-5"}>
             Kiến trúc là loại hình nghệ thuật của cách sắp xếp, tổ chức không
             gian. Kiến trúc tồn tại xung quanh cuộc sống chúng ta, từ căn nhà,
             lớp học, đường sá,...đều là thành quả của hoạt động kiến trúc. Em
@@ -49,10 +49,10 @@ const ArtExample = ({ color }) => {
           </div>
         </div>
       </div>
-      <div className={"flex flex-row items-end"}>
+      <div className={"flex flex-row items-end my-10"}>
         <div>
           <p className={"text-2xl font-bold mb-5"}>ĐIÊU KHẮC</p>
-          <p>
+          <p className={"mb-5"}>
             Điêu khắc là loại hình nghệ thuật của việc tạo hình, kết hợp các
             loại vật liệu khác nhau để làm ra các khối không gian ba chiều. Các
             sản phẩm của lĩnh vực này chính là những hình khối chúng ta thấy
@@ -75,15 +75,15 @@ const ArtExample = ({ color }) => {
           </div>
         </div>
         <img
-          className={"mr-5 w-[500px]"}
+          className={"ml-16 w-[500px]"}
           src={"/images/nghethuat/dieukhac.svg"}
         />
       </div>
-      <div className={"flex flex-row items-end"}>
-        <img className={"mr-5"} src={"/images/nghethuat/vanchuong.svg"} />
+      <div className={"flex flex-row items-end my-10"}>
+        <img className={"mr-16"} src={"/images/nghethuat/vanchuong.svg"} />
         <div>
           <p className={"text-2xl font-bold mb-5"}>VĂN CHƯƠNG</p>
-          <p>
+          <p className={"mb-5"}>
             Văn chương là nghệ thuật của ngôn từ. Từ ngày bé chúng ta đã được
             tiếp xúc với văn chương qua những câu chuyện cổ tích, lời hát ru, ca
             dao,... mà ông bà, cha mẹ kể/hát cho chúng ta nghe. Lớn lên, chúng
@@ -117,10 +117,10 @@ const ArtExample = ({ color }) => {
           </div>
         </div>
       </div>
-      <div className={"flex flex-row items-end"}>
+      <div className={"flex flex-row items-end my-10"}>
         <div>
           <p className={"text-2xl font-bold mb-5"}>HỘI HỌA</p>
-          <p>
+          <p className={"mb-5"}>
             Hội họa là ngành nghệ thuật của sự phối hợp đường nét, màu sắc trên
             mặt phẳng. Để có cái nhìn rõ hơn về hội họa trong các loại hình nghệ
             thuật là gì, em có thể tìm hiểu về những cái tên huyền thoại như
@@ -154,15 +154,15 @@ const ArtExample = ({ color }) => {
           </div>
         </div>
         <img
-          className={"mr-5 w-[500px]"}
+          className={"ml-16 w-[500px]"}
           src={"/images/nghethuat/hoihoa.svg"}
         />
       </div>
-      <div className={"flex flex-row items-end"}>
-        <img className={"mr-5"} src={"/images/nghethuat/amnhac.svg"} />
+      <div className={"flex flex-row items-end my-10"}>
+        <img className={"mr-16"} src={"/images/nghethuat/amnhac.svg"} />
         <div>
           <p className={"text-2xl font-bold mb-5"}>ÂM NHẠC</p>
-          <p>
+          <p className={"mb-5"}>
             Âm nhạc là loại hình nghệ thuật của âm thanh, tiếng nhạc từ giọng
             hát hoặc nhạc cụ. Trong thế giới của chúng ta hiện nay, âm nhạc là
             một phần không thể thiếu, nó giúp chúng ta thư giãn, tạo cảm
@@ -186,10 +186,10 @@ const ArtExample = ({ color }) => {
           </div>
         </div>
       </div>
-      <div className={"flex flex-row items-end"}>
+      <div className={"flex flex-row items-end my-10"}>
         <div>
           <p className={"text-2xl font-bold mb-5"}>SÂN KHẤU</p>
-          <p>
+          <p className={"mb-5"}>
             Sân khấu là loại hình nghệ thuật được thể hiện qua hành động, diễn
             xuất của nhân vật trong các màn trình diễn trực tiếp trên sân khấu.
             Chúng ta có thể hình dung về nó cụ thể hơn khi em nghĩ tới các vở
@@ -213,16 +213,16 @@ const ArtExample = ({ color }) => {
             </p>
           </div>
         </div>
-        <img className={"mr-5"} src={"/images/nghethuat/sankhau.svg"} />
+        <img className={"ml-16"} src={"/images/nghethuat/sankhau.svg"} />
       </div>
-      <div className={"flex flex-row items-end"}>
+      <div className={"flex flex-row items-end my-10"}>
         <img
-          className={"mr-5 max-w-[500px]"}
+          className={"mr-16 max-w-[500px]"}
           src={"/images/nghethuat/dienanh.svg"}
         />
         <div>
           <p className={"text-2xl font-bold mb-5"}>ĐIỆN ẢNH</p>
-          <p>
+          <p className={"mb-5"}>
             Điện ảnh là môn nghệ thuật “sinh sau đẻ muộn” so với các loại hình
             trên. Vì thế mà nó có sự phối hợp, tổng hòa một số đặc điểm của 06
             lĩnh vực nghệ thuật đã kể tên. Đặc trưng của điện ảnh là kĩ thuật

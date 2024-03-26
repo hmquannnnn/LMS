@@ -17,7 +17,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import "@/style/notion.css";
 // import "prismjs/themes/prism-tomorrow.css";
-import { Button, Modal, Spin, Breadcrumb } from "antd";
+import { Breadcrumb, Button, Modal, Spin } from "antd";
 import paths from "@/app/paths";
 
 export function formatVietnameseDateTime(dateTime: Date) {
@@ -72,12 +72,12 @@ function isJwtExpired(token: String) {
   return decodedPayload.exp < currentTime;
 }
 
-const topicMapping = {
-  "SOCIAL": "Xã hội",
-  "CULTURE": "Văn hóa",
-  "SPORT": "Thể thao",
-  "TOURISM": "Du lịch"
-}
+export const topicMapping = {
+  SOCIAL: "Xã hội",
+  CULTURE: "Văn hóa",
+  SPORT: "Thể thao",
+  TOURISM: "Du lịch",
+};
 
 const DocumentIdPage = ({ params }) => {
   const [data, setData] = useState(null);
@@ -266,8 +266,8 @@ const DocumentIdPage = ({ params }) => {
           onClick={() => {
             window.open(
               "https://www.facebook.com/sharer/sharer.php?u=" +
-              NEXT_PUBLIC_FRONTEND_URL +
-              pathName,
+                NEXT_PUBLIC_FRONTEND_URL +
+                pathName,
               "facebook-share-dialog",
               "width=600,height=600",
             );
@@ -277,8 +277,8 @@ const DocumentIdPage = ({ params }) => {
           onClick={() => {
             window.open(
               "https://twitter.com/intent/tweet?url=" +
-              NEXT_PUBLIC_FRONTEND_URL +
-              pathName,
+                NEXT_PUBLIC_FRONTEND_URL +
+                pathName,
               "twitter-share-dialog",
               "width=600,height=600",
             );
@@ -293,29 +293,39 @@ const DocumentIdPage = ({ params }) => {
       </div>
 
       <div className="flex justify-start flex-col mx-auto ml-[20vw] pr-[5vw] mr-[4vw] ">
-
         <div className=" pl-10 pr-20 mt-4">
           <Breadcrumb
             items={[
               {
-                href: '/library',
-                title: <div className="flex group " >
-                  <svg className="group-hover:fill-black" xmlns="http://www.w3.org/2000/svg" fill="#AAA" x="0px" y="0px" width="20" height="20" viewBox="0 0 24 24">
-                    <path d="M 12 2.0996094 L 1 12 L 4 12 L 4 21 L 11 21 L 11 15 L 13 15 L 13 21 L 20 21 L 20 12 L 23 12 L 12 2.0996094 z M 12 4.7910156 L 18 10.191406 L 18 11 L 18 19 L 15 19 L 15 13 L 9 13 L 9 19 L 6 19 L 6 10.191406 L 12 4.7910156 z"></path>
-                  </svg>
-                  &nbsp;
-                  <span>Thư viện</span>
-                </div>,
+                href: "/library",
+                title: (
+                  <div className="flex group ">
+                    <svg
+                      className="group-hover:fill-black"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="#AAA"
+                      x="0px"
+                      y="0px"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M 12 2.0996094 L 1 12 L 4 12 L 4 21 L 11 21 L 11 15 L 13 15 L 13 21 L 20 21 L 20 12 L 23 12 L 12 2.0996094 z M 12 4.7910156 L 18 10.191406 L 18 11 L 18 19 L 15 19 L 15 13 L 9 13 L 9 19 L 6 19 L 6 10.191406 L 12 4.7910156 z"></path>
+                    </svg>
+                    &nbsp;
+                    <span>Thư viện</span>
+                  </div>
+                ),
               },
               {
-                href: '/library/topics/' + currentDocument?.topic,
+                href: "/library/topics/" + currentDocument?.topic,
                 title: (
                   <>
                     {/* <UserOutlined /> */}
                     <span>{topicMapping[currentDocument?.topic]}</span>
                   </>
                 ),
-              }
+              },
             ]}
           />
           {data && (
@@ -338,10 +348,12 @@ const DocumentIdPage = ({ params }) => {
             }
             onClick={() => handleDirectToTest("READING")}
           >
-            Nói và nghe
+            {currentDocument?.type === "TEXT" ? "Đọc hiểu" : "Nói và nghe"}
           </Button>
           <Button
-            className={"bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded"}
+            className={
+              "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded"
+            }
             onClick={() => handleDirectToTest("WRITING")}
           >
             Viết

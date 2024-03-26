@@ -14,6 +14,7 @@ interface Paths {
   favoriteDocumentations: string;
   sendVerificationEmail: string;
   verifyEmail: string;
+  evaluation: string;
 }
 
 export default Paths;

@@ -8,9 +8,13 @@ import { getCurrentTest } from "@/redux/slices/testSlice";
 import "./test.scss";
 import { NotionRenderer } from "react-notion";
 import { callGetDocumentById } from "@/apis/documentsAPI";
-import { formatVietnameseDateTime } from "@/app/library/[documentId]/page";
+import {
+  formatVietnameseDateTime,
+  topicMapping,
+} from "@/app/library/[documentId]/page";
 import { FaCheck } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
+import { Breadcrumb } from "antd";
 
 const Test = ({ params }) => {
   const documentId = params.documentId;
@@ -29,6 +33,38 @@ const Test = ({ params }) => {
   const [showHints, setShowHints] = useState(true);
   const [showAnswerHints, setShowAnswerHints] = useState(false);
   const [writingAnswerValues, setWritingAnswerValues] = useState([]);
+  const [currentDocument, setCurrentDocument] = useState();
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const document: any = await callGetDocumentById(documentId);
+        setCurrentDocument(document);
+        const notionPageId = document.notionPageId;
+        postTime.current = formatVietnameseDateTime(
+          new Date(document.postTime),
+        );
+        documentTitle.current = document.title;
+        const response = await fetch(
+          `https://notion-api.splitbee.io/v1/page/${notionPageId}`,
+        );
+        const data = await response.json();
+        setData(data);
+
+        // add delay to show loading spinner
+        // await new Promise(resolve => setTimeout(resolve, 2000));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setNotFound(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [documentId]);
 
   const questionCollection = useSelector(
     (state) => state?.test?.currentTest?.questions || [],
@@ -65,6 +101,7 @@ const Test = ({ params }) => {
 
   const handleChangeWritingAnswer = (e, questionId) => {
     const { value } = e.target;
+    console.log(documentTitle);
     setWritingAnswerValues((prevValues) =>
       prevValues.map((item) =>
         item.id === questionId ? { ...item, value: value } : item,
@@ -161,9 +198,8 @@ const Test = ({ params }) => {
   }, []);
 
   useEffect(() => {
-    testType === "READING"
-      ? initializeReadingAnswers(questionCollection)
-      : initializeWritingAnswer(questionCollection);
+    initializeReadingAnswers(questionCollection);
+    initializeWritingAnswer(questionCollection);
   }, [questionCollection, isRerendered]);
 
   const indexToAlphabet = (index) => {
@@ -179,6 +215,45 @@ const Test = ({ params }) => {
 
   return (
     <>
+      <Breadcrumb
+        className={"ml-5"}
+        items={[
+          {
+            href: "/library",
+            title: (
+              <div className="flex group ">
+                <svg
+                  className="group-hover:fill-black"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#AAA"
+                  x="0px"
+                  y="0px"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M 12 2.0996094 L 1 12 L 4 12 L 4 21 L 11 21 L 11 15 L 13 15 L 13 21 L 20 21 L 20 12 L 23 12 L 12 2.0996094 z M 12 4.7910156 L 18 10.191406 L 18 11 L 18 19 L 15 19 L 15 13 L 9 13 L 9 19 L 6 19 L 6 10.191406 L 12 4.7910156 z"></path>
+                </svg>
+                &nbsp;
+                <span>Thư viện</span>
+              </div>
+            ),
+          },
+          {
+            href: "/library/topics/" + currentDocument?.topic,
+            title: (
+              <>
+                {/* <UserOutlined /> */}
+                <span>{topicMapping[currentDocument?.topic]}</span>
+              </>
+            ),
+          },
+          {
+            href: `/library/${documentId}`,
+            title: <p>{documentTitle.current}</p>,
+          },
+        ]}
+      />
       <div className={"grid grid-cols-2 h-full test-page"}>
         <div
           className={
@@ -230,60 +305,110 @@ const Test = ({ params }) => {
                           )
                         ) : null}
                       </div>
-
-                      {question.choices.map((choice, choiceIndex: number) => (
-                        <div
-                          key={choice.id}
-                          className={"my-1 px-2 py-1 rounded-2xl"}
-                          style={
-                            isSubmitted
-                              ? userAnswers[questionIndex]?.answers[choiceIndex]
-                                ? compareCorrectAnswer(
-                                    questionIndex,
-                                    choiceIndex,
-                                  )
-                                  ? { backgroundColor: "#99f090" }
-                                  : { backgroundColor: "#f09090" }
-                                : correctAnswer[questionIndex]?.answers[
-                                      choiceIndex
-                                    ] === true
-                                  ? { backgroundColor: "#99f090" }
-                                  : null
-                              : null
-                          }
-                        >
-                          {" "}
-                          {/* Added a wrapper div */}
-                          {isSubmitted === false && (
-                            <input
-                              type="checkbox"
-                              id={`${choice.id}`}
-                              onChange={() =>
-                                handleAnswerSelection(
-                                  questionIndex,
-                                  choiceIndex,
-                                )
-                              }
-                            />
+                      {question.type === "FILL_IN_THE_BLANK" ? (
+                        <div>
+                          {showHints && (
+                            <div className={"italic text-gray-500"}>
+                              <p>Gợi ý: </p>
+                              {question?.hints?.length > 0 &&
+                                question.hints.map((hint, hintIndex) => (
+                                  <p key={hintIndex}>- {hint.content}</p>
+                                ))}
+                            </div>
                           )}
-                          <label
-                            htmlFor={`${choice.id}`}
-                            style={
-                              isSubmitted
-                                ? userAnswers[questionIndex]?.answers[
-                                    choiceIndex
-                                  ]
-                                  ? { fontWeight: "bold" }
-                                  : null
-                                : null
+                          <textarea
+                            className={
+                              "border-[2px] border-black w-full rounded-xl px-2 py-2"
                             }
-                          >
-                            <span>
-                              {indexToAlphabet(choiceIndex)}. {choice.content}
-                            </span>
-                          </label>
+                            onChange={(e) =>
+                              handleChangeWritingAnswer(e, question.id)
+                            }
+                            value={
+                              writingAnswerValues.find(
+                                (item) => item.id === question.id,
+                              )?.value || ""
+                            }
+                            disabled={isSubmitted}
+                            name={question.id}
+                            id={question.id}
+                            cols="30"
+                            rows="10"
+                            placeholder={"Nhập câu trả lời ..."}
+                          />
+                          {showAnswerHints && (
+                            <div className={"italic text-red-500"}>
+                              <p>Đáp án gợi ý: </p>
+                              {question?.answerHints?.length > 0 &&
+                                question.answerHints.map(
+                                  (answerHint, answerIndex) => (
+                                    <p key={answerIndex}>
+                                      - {answerHint.content}
+                                    </p>
+                                  ),
+                                )}
+                            </div>
+                          )}
                         </div>
-                      ))}
+                      ) : (
+                        <>
+                          {question.choices.map(
+                            (choice, choiceIndex: number) => (
+                              <div
+                                key={choice.id}
+                                className={"my-1 px-2 py-1 rounded-2xl"}
+                                style={
+                                  isSubmitted
+                                    ? userAnswers[questionIndex]?.answers[
+                                        choiceIndex
+                                      ]
+                                      ? compareCorrectAnswer(
+                                          questionIndex,
+                                          choiceIndex,
+                                        )
+                                        ? { backgroundColor: "#99f090" }
+                                        : { backgroundColor: "#f09090" }
+                                      : correctAnswer[questionIndex]?.answers[
+                                            choiceIndex
+                                          ] === true
+                                        ? { backgroundColor: "#99f090" }
+                                        : null
+                                    : null
+                                }
+                              >
+                                {isSubmitted === false && (
+                                  <input
+                                    type="checkbox"
+                                    id={`${choice.id}`}
+                                    onChange={() =>
+                                      handleAnswerSelection(
+                                        questionIndex,
+                                        choiceIndex,
+                                      )
+                                    }
+                                  />
+                                )}
+                                <label
+                                  htmlFor={`${choice.id}`}
+                                  style={
+                                    isSubmitted
+                                      ? userAnswers[questionIndex]?.answers[
+                                          choiceIndex
+                                        ]
+                                        ? { fontWeight: "bold" }
+                                        : null
+                                      : null
+                                  }
+                                >
+                                  <span>
+                                    {indexToAlphabet(choiceIndex)}.{" "}
+                                    {choice.content}
+                                  </span>
+                                </label>
+                              </div>
+                            ),
+                          )}
+                        </>
+                      )}
                     </div>
                   ))}
               </div>

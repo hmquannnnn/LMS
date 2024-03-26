@@ -53,10 +53,10 @@ const AssignmentDetails = (props: any) => {
       <div className={"w-full min-h-[80vh] h-fit"}>
         <div
           className={
-            "py-5 px-10 rounded-xl bg-blue_6 h-fit mx-auto w-[90%] my-10"
+            "py-5 px-10 rounded-xl bg-purple_4 h-fit mx-auto w-[90%] my-10"
           }
         >
-          <h4 className={"uppercase font-semibold text-xl text-blue_5 mb-5"}>
+          <h4 className={"uppercase font-semibold text-xl text-purple_5 mb-5"}>
             {currentAssignment.title}
           </h4>
           <div
@@ -99,7 +99,7 @@ const AssignmentDetails = (props: any) => {
                 {/*{currentAssignment.status === assignmentStatus.NOT_SUBMITTED ? (*/}
                 <button
                   className={
-                    "rounded bg-blue_8 px-3 py-1 font-semibold text-white mr-5"
+                    "rounded bg-purple_7 px-3 py-1 font-semibold text-white mr-5"
                   }
                   onClick={() => router.push(`${assignmentId}/submit`)}
                 >
@@ -109,7 +109,7 @@ const AssignmentDetails = (props: any) => {
                   assignmentStatus.NOT_SUBMITTED && (
                   <button
                     className={
-                      "rounded bg-blue_8 px-3 py-1 font-semibold text-white"
+                      "rounded bg-purple_7 px-3 py-1 font-semibold text-white"
                     }
                     onClick={() => router.push(`${assignmentId}/history`)}
                   >

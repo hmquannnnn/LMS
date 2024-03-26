@@ -32,6 +32,9 @@ const config: Config = {
         blue_7: "#126b8c",
         blue_8: "#4fc1e9",
         blue_9: "#b6cff9",
+        blue_10: "#0b4582",
+        blue_11: "#5e86b4",
+        blue_12: "#d6e4fc",
         pink_1: "#fec5b9",
         pink_2: "#f49ba2",
         pink_3: "#f8bbc1",
@@ -50,7 +53,12 @@ const config: Config = {
         purple_1: "#367ff0",
         purple_2: "#b3cbfb",
         purple_3: "#6d9ef3",
+        purple_4: "#dbe7fc",
+        purple_5: "#072251",
+        purple_6: "#e9f1fd",
+        purple_7: "#97b0ec",
       },
+
       screens: {
         tablet: "640px",
         // => @media (min-width: 640px) { ... }

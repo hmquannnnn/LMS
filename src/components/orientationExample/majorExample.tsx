@@ -5,11 +5,14 @@ import { FaRegHandPointRight } from "react-icons/fa";
 const MajorExample = ({ color }) => {
   return (
     <>
-      <div className={"flex flex-row items-end"}>
-        <img className={"mr-5 w-[500px]"} src={"/images/nghiepvu/ketoan.svg"} />
+      <div className={"flex flex-row items-end my-10"}>
+        <img
+          className={"w-[500px] mr-16"}
+          src={"/images/nghiepvu/ketoan.svg"}
+        />
         <div>
           <p className={"text-2xl font-bold mb-5"}>KẾ TOÁN</p>
-          <p>
+          <p className={"mb-5"}>
             Người làm kế toán là người làm những công việc ghi chép, thu thập và
             xử lý các thông tin về tình hình hoạt động tài chính của doanh
             nghiệp, các cơ quan, tổ chức hoặc cơ sở kinh doanh, … Đây là bộ phận
@@ -45,10 +48,10 @@ const MajorExample = ({ color }) => {
           </div>
         </div>
       </div>
-      <div className={"flex flex-row items-end"}>
+      <div className={"flex flex-row items-end my-10"}>
         <div>
           <p className={"text-2xl font-bold mb-5"}>PHÂN TÍCH KINH TẾ</p>
-          <p>
+          <p className={"mb-5"}>
             Doanh nghiệp nào muốn hoạt động hiệu quả đều phải đảm bảo phân chia
             được nguồn lực tài chính một cách thông minh, đảm bảo nguồn tiền
             được đưa vào đầu tư một cách thông minh và tiết kiệm. Và công việc
@@ -86,13 +89,13 @@ const MajorExample = ({ color }) => {
             </p>
           </div>
         </div>
-        <img className={"mr-5"} src={"/images/nghiepvu/phantichkinhte.svg"} />
+        <img className={"ml-16"} src={"/images/nghiepvu/phantichkinhte.svg"} />
       </div>
-      <div className={"flex flex-row items-end"}>
-        <img className={"mr-5"} src={"/images/nghiepvu/tindung.svg"} />
+      <div className={"flex flex-row items-end my-10"}>
+        <img className={"mr-16"} src={"/images/nghiepvu/tindung.svg"} />
         <div>
           <p className={"text-2xl font-bold mb-5"}>TÍN DỤNG</p>
-          <p>
+          <p className={"mb-5"}>
             Những người trong ngành tín dụng là cầu nối giữa đơn vị cho vay tín
             dụng (ngân hàng) và người đi vay. Họ làm nhiệm vụ đảm bảo lợi ích
             của cả ngân hàng và người vay. Họ làm những công việc tăng doanh số
@@ -127,10 +130,10 @@ const MajorExample = ({ color }) => {
           </div>
         </div>
       </div>
-      <div className={"flex flex-row items-end"}>
+      <div className={"flex flex-row items-end my-10"}>
         <div>
           <p className={"text-2xl font-bold mb-5"}>VĂN PHÒNG (THỦ THƯ)</p>
-          <p>
+          <p className={"mb-5"}>
             Nhân viên văn phòng là một trong những nhân sự quan trọng đối với
             công ty hoặc doanh nghiệp. Đây là những người chịu trách nhiệm chính
             cho các công việc liên quan đến hành chính nhân sự. Họ đảm nhiệm
@@ -161,7 +164,7 @@ const MajorExample = ({ color }) => {
             </p>
           </div>
         </div>
-        <img className={"mr-5"} src={"/images/nghiepvu/vanphong.svg"} />
+        <img className={"ml-16"} src={"/images/nghiepvu/vanphong.svg"} />
       </div>
     </>
   );
