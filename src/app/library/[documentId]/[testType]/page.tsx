@@ -16,6 +16,13 @@ import { FaCheck } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { Breadcrumb } from "antd";
 
+function formatTextToHTML(content) {
+  const lines = content.split("\n");
+  const filteredLines = lines.filter((line) => line.trim() !== "");
+  const htmlContent = filteredLines.map((line) => `<p>${line}</p>`).join("\n");
+  return htmlContent;
+}
+
 const Test = ({ params }) => {
   const documentId = params.documentId;
   const testType = params.testType;
@@ -36,6 +43,7 @@ const Test = ({ params }) => {
   const [currentDocument, setCurrentDocument] = useState();
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [numberOfWritingQuestions, setNumberOfWritingQuestions] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -128,7 +136,7 @@ const Test = ({ params }) => {
     setShowAnswerHints(true);
     setShowHints(false);
     window.scrollTo({
-      top: contentRef.current ? contentRef.current.offsetTop - 64 : 0,
+      top: contentRef.current ? contentRef.current.offsetTop - 80 : 0,
       behavior: "smooth",
     });
     if (testType === "READING") {
@@ -156,7 +164,7 @@ const Test = ({ params }) => {
     initializeUserAnswers(questionCollection);
     initializeWritingAnswer(questionCollection);
     window.scrollTo({
-      top: contentRef.current ? contentRef.current.offsetTop - 64 : 0,
+      top: contentRef.current ? contentRef.current.offsetTop - 80 : 0,
       behavior: "smooth",
     });
   };
@@ -168,7 +176,10 @@ const Test = ({ params }) => {
     formData.append("documentId", documentId);
     formData.append("type", type);
     const res = await callGetTestByDocument(formData);
-
+    const countFillInTheBlankQuestions = res.questions.filter(
+      (question) => question.type === "FILL_IN_THE_BLANK",
+    ).length;
+    setNumberOfWritingQuestions(countFillInTheBlankQuestions);
     dispatch(getCurrentTest(res));
   };
 
@@ -309,10 +320,17 @@ const Test = ({ params }) => {
                         <div>
                           {showHints && (
                             <div className={"italic text-gray-500"}>
-                              <p>Gợi ý: </p>
+                              {question?.hints?.length > 0 && <p>Gợi ý: </p>}
+
                               {question?.hints?.length > 0 &&
                                 question.hints.map((hint, hintIndex) => (
-                                  <p key={hintIndex}>- {hint.content}</p>
+                                  <p key={hintIndex}>
+                                    <div
+                                      dangerouslySetInnerHTML={{
+                                        __html: formatTextToHTML(hint.content),
+                                      }}
+                                    />
+                                  </p>
                                 ))}
                             </div>
                           )}
@@ -337,12 +355,20 @@ const Test = ({ params }) => {
                           />
                           {showAnswerHints && (
                             <div className={"italic text-red-500"}>
-                              <p>Đáp án gợi ý: </p>
+                              {question?.answerHints?.length > 0 && (
+                                <p>Đáp án gợi ý: </p>
+                              )}
                               {question?.answerHints?.length > 0 &&
                                 question.answerHints.map(
                                   (answerHint, answerIndex) => (
                                     <p key={answerIndex}>
-                                      - {answerHint.content}
+                                      <div
+                                        dangerouslySetInnerHTML={{
+                                          __html: formatTextToHTML(
+                                            answerHint.content,
+                                          ),
+                                        }}
+                                      />
                                     </p>
                                   ),
                                 )}
@@ -441,7 +467,8 @@ const Test = ({ params }) => {
                     BẠN ĐÃ HOÀN THÀNH BỘ ĐỀ ĐỌC HIỂU!
                   </p>{" "}
                   <br />
-                  Số câu đúng: {score}/{questionCollection?.length}
+                  Số câu đúng: {score - numberOfWritingQuestions}/
+                  {questionCollection?.length - numberOfWritingQuestions}
                 </p>
                 <button
                   onClick={() => setShowTest(true)}
@@ -465,15 +492,20 @@ const Test = ({ params }) => {
                   questionCollection.map((question, questionIndex: number) => (
                     <div key={questionIndex}>
                       <p>
-                        {" "}
                         <b>Câu {questionIndex + 1}:</b> {question.question}
                       </p>
                       {showHints && (
                         <div className={"italic text-gray-500"}>
-                          <p>Gợi ý: </p>
+                          {question?.hints?.length > 0 && <p>Gợi ý: </p>}
                           {question?.hints?.length > 0 &&
                             question.hints.map((hint, hintIndex) => (
-                              <p key={hintIndex}>- {hint.content}</p>
+                              <p key={hintIndex}>
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: formatTextToHTML(hint.content),
+                                  }}
+                                />
+                              </p>
                             ))}
                         </div>
                       )}
@@ -499,11 +531,21 @@ const Test = ({ params }) => {
                       />
                       {showAnswerHints && (
                         <div className={"italic text-red-500"}>
-                          <p>Đáp án gợi ý: </p>
+                          {question?.answerHints?.length > 0 && (
+                            <p>Đáp án gợi ý: </p>
+                          )}
                           {question?.answerHints?.length > 0 &&
                             question.answerHints.map(
                               (answerHint, answerIndex) => (
-                                <p key={answerIndex}>- {answerHint.content}</p>
+                                <p key={answerIndex}>
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: formatTextToHTML(
+                                        answerHint.content,
+                                      ),
+                                    }}
+                                  />
+                                </p>
                               ),
                             )}
                         </div>
