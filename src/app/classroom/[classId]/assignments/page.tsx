@@ -131,9 +131,11 @@ const ClassAssignment = (props: any) => {
     e.preventDefault();
     const title = `BÀI TẬP ${assignmentsList.length + 1}: ${e.target.elements.title.value}`;
     // const content = e.target.elements.content.value;
-    const content = editorRef.current.getContent();
-    const dueDateTime = e.target.elements.dueDateTime.value;
-    const isForGroup = e.target.elements.isForGroup.value;
+    const content = editorRef.current.getContent() as string;
+    const dueDateTime = e.target.elements.dueDateTime.value as string;
+    const isForGroup = e.target.elements.isForGroup.value as boolean;
+    console.log("c: ", isForGroup);
+
     const assignmentReq = {
       title: title,
       content: content,
@@ -145,8 +147,10 @@ const ClassAssignment = (props: any) => {
     setUpdateFlag(false);
     setIsModalOpen(false);
     if (res.status === "success") {
-      const type = isForGroup ? "Nhóm" : "Cá nhân";
-      const content = `${title} - ${type}`;
+      console.log(Boolean(isForGroup));
+      const type = Boolean(isForGroup) == true ? "Nhóm" : "Cá nhân";
+
+      const content = `${title}`;
       const noti = await callCreateNotification(classId, content);
       setSuccessModalVisible(true);
       // Clear form values
@@ -310,7 +314,7 @@ const ClassAssignment = (props: any) => {
 
           {assignmentsList.map((assignment) => (
             <>
-              <Row className={"mb-5 w-full"}>
+              <Row key={assignment.id} className={"mb-5 w-full"}>
                 <Col
                   span={21}
                   className={"rounded-xl px-5 py-3 bg-purple_4 cursor-pointer"}
