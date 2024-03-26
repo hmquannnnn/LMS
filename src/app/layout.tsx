@@ -9,6 +9,7 @@ import Header from "@/components/header/header";
 import { Suspense } from "react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Head from 'next/head'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -66,6 +67,13 @@ export default function RootLayout({
         {/*{window.location.pathname === paths.logIn ? <></> : <Header></Header>}*/}
 
         <body className={inter.className + "relative"}>
+          <div>
+            <Head>
+              <title>Đèn sách</title>
+            </Head>
+          </div>
+
+
           {/* <Link rel="preconnect" href="https://fonts.googleapis.com" />
           <Link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" /> */}
           <link

@@ -54,6 +54,7 @@ const items: MenuProps["items"] = [
     },
 ];
 
+
 const Header = () => {
     const isAuthenticated = useSelector(state => state.account.isAuthenticated);
     const [isTypingSearch, setIsTypingSearch] = useState(false);
@@ -81,6 +82,8 @@ const Header = () => {
     const onClose = () => {
         setOpen(false);
     };
+    const [count, setCount] = useState(0);
+
 
     const showTopics = (
         <div className="">

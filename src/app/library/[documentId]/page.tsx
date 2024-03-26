@@ -210,6 +210,7 @@ const DocumentIdPage = ({ params }) => {
 
   return (
     <>
+      <title>Thư viện thông tin</title>
       <div className=" fixed flex  flex-col h-[90vh] gap-10 w-[18%] mt-4  pl-10">
         {/* bg-gradient-to-br from-pink_1 to-yellow_1 */}
         {/* <div className="h-40 border-2  rounded-xl "></div> */}

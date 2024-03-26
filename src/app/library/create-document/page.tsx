@@ -3,37 +3,64 @@ import { useEffect, useState, useRef } from 'react';
 import "react-notion/src/styles.css";
 import "prismjs/themes/prism-tomorrow.css";
 import { callPostDocument, DocumentInput } from '@/apis/documentsAPI';
-import { Button, Select } from 'antd';
-
+import { Button, Select, message, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import type { UploadProps } from 'antd';
 import { NotionRenderer } from "react-notion";
 import DocumentPreview from '@/app/library/documentPreview';
+import { FormProvider } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import * as XLSX from 'xlsx';
+import { callCreateTest } from '@/apis/testAPI';
 
+// /* load 'fs' for readFile and writeFile support */
+// import * as fs from 'fs';
+// XLSX.set_fs(fs);
+// import { Form } from "antd";
 const IMAGE_PLACEHOLDER = "https://placehold.co/600x400/png?text=%E1%BA%A2nh\nThumbnail&font=arial"
 const TITLE_PLACEHOLDER = "Tiêu đề"
 const SHORT_DESCRIPTION_PLACEHOLDER = "Mô tả ngắn"
 
+
 const Index = () => {
     const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingCheckImage, setIsLoadingCheckImage] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [data, setData] = useState();
     const [fileInput, setFileInput] = useState(null);
-    const [documentTitle, setDocumentTitle] = useState(TITLE_PLACEHOLDER);
-    const [veryFirstText, setVeryFirstText] = useState(SHORT_DESCRIPTION_PLACEHOLDER);
+    const [documentTitle, setDocumentTitle] = useState<string>('');
+    const [veryFirstText, setVeryFirstText] = useState<string>('');
     const [topic, setTopic] = useState('CULTURE');
-    const [type, setType] = useState('');
-    const [firstImageUrl, setFirstImageUrl] = useState(IMAGE_PLACEHOLDER);
+    const [type, setType] = useState('TEXT');
+    const [firstImageUrl, setFirstImageUrl] = useState<string>('');
+    const [testData, setTestData] = useState({});
+    const [testType, setTestType] = useState('MULTIPLE_CHOICE');
+    const [isLoadingCreateTest, setIsLoadingCreateTest] = useState(false);
+    const [documentTestId, setDocumentTestId] = useState(0);
     // const firstImageUrl = useRef(IMAGE_PLACEHOLDER);
-
+    const methods = useForm()
     const resetPreview = () => {
-        setDocumentTitle(TITLE_PLACEHOLDER)
-        setVeryFirstText(SHORT_DESCRIPTION_PLACEHOLDER)
-        setFirstImageUrl(IMAGE_PLACEHOLDER)
+        setDocumentTitle('')
+        setVeryFirstText('')
+        setFirstImageUrl('')
         setIsLoadingSubmit(false)
         setIsLoading(false)
         setData(null)
         setFileInput(null)
     }
+
+    const onSubmit = methods.handleSubmit(data => {
+        onPostDocument(
+            {
+                title: documentTitle,
+                type: type,
+                topic: topic,
+                veryFirstText: veryFirstText,
+                notionPageId: inputValue
+            }, null
+        )
+    })
 
     const fetchData = async () => {
         try {
@@ -158,120 +185,319 @@ const Index = () => {
         if (isCanPost) {
             // setFileInput(file)
             setIsLoadingSubmit(true);
-            const response = await callPostDocument(formData).then((res) => {
-                console.log(res);
-                setIsLoadingSubmit(false);
-                alert("Đăng bài thành công");
-                return res
-                // resolve(res);
-            }
-            ).catch((error) => {
-                console.error('Error fetching data:', error);
-                alert("Đăng bài thất bại");
-                setIsLoadingSubmit(false);
-            });
+            const response = await callPostDocument(formData)
+                .then((res) => {
+                    console.log(res);
+                    setIsLoadingSubmit(false);
+                    alert("Đăng bài thành công");
+                    return res
+                    // resolve(res);
+                }).catch((error) => {
+                    console.error('Error fetching data:', error);
+                    alert("Đăng bài thất bại");
+                    setIsLoadingSubmit(false);
+                });
 
+            // if (response.status == 200) {
+            //     alert("Đăng bài thành công");
+            //     setIsLoadingSubmit(false);
+
+            // } else {
+            //     alert("Đăng bài thất bại");
+            //     setIsLoadingSubmit(false);
+
+            // }
+
+            setIsLoadingSubmit(false);
             console.log(response);
-        } else {
-            alert("Đăng bài thất bại. Vui lòng thay đổi link ảnh hoặc tải ảnh lên.");
         }
 
 
     }
 
+    const handleCheckImageSaveAbility = async () => {
+        if (firstImageUrl == '') {
+            alert("Vui lòng nhập link ảnh");
+            return;
+        }
+        setIsLoadingCheckImage(true);
+        await blobUrlToFile(firstImageUrl).then((file) => {
+            setFileInput(file)
+            setIsLoadingCheckImage(false);
+            alert("Lưu ảnh từ link thành công");
+        }).catch((error) => {
+            console.error('Error fetching data:', error);
+            setIsLoadingCheckImage(false);
+            alert("Link ảnh không cho phép lưu do lỗi bảo mật của trang chứa ảnh.\n Vui lòng thay đổi link ảnh hoặc tải ảnh lên.");
+        });
+    }
+
+    const uploadProps: UploadProps = {
+        beforeUpload: (file) => {
+            const isPNGJPG = file.type === 'image/png' || 'image/jpg';
+            if (!isPNGJPG) {
+                message.error(`${file.name} không hợp lệ, vui lòng chọn ảnh đuôi .png/.jpg.`);
+            }
+            return isPNGJPG || Upload.LIST_IGNORE;
+        },
+        onChange: (info) => {
+            if (info.fileList != null && info.fileList.length > 0) {
+                setFirstImageUrl('')
+                setFileInput(info.file.originFileObj);
+            }
+            // setFirstImageUrl('')
+            console.log(info.fileList);
+        },
+        multiple: false,
+        maxCount: 1
+    };
+
+    const uploadTestProps: UploadProps = {
+        beforeUpload: (file) => {
+            const isXlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+            if (!isXlsx) {
+                message.error(`${file.name} không hợp lệ, vui lòng chọn ảnh đuôi .png/.jpg.`);
+            }
+            return isXlsx || Upload.LIST_IGNORE;
+        },
+        onChange: (info) => {
+
+            const parseExcelToJson = (file: File) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+
+                    const data = e.target?.result;
+                    const workbook = XLSX.read(data, { type: 'binary' });
+                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    const outputJson = {
+                        documentId: documentTestId,
+                        title: documentTitle,
+                        questions: [],
+                        type: testType
+                    };
+                    console.log(jsonData)
+                    jsonData[0] = jsonData[0].map((item) => item.toString().toUpperCase().trim());
+                    for (let i = 2; i < jsonData.length; i++) {
+                        if (jsonData[i][0] == null || jsonData[i][0] == '') break;
+                        const question = jsonData[i][0];
+                        let questionType = jsonData[i][1]?.toString()?.toUpperCase().trim();
+                        if (questionType.toString().toUpperCase() == 'FILL-IN-THE-BLANK') {
+                            questionType = 'FILL_IN_THE_BLANK';
+                        }
+                        if (questionType.toString().toUpperCase() == 'MULTIPLE CHOICE') {
+                            questionType = 'MULTIPLE_CHOICE';
+                        }
+                        const choices = [];
+                        const hints = [];
+                        const answerHints = [];
+
+                        for (let j = 2; jsonData[0][j].includes('OPTION'); j++) {
+                            if (jsonData[i][j]) {
+                                choices.push({
+                                    content: jsonData[i][j],
+                                    isAnswer: false
+                                });
+                            }
+                        }
+
+                        const correctAnswerColumnIndex = jsonData[0].indexOf(('Correct Answer').toUpperCase());
+                        const correctAnswer = jsonData[i][correctAnswerColumnIndex];
+                        if (correctAnswer) {
+                            correctAnswer.toString().split(',').forEach((choiceIndex, index) => {
+                                choices[parseInt(choiceIndex) - 1].isAnswer = true;
+                            });
+                        }
+
+                        const hintColumnIndex = jsonData[0].indexOf(('HINT').toUpperCase());
+                        console.log("header: " + jsonData[0])
+                        console.log("hintCI: " + hintColumnIndex)
+                        if (jsonData[i][hintColumnIndex]) {
+                            hints.push({
+                                content: jsonData[i][hintColumnIndex]
+                            });
+                        }
+                        const answerHintColumnIndex = hintColumnIndex + 1;
+                        if (jsonData[i][answerHintColumnIndex]) {
+                            answerHints.push({
+                                content: jsonData[i][answerHintColumnIndex]
+                            });
+                        }
+
+                        const questionObj = {
+                            question,
+                            type: questionType,
+                            choices,
+                            hints,
+                            answerHints
+                        };
+
+                        outputJson.questions.push(questionObj);
+                    }
+
+                    console.log(outputJson);
+                    setTestData(outputJson);
+                };
+                reader.readAsBinaryString(file);
+            };
+
+            // ...
+
+            const file = info.file.originFileObj;
+            parseExcelToJson(file);
+
+        },
+        multiple: false,
+        maxCount: 1
+    };
 
     return (
         <div className='flex gap-5'>
             <div className='w-1/2 mt-4'>
-                <div className='flex flex-col  pl-4 '>
-                    <div className='flex-1 flex mb-4'>
-                        <div className='flex-1 flex  mr-2'>
-                            <div className='mr-2 font-bold'>Notion page&apos;s Id:</div>
-                            <input
-                                className='flex-auto border-b-[1px] border-black focus:outline-none'
-                                type="text"
-                                value={inputValue}
-                                onChange={handleInputChange}
-                                placeholder="Enter query..."
-                            />
-                            <Button loading={isLoading} onClick={handleLoadDocument}>Load</Button>
-                        </div>
-                    </div>
-                    <div className='flex-1 flex mb-4'>
-                        <div className='flex-1 flex  mr-2'>
-                            <div className='mr-2 font-bold'>Tiêu đề:</div>
-                            <input
-                                className='flex-auto border-b-[1px] border-black focus:outline-none'
-                                type="text"
-                                value={documentTitle}
-                                onChange={(e) => setDocumentTitle(e.target.value)}
-                                placeholder="Enter query..."
-                            />
-                        </div>
-                    </div>
+                <FormProvider {...methods}  >
+                    <form
+                        onSubmit={e => e.preventDefault()}
+                        noValidate
+                        className="container"
+                    >
+                        <div className='flex flex-col  pl-4 '>
+                            <div className='flex-1 flex mb-4'>
+                                <div className='flex-1 flex  mr-2'>
+                                    <div className='mr-2 font-bold'>Notion page&apos;s Id:</div>
+                                    <input
+                                        required={true}
+                                        className='flex-auto border-b-[1px] border-black focus:outline-none'
+                                        type="text"
+                                        value={inputValue}
+                                        onChange={handleInputChange}
+                                        placeholder="Nhập id của trang Notion cần tải..."
+                                    />
+                                    <Button loading={isLoading} onClick={handleLoadDocument}>Tải trang</Button>
+                                </div>
+                            </div>
+                            <div className='flex-1 flex mb-4'>
+                                <div className='flex-1 flex  mr-2'>
+                                    <div className='mr-2 font-bold'>Tiêu đề:</div>
+                                    <input
+                                        className='flex-auto border-b-[1px] border-black focus:outline-none'
+                                        type="text"
+                                        value={documentTitle}
+                                        onChange={(e) => setDocumentTitle(e.target.value)}
+                                        placeholder={TITLE_PLACEHOLDER}
+                                    />
+                                </div>
+                            </div>
 
-                    <div className='flex-1 flex mb-4'>
-                        <div className='flex-1 flex  mr-2'>
-                            <div className='mr-2 font-bold'>Sapo:</div>
-                            <input
-                                className='flex-auto border-b-[1px] border-black focus:outline-none'
-                                type="text"
-                                value={veryFirstText}
-                                onChange={(e) => setVeryFirstText(e.target.value)}
-                                placeholder="Enter query..."
-                            />
-                        </div>
-                    </div>
-                    <div className='flex-1 flex mb-4'>
-                        <div className='flex-1 flex  mr-2'>
-                            <div className='mr-2 font-bold'>Link ảnh:</div>
-                            <input
-                                className='flex-auto border-b-[1px] border-black focus:outline-none'
-                                type="text"
-                                value={veryFirstText}
-                                onChange={(e) => setVeryFirstText(e.target.value)}
-                                placeholder="Enter query..."
-                            />
-                        </div>
-                    </div>
+                            <div className='flex-1 flex mb-4'>
+                                <div className='flex-1 flex  mr-2'>
+                                    <div className='mr-2 font-bold'>Sapo:</div>
+                                    <input
+                                        className='flex-auto border-b-[1px] border-black focus:outline-none'
+                                        type="text"
+                                        value={veryFirstText}
+                                        onChange={(e) => setVeryFirstText(e.target.value)}
+                                        placeholder={SHORT_DESCRIPTION_PLACEHOLDER}
+                                    />
+                                </div>
+                            </div>
+                            <div className='flex-1 flex mb-4'>
+                                <div className='flex-1 flex  mr-2'>
+                                    <div className='mr-2 font-bold'>Link ảnh:</div>
+                                    <input
+                                        className='flex-auto border-b-[1px] border-black focus:outline-none'
+                                        type="text"
+                                        value={firstImageUrl}
+                                        onChange={(e) => {
+                                            setFileInput(null)
+                                            setFirstImageUrl(e.target.value)
+                                        }}
+                                        placeholder=""
+                                    />
+                                </div>
+                                <Button loading={isLoadingCheckImage} onClick={handleCheckImageSaveAbility}>Kiểm tra</Button>
+                            </div>
+                            <div className='flex-1 flex mb-4'>
+                                <Upload {...uploadProps}>
+                                    <Button icon={<UploadOutlined />}>Tải ảnh lên</Button>
+                                </Upload>
+                            </div>
 
-                    <div className='flex-1 flex mb-4'>
-                        <div className='flex-1 flex  mr-2'>
-                            <div className='mr-2 font-bold'>Thể loại:</div>
-                            <Select onChange={(val) => setTopic(val)} defaultValue={'Văn hóa'}>
-                                <Select.Option value="CULTURE">Văn hóa</Select.Option>
-                                <Select.Option value="SOCIAL">Xã hội</Select.Option>
-                                <Select.Option value="SPORT">Thể thao</Select.Option>
-                                <Select.Option value="TOURISM">Du lịch</Select.Option>
-                            </Select>
-                        </div>
-                        <div className='flex-1 flex  mr-2'>
-                            <div className='mr-2 font-bold'>Dạng thức</div>
-                            <Select onChange={(val) => setType(val)} defaultValue={'Chữ'}>
-                                <Select.Option value="TEXT">Chữ</Select.Option>
-                                <Select.Option value="AUDIO">Âm thanh</Select.Option>
-                                {/* <Select.Option value="SPORT">Thể thao</Select.Option>
+                            <div className='flex-1 flex mb-4'>
+                                <div className='flex-1 flex  mr-2'>
+                                    <div className='mr-2 font-bold'>Thể loại:</div>
+                                    <Select onChange={(val) => setTopic(val)} defaultValue={'Văn hóa'}>
+                                        <Select.Option value="CULTURE">Văn hóa</Select.Option>
+                                        <Select.Option value="SOCIAL">Xã hội</Select.Option>
+                                        <Select.Option value="SPORT">Thể thao</Select.Option>
+                                        <Select.Option value="TOURISM">Du lịch</Select.Option>
+                                    </Select>
+                                </div>
+                                <div className='flex-1 flex  mr-2'>
+                                    <div className='mr-2 font-bold'>Dạng thức</div>
+                                    <Select style={{ width: 120 }} onChange={(val) => setType(val)} defaultValue={'Chữ'}>
+                                        <Select.Option value="TEXT">Chữ</Select.Option>
+                                        <Select.Option value="AUDIO">Âm thanh</Select.Option>
+                                        {/* <Select.Option value="SPORT">Thể thao</Select.Option>
                                 <Select.Option value="TOURISM">Du lịch</Select.Option> */}
-                            </Select>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            <div className='flex-1 flex mb-4'>
+                                <div className='mr-2 font-bold'>Id document:</div>
+                                <input
+                                    className='flex-auto border-b-[1px] border-black focus:outline-none'
+                                    type="number"
+                                    value={documentTestId}
+                                    onChange={(e) => {
+                                        setDocumentTestId(e.target.value)
+                                    }}
+                                    placeholder=""
+                                />
+                                <Upload {...uploadTestProps}>
+                                    <Button icon={<UploadOutlined />}>Tải file test lên</Button>
+                                </Upload>
+                                <Select onChange={(val) => setTestType(val)} defaultValue={'Đọc hiểu'}>
+                                    <Select.Option value="MULTIPLE_CHOICE">Đọc hiểu</Select.Option>
+                                    <Select.Option value="WRITING">Viết</Select.Option>
+                                </Select>
+                                <Button loading={isLoadingCreateTest} onClick={async () => {
+                                    const req = { ...testData, documentId: parseInt(documentTestId), type: testType }
+                                    console.log(req)
+                                    setIsLoadingCreateTest(true)
+                                    const res = await callCreateTest(req).then((res) => {
+                                        console.log(res)
+                                        setIsLoadingCreateTest(false)
+                                        alert("Tạo bài test thành công")
+                                    }).catch((error) => {
+                                        console.error('Error fetching data:', error);
+                                        setIsLoadingCreateTest(false)
+                                        alert("Tạo bài test thất bại" + error)
+                                    });
+
+                                    setIsLoadingCreateTest(false)
+
+                                }}>Test</Button>
+                            </div>
+
+
+
+
+                            <Button type="default"
+                                className='text-purple_1 border-purple_1 hover:bg-purple_1 hover:text-white'
+                                loading={isLoadingSubmit}
+                                onClick={onSubmit}>Đăng
+                            </Button>
                         </div>
-                    </div>
-
-
-                    <Button type="default"
-                        className='text-purple_1 border-purple_1 hover:bg-purple_1 hover:text-white'
-                        loading={isLoadingSubmit}
-                        onClick={() => onPostDocument(
-                            {
-                                title: documentTitle,
-                                type: type,
-                                topic: topic,
-                                veryFirstText: veryFirstText,
-                                notionPageId: inputValue
-                            }, null
-                        )}>Submit</Button>
-                </div>
+                    </form>
+                </FormProvider>
                 <div className='flex justify-center pl-[2vw] mt-10'>
-                    <DocumentPreview props={{ data: data, url: fileInput ? URL.createObjectURL(fileInput) : firstImageUrl, veryFirstText: veryFirstText, title: documentTitle }} />
+                    <DocumentPreview props={
+                        {
+                            data: data, url: fileInput ? URL.createObjectURL(fileInput) : (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
+                            veryFirstText: veryFirstText == '' ? SHORT_DESCRIPTION_PLACEHOLDER : veryFirstText,
+                            title: documentTitle == '' ? TITLE_PLACEHOLDER : documentTitle
+                        }} />
                 </div>
                 {/* <div className='max-w-[600px]'>
                     {
@@ -287,12 +513,13 @@ const Index = () => {
             </div>
             <div className='flex-1'>
                 <div className='border h-screen overflow-scroll'>
-                    {data && (
+                    {data ? (
                         <div>
 
                             <NotionRenderer blockMap={data} fullPage hideHeader />
                         </div>
-                    )}
+                    )
+                        : <div className='flex justify-center items-center h-full'>Xem trước</div>}
                 </div>
             </div>
         </div>

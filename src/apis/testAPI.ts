@@ -1,7 +1,12 @@
 import instance from "@/utils/axiosCustomize";
 
 export const callCreateTest = (req: object) => {
-  return instance.post("tests", req);
+  return instance.post("tests", req, {
+    headers: {
+      // Overwrite Axios's automatically set Content-Type
+      "Content-Type": "application/json",
+    },
+  });
 };
 
 export const callGetTest = (testId: number) => {

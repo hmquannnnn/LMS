@@ -219,11 +219,18 @@ const Test = ({ params }) => {
                       <div className={"flex flex-row items-center"}>
                         <p>
                           <b>Câu hỏi {questionIndex + 1}:</b>
-                          {question.question}
+                          {question.question.split("\n").map((item, key) => {
+                            return (
+                              <span key={key}>
+                                {item}
+                                <br />
+                              </span>
+                            );
+                          })}
                         </p>
                         {isSubmitted === true ? (
                           JSON.stringify(userAnswers[questionIndex]) ===
-                          JSON.stringify(correctAnswer[questionIndex]) ? (
+                            JSON.stringify(correctAnswer[questionIndex]) ? (
                             <FaCheck className={"text-green-500 text-xl"} />
                           ) : (
                             <MdCancel className={"text-red-600 text-xl"} />
@@ -239,14 +246,14 @@ const Test = ({ params }) => {
                             isSubmitted
                               ? userAnswers[questionIndex]?.answers[choiceIndex]
                                 ? compareCorrectAnswer(
-                                    questionIndex,
-                                    choiceIndex,
-                                  )
+                                  questionIndex,
+                                  choiceIndex,
+                                )
                                   ? { backgroundColor: "#99f090" }
                                   : { backgroundColor: "#f09090" }
                                 : correctAnswer[questionIndex]?.answers[
-                                      choiceIndex
-                                    ] === true
+                                  choiceIndex
+                                ] === true
                                   ? { backgroundColor: "#99f090" }
                                   : null
                               : null
@@ -271,8 +278,8 @@ const Test = ({ params }) => {
                             style={
                               isSubmitted
                                 ? userAnswers[questionIndex]?.answers[
-                                    choiceIndex
-                                  ]
+                                  choiceIndex
+                                ]
                                   ? { fontWeight: "bold" }
                                   : null
                                 : null
