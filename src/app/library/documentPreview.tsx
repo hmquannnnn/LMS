@@ -92,7 +92,7 @@ const DocumentPreview = ({ props }) => {
                     window.open(
                         "https://twitter.com/intent/tweet?url=" +
                         NEXT_PUBLIC_FRONTEND_URL +
-                        pathName,
+                        '/library/' + document?.id,
                         "twitter-share-dialog",
                         "width=600,height=600",
                     );
