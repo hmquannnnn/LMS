@@ -164,19 +164,23 @@ const Header = () => {
                                     {
                                         key: 1,
                                         label: (
-                                            <div className="flex gap-4">
+                                            <div className="flex  flex-wrap">
                                                 {
                                                     listTopics.map((topic, index) => {
                                                         return (
-                                                            <Link
-                                                                key={index}
-                                                                href={`/library/topics/${topic.toLowerCase()}`}
-                                                            >
-                                                                <div className={`text-lg items-center flex group${index} group${index}-hover:text-purple_1 h-[4vh]  hover:border-y border-none hover:`}>
-                                                                    {index != 0 && <div className={`h-full w-[1px] mr-4 my-[2px] bg-black group${index}-hover:bg-purple_1`}></div>}
-                                                                    {topicMapping[topic]}
-                                                                </div>
-                                                            </Link>
+                                                            <>
+                                                                {index != 0 &&
+                                                                    <div className={`h-full w-[1px] ml-2 mr-2 my-[2px] bg-black `}></div>
+                                                                }
+                                                                <Link
+                                                                    key={index}
+                                                                    href={`/library/topics/${topic.toLowerCase()}`}
+                                                                >
+                                                                    <div className={`text-lg text-nowrap items-center flex group${index} group${index}-hover:text-purple_1 h-[4vh]  hover:border-y border-purple_1  hover:`}>
+                                                                        {topicMapping[topic]}
+                                                                    </div>
+                                                                </Link>
+                                                            </>
                                                         )
                                                     })
                                                 }

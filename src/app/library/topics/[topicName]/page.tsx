@@ -97,8 +97,8 @@ const TopicDetailPage = (props: any) => {
 
     return (
         <>
-            <div className="flex ">
-                <div className="flex flex-col min-h-full gap-10 w-[18%] mt-8 pl-10">
+            <div className="flex px-10">
+                <div className="flex min-h-full min-w-[300px] max-w-[300px]">
                     <div className="h-full">
 
                         <div className=" h-full border-2 rounded-xl pl-4 pt-4 pr-6">
@@ -146,7 +146,7 @@ const TopicDetailPage = (props: any) => {
                     </div >
                 </div>
 
-                <div className="flex-1 mt-8  overflow-auto">
+                <div className="flex-1 mt-8  overflow-auto pl-10">
                     <div className="h-[90vh]  pl-10 pt-1 pr-8 mr-10">
                         <div className="flex items-center gap-4">
                             <Image src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSw5AP3H_GiJXKNUfyvPZye9h6XT0N01JcsIIn1OepH6N60fx-U" alt="Demo culture topic picture" width={110} height={110} />
