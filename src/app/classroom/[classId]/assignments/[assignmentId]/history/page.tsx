@@ -9,6 +9,7 @@ export const vietnamesePostStatus = {
   PENDING: "Đang chờ duyệt",
   APPROVED: "Đã duyệt",
   REJECTED: "Chưa đạt",
+  NOT_SUBMITTED: "Chưa nộp",
 };
 
 const Page = ({ params }) => {

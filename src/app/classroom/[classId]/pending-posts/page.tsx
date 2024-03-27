@@ -116,7 +116,7 @@ const PendingPosts = (props: any) => {
           </tbody>
         </table>
       ) : (
-        <p>No data</p>
+        <p className={"text-center"}>Không có bài nộp nào đang chờ</p>
       )}
     </div>
   );

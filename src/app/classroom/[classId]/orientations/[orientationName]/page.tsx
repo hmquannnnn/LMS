@@ -22,6 +22,7 @@ import ManagementExample from "@/components/orientationExample/managementExample
 export const theme = {
   // GREEN
   SOCIAL: {
+    icon: "/social.svg",
     vietnameseName: "XÃ HỘI",
     textColor: colors.green_3,
     mainColor: colors.green_1,
@@ -51,10 +52,11 @@ export const theme = {
   },
   // BLUE
   RESEARCH: {
+    icon: "/research.svg",
     vietnameseName: "NGHIÊN CỨU",
     textColor: colors.blue_10,
-    mainColor: "#bed5fa",
-    lightColor: "#dbe7fc",
+    mainColor: colors.blue_8,
+    lightColor: colors.blue_6,
     greeting: (
       <p>
         Chào mừng các em đến với cộng đồng nhóm ngành NGHIÊN CỨU. <br />
@@ -81,6 +83,7 @@ export const theme = {
   },
   // YELLOW
   TECHNIQUE: {
+    icon: "/technique.svg",
     vietnameseName: "KĨ THUẬT",
     textColor: colors.yellow_2,
     mainColor: "#ffd78f",
@@ -119,6 +122,7 @@ export const theme = {
   },
   // LIGHT PINK
   ART: {
+    icon: "/art.svg",
     vietnameseName: "NGHỆ THUẬT",
     textColor: colors.pink_4,
     mainColor: "#f8bbc1",
@@ -151,6 +155,7 @@ export const theme = {
   },
   // PINK
   MANAGEMENT: {
+    icon: "/management.svg",
     vietnameseName: "QUẢN LÝ",
     textColor: colors.pink_5,
     mainColor: "#fda897",
@@ -186,6 +191,7 @@ export const theme = {
   },
   // GRAY
   MAJOR: {
+    icon: "/major.svg",
     vietnameseName: "NGHIỆP VỤ",
     textColor: colors.grey_2,
     mainColor: "#bfbfbf",
@@ -272,21 +278,44 @@ const OrientationPostsList = (props: any) => {
     fetchPosts();
   }, []);
   console.log(postsList);
+
+  const nameElement = document.querySelector(".name");
+  console.log(nameElement);
+  const parentElement = nameElement?.parentElement;
+
+  parentElement?.addEventListener("scroll", () => {
+    const parentRect = parentElement.getBoundingClientRect();
+    const nameRect = nameElement.getBoundingClientRect();
+
+    // Kiểm tra xem phần tử cha đã cuộn hết hay chưa
+    if (parentRect.bottom < nameRect.bottom) {
+      // Nếu phần tử cha đã cuộn hết, cố định phần tử "name" ở cuối phần tử cha
+      nameElement.style.position = "absolute";
+      nameElement.style.bottom = "0";
+    } else {
+      // Nếu phần tử cha chưa cuộn hết, đặt lại vị trí của phần tử "name"
+      nameElement.style.position = "static"; // hoặc 'relative' tùy thuộc vào cấu trúc CSS của bạn
+    }
+  });
   return (
     <>
       <div
-        className={"h-full w-full mx-auto flex mb-8"}
+        className={
+          "h-full w-full mx-auto mb-8 grid grid-cols-10 overflow-hidden"
+        }
         // style={{ overflowY: "scroll" }}
       >
-        <div className={"px-10"}>
+        <div className={"col-span-1 flex justify-center min-h-screen"}>
           <div
             className={
-              "rounded-xl flex justify-center items-center shadow-xl px-3 h-[600px] 2xl:h-[700px]"
+              "rounded-xl flex justify-center items-center shadow-xl px-3 h-[350px] laptop125percent:h-[450px] 2xl:h-[500px] largelaptop:w-[120px] laptop125percent:w-[100px] laptop:w-[80px] name"
             }
-            style={{ backgroundColor: theme[orientationName].mainColor }}
+            style={{ backgroundColor: theme[orientationName].lightColor }}
           >
             <div
-              className={"text-center font-bold text-2xl"}
+              className={
+                "text-center font-bold laptop125percent:text-2xl text-lg"
+              }
               style={{
                 // textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                 color: `${theme[orientationName].textColor}`,
@@ -298,7 +327,7 @@ const OrientationPostsList = (props: any) => {
           </div>
         </div>
 
-        <div>
+        <div className={"col-span-9"}>
           <div className={"italic font-timesNewRoman text-lg"}>
             {theme[orientationName].greeting}
           </div>
@@ -308,7 +337,7 @@ const OrientationPostsList = (props: any) => {
           />
           <div
             className={
-              "rounded-xl text-center px-10 py-10 w-[80%] mx-auto font-semibold text-lg"
+              "rounded-xl text-center px-10 py-10 w-[80%] mx-auto font-semibold text-lg "
             }
             style={{
               border: `2px solid ${theme[orientationName].textColor}`,
@@ -385,11 +414,19 @@ const OrientationPostsList = (props: any) => {
                     }
                   >
                     <div
-                      className={"h-full w-full rounded-2xl max-w-full"}
+                      className={
+                        "h-full w-full rounded-2xl max-w-full flex justify-center items-center"
+                      }
                       style={{
                         backgroundColor: theme[orientationName].lightColor,
                       }}
-                    ></div>
+                    >
+                      <img
+                        src={theme[orientationName].icon}
+                        className={"h-10 w-10"}
+                        alt=""
+                      />
+                    </div>
                     <div
                       className={
                         "h-full w-full rounded-2xl px-3 max-w-full text-ellipsis overflow-hidden flex items-center"

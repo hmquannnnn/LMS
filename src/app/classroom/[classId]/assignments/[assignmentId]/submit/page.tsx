@@ -12,7 +12,16 @@ import {
   getMembersWithoutStatusAction,
 } from "@/redux/slices/classSlice";
 import React, { useEffect, useRef, useState } from "react";
-import { Avatar, Col, Dropdown, Menu, MenuProps, Row } from "antd";
+import {
+  Avatar,
+  Button,
+  Col,
+  Dropdown,
+  Menu,
+  MenuProps,
+  Modal,
+  Row,
+} from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import { UserOutlined } from "@ant-design/icons";
 import { MdOutlineCancel } from "react-icons/md";
@@ -52,6 +61,21 @@ const SubmissionPage = (props: any) => {
   const [isUpdate, setIsUpdate] = useState(false);
   // const [teammate, setTeammate] = useState([]);
   const teammate = useRef([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const editorRef = useRef(null);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   // console.log(">>>check team: ", teammate);
 
   const handleAddTeammate = (member: Teammate) => {
@@ -142,7 +166,7 @@ const SubmissionPage = (props: any) => {
     assignmentId: number,
   ) => {
     e.preventDefault();
-
+    showModal();
     const formData = new FormData(e.currentTarget);
     const title = formData.get("title") as string;
     const files = formData.getAll("files") as FileList;
@@ -166,9 +190,18 @@ const SubmissionPage = (props: any) => {
     }
     console.log(formDataWithFiles);
     const res = await callSubmitAssignment(assignmentId, formDataWithFiles);
+    setSuccessModalVisible(true);
   };
 
-  const editorRef = useRef(null);
+  const handleSuccessModalClose = () => {
+    setSuccessModalVisible(false);
+    document.getElementById("submitForm").reset();
+    if (editorRef.current) {
+      editorRef.current.setContent("<p>Nhập nội dung ở đây</p>");
+    }
+
+    teammate.current = [];
+  };
 
   const items: MenuProps["items"] = membersMenu.map((member) => ({
     key: member.key.toString(),
@@ -178,10 +211,10 @@ const SubmissionPage = (props: any) => {
   return (
     <>
       <Row className={"w-[90%] mx-auto min-h-[80vh] h-fit"}>
-        <Col span={10} className={"bg-blue_6 rounded-xl h-fit px-10 py-5"}>
+        <Col span={10} className={"bg-purple_4 rounded-xl h-fit px-10 py-5"}>
           <h4
             className={
-              "uppercase font-semibold text-xl text-blue_5 mb-5 text-center"
+              "uppercase font-semibold text-xl text-purple_5 mb-5 text-center"
             }
           >
             {currentAssignment.title}
@@ -192,7 +225,10 @@ const SubmissionPage = (props: any) => {
         </Col>
         <Col span={14} className={"pl-10"}>
           <div>
-            <form onSubmit={(e) => handleSubmit(e, assignmentId)}>
+            <form
+              id={"submitForm"}
+              onSubmit={(e) => handleSubmit(e, assignmentId)}
+            >
               <Col>
                 <div className={"my-2"}>
                   <div>
@@ -203,57 +239,62 @@ const SubmissionPage = (props: any) => {
                       type={"text"}
                       placeholder={"Tiêu đề"}
                       className={"mb-2 rounded border-[1px]"}
+                      defaultValue={""}
                     />
                   </div>
-                  <div className={"flex flex-row items-center"}>
-                    <label>Choose your teammates: </label>
-                    {teammate.current.length < 2 && (
-                      <Dropdown
-                        trigger={"click"}
-                        overlay={<Menu items={items} />}
-                        placement={"bottom"}
-                      >
-                        <div className={"border-[1px] rounded px-4 py-1 h-fit"}>
-                          Chọn thành viên
-                        </div>
-                      </Dropdown>
-                    )}
-
+                  {currentAssignment?.isForGroup === true && (
                     <div className={"flex flex-row items-center"}>
-                      {teammate.current.length > 0 &&
-                        teammate.current.map((member: Teammate) => (
+                      <label>Choose your teammates: </label>
+                      {teammate.current.length < 2 && (
+                        <Dropdown
+                          trigger={"click"}
+                          overlay={<Menu items={items} />}
+                          placement={"bottom"}
+                        >
                           <div
-                            key={member.id}
-                            className={
-                              "flex flex-row items-center bg-gray-100 rounded-3xl px-3 py-1 mx-2.5"
-                            }
+                            className={"border-[1px] rounded px-4 py-1 h-fit"}
                           >
-                            <Avatar
-                              size={30}
-                              icon={<UserOutlined />}
-                              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${member.avatarId}`}
-                              className="mr-3 border-black border-[1px]"
-                            />
-                            <div>
-                              <p className={"font-medium"}>
-                                {member.lastName + " " + member.firstName}
-                              </p>
-                              <p className={"text-grey_2"}>
-                                {member.email != null
-                                  ? member.email
-                                  : "No email"}
-                              </p>
-                            </div>
-                            <MdOutlineCancel
-                              className={
-                                "text-red-600 cursor-pointer ml-5 text-lg"
-                              }
-                              onClick={() => handleDeleteTeammate(member.id)}
-                            />
+                            Chọn thành viên
                           </div>
-                        ))}
+                        </Dropdown>
+                      )}
+
+                      <div className={"flex flex-row items-center"}>
+                        {teammate.current.length > 0 &&
+                          teammate.current.map((member: Teammate) => (
+                            <div
+                              key={member.id}
+                              className={
+                                "flex flex-row items-center bg-gray-100 rounded-3xl px-3 py-1 mx-2.5"
+                              }
+                            >
+                              <Avatar
+                                size={30}
+                                icon={<UserOutlined />}
+                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/media/${member.avatarId}`}
+                                className="mr-3 border-black border-[1px]"
+                              />
+                              <div>
+                                <p className={"font-medium"}>
+                                  {member.lastName + " " + member.firstName}
+                                </p>
+                                <p className={"text-grey_2"}>
+                                  {member.email != null
+                                    ? member.email
+                                    : "No email"}
+                                </p>
+                              </div>
+                              <MdOutlineCancel
+                                className={
+                                  "text-red-600 cursor-pointer ml-5 text-lg"
+                                }
+                                onClick={() => handleDeleteTeammate(member.id)}
+                              />
+                            </div>
+                          ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {currentAssignment?.isForGroup === false && (
                     <div>
@@ -262,6 +303,7 @@ const SubmissionPage = (props: any) => {
                         name="orientation"
                         id="orientation"
                         className={"border-[1px] px-2 p-0.5 rounded ml-2"}
+                        defaultValue={`${Orientations.TECHNIQUE}`}
                       >
                         <option value={`${Orientations.TECHNIQUE}`}>
                           KĨ THUẬT
@@ -274,7 +316,10 @@ const SubmissionPage = (props: any) => {
                         </option>
                         <option value={`${Orientations.SOCIAL}`}>XÃ HỘI</option>
 
-                        <option value={`${Orientations.ART}`}> XÃ HỘI</option>
+                        <option value={`${Orientations.ART}`}>
+                          {" "}
+                          NGHỆ THUẬT
+                        </option>
                       </select>
                     </div>
                   )}
@@ -318,14 +363,32 @@ const SubmissionPage = (props: any) => {
                   }}
                 />
                 {/* <button onClick={log}>Log editor content</button> */}
-                <input name="files" type="file" multiple className={"mt-2"} />
+                <input
+                  name="files"
+                  type="file"
+                  multiple
+                  className={"mt-2"}
+                  defaultValue={null}
+                />
 
                 <button
                   type="submit"
-                  className="bg-blue_6 rounded mt-2 text-blue_5 font-bold text-base py-2 px-4"
+                  className="bg-purple_7 rounded mt-2 text-blue_5 font-bold text-base py-2 px-4"
                 >
                   Nộp bài
                 </button>
+                <Modal
+                  title="Nộp bài thành công"
+                  visible={successModalVisible}
+                  onCancel={handleSuccessModalClose}
+                  footer={[
+                    <Button key="back" onClick={handleSuccessModalClose}>
+                      Quay lại
+                    </Button>,
+                  ]}
+                >
+                  <p>Bài tập đã được tạo thành công!</p>
+                </Modal>
               </Col>
             </form>
           </div>

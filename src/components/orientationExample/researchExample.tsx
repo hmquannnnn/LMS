@@ -5,7 +5,7 @@ import { FaRegHandPointRight } from "react-icons/fa";
 const ResearchExample = ({ color }) => {
   return (
     <>
-      <div className={"flex flex-row items-end"}>
+      <div className={"flex flex-row items-end my-10"}>
         <img
           className={"mr-5 w-[500px]"}
           src={"/images/nghiencuu/khoahoctunhien.svg"}
@@ -20,7 +20,7 @@ const ResearchExample = ({ color }) => {
             </i>
           </p>
 
-          <p>
+          <p className={"mb-5"}>
             Khoa học tự nhiên với nhiệm vụ nghiên cứu lý giải các sự vật, hiện
             tượng, quy luật xảy ra trong tự nhiên, từ đó xây dựng các luận cứ,
             giải pháp làm cơ sở xây dựng những công trình ứng dụng cũng như sử
@@ -42,7 +42,7 @@ const ResearchExample = ({ color }) => {
           </div>
         </div>
       </div>
-      <div className={"flex flex-row items-end"}>
+      <div className={"flex flex-row items-end my-10"}>
         <div>
           <div className={"flex flex-row items-end"}>
             <p className={"text-2xl font-bold mb-5 mr-1"}>
@@ -54,7 +54,7 @@ const ResearchExample = ({ color }) => {
               </p>
             </p>
           </div>
-          <p>
+          <p className={"mb-5"}>
             Khoa học Xã hội là một nhánh Khoa học nghiên cứu chuyên sâu về hành
             vi con người trong các khía cạnh xã hội và văn hóa. Khối lượng kiến
             thức trong khối ngành này rất rộng: bao gồm các môn khoa học nghiên
@@ -76,7 +76,7 @@ const ResearchExample = ({ color }) => {
           </div>
         </div>
         <img
-          className={"mr-5 w-[500px]"}
+          className={"ml-16 w-[500px]"}
           src={"/images/nghiencuu/khoahocxahoi.svg.png"}
         />
       </div>

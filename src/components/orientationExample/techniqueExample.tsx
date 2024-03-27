@@ -5,8 +5,8 @@ import { FaRegHandPointRight } from "react-icons/fa";
 const TechniqueExample = ({ color }) => {
   return (
     <>
-      <div className={"flex flex-row items-end"}>
-        <img className={"mr-5"} src={"/images/kithuat/congnghiep.svg"} />
+      <div className={"flex flex-row items-end my-10"}>
+        <img className={"mr-16"} src={"/images/kithuat/congnghiep.svg"} />
         <div>
           <p className={"text-2xl font-bold mb-5"}>CÔNG NGHIỆP</p>
 
@@ -41,8 +41,12 @@ const TechniqueExample = ({ color }) => {
           </div>
         </div>
       </div>
-      <div className={"flex flex-row items-end"}>
-        <img src="/images/kithuat/diendientu.svg" alt="" className={"w-5/12"} />
+      <div className={"flex flex-row items-end my-10"}>
+        <img
+          src="/images/kithuat/diendientu.svg"
+          alt=""
+          className={"w-5/12 mr-16"}
+        />
         <div>
           <p className={"text-2xl font-bold mb-5"}>ĐIỆN, ĐIỆN TỬ</p>
           <div className={"flex flex-row"}>
@@ -79,7 +83,7 @@ const TechniqueExample = ({ color }) => {
           </div>
         </div>
       </div>
-      <div className={"flex flex-row items-end"}>
+      <div className={"flex flex-row items-end my-10"}>
         <div>
           <p className={"text-2xl font-bold mb-5"}>CƠ KHÍ, XÂY DỰNG, VẬN TẢI</p>
           <div className={"flex flex-row"}>
@@ -104,23 +108,21 @@ const TechniqueExample = ({ color }) => {
               style={{ color: `${color}` }}
             />
             <p className={"w-[94%]"}>
-              Sắp tới sẽ có 02 đoàn khách du lịch đến thăm quan địa điểm trong
-              văn bản vừa nêu, một đoàn đến từ Hồ Chí Minh, một đoàn từ Hà Nội.
-              Là một kĩ sư vận tải, em hãy gợi ý lộ trình phù hợp cho 02 đoàn
-              khách đó nhé! Lưu ý, em cần nêu rõ vì sao em lại chọn lộ trình này
-              (những con đường khác và con đường em chọn có ưu, nhược điểm gì)
-              và đưa ra một số gợi ý để cải thiện tình hình giao thông (mở rộng
-              làn đường, mở thêm cao tốc, làm thêm đường,...) cho lộ trình này
+              Hãy tưởng tượng một ngày, nhóm tác giả chuyên viết văn bản thông
+              tin (gồm 05 văn bản em yêu thích nhất) muốn xây dựng một viện bảo
+              tàng để trưng bày các thông tin họ đã viết một cách trực quan
+              nhất. Là một kĩ sư xây dựng, em hãy lập một bản vẽ bảo tàng để hỗ
+              trợ quá trình xây dựng của họ nhé!
             </p>
           </div>
         </div>
         <img
           src="/images/kithuat/cokhixaydungvantai.svg"
           alt=""
-          className={"w-5/12"}
+          className={"w-5/12 ml-16"}
         />
       </div>
-      <div className={"flex flex-row items-end"}>
+      <div className={"flex flex-row items-end my-10"}>
         <div>
           <p className={"text-2xl font-bold mb-5"}>NÔNG NGHIỆP, THỰC PHẨM</p>
           <div className={"flex flex-row"}>
@@ -141,7 +143,7 @@ const TechniqueExample = ({ color }) => {
         <img
           src="/images/kithuat/nongnghiepthucpham.svg"
           alt=""
-          className={"w-5/12"}
+          className={"w-5/12 ml-16"}
         />
       </div>
     </>

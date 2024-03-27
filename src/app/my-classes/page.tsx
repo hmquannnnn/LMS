@@ -38,7 +38,7 @@ const MyClasses = () => {
       <div className={" min-h-[84vh] mt-5 w-[90%] mx-auto"}>
         <div>
           <div className={"flex justify-between items-center"}>
-            <p className={"h-fit font-bold text-2xl"}>Chào mừng em đến với</p>
+            <p className={"h-fit font-bold text-2xl"}>Lớp học của bạn</p>
             {userRole === ROLE_TEACHER ? (
               <CreateClassButton onUpdate={handleUpdate} />
             ) : (

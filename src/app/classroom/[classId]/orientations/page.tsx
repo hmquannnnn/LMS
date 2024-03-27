@@ -15,7 +15,7 @@ const backgroundColor = {
   SOCIAL: colors.green_5,
   ART: colors.pink_3,
   MANAGEMENT: colors.pink_1,
-  RESEARCH: colors.blue_9,
+  RESEARCH: colors.blue_6,
   MAJOR: colors.grey_1,
 };
 
@@ -48,17 +48,21 @@ const ClassOrientations = (props: any) => {
 
   return (
     <div>
-      <p className={"text-center font-bold text-3xl"}>
+      <p
+        className={
+          "text-center font-bold largelaptop:text-2xl xl:text-xl text-base mt-0"
+        }
+      >
         CHÀO MỪNG EM KHÁM PHÁ THẾ GIỚI NGHỀ NGHIỆP KÌ THÚ
       </p>
-      <div className="flex flex-row flex-wrap w-[80%] mx-auto">
+      <div className="flex flex-row flex-wrap w-[60%] mx-auto">
         {Object.entries(Orientations).map(([key, value]) => (
           <div key={key} className="relative basis-1/3 h-[33%] block pb-[20%] ">
             <div
               className={
-                "absolute h-[87%] w-[92%] rounded-xl cursor-pointer shadow-xl  hover:shadow-2xl " +
+                "absolute h-[87%] w-[92%] cursor-pointer shadow-xl  hover:shadow-2xl " +
                 // "flex items-center justify-center flex-row" +
-                "grid content-end 2xl:p-10 xl:p-5 lg:p-3"
+                "grid content-end xl:p-5 lg:p-3"
               }
               style={{
                 top: "50%",
@@ -73,7 +77,11 @@ const ClassOrientations = (props: any) => {
             >
               <div className={"flex flex-row h-fit"}>
                 <OrientationIcon color={textColor[value]} orientation={value} />
-                <p className={"text-3xl font-bold w-fit grid content-end"}>
+                <p
+                  className={
+                    "text-lg 2xl:text-2xl font-bold w-fit grid content-end"
+                  }
+                >
                   {theme[value]?.vietnameseName}
                 </p>
               </div>

@@ -17,6 +17,7 @@ import {
 import { FaPeopleLine } from "react-icons/fa6";
 import { ROLE_TEACHER } from "@/utils/constant";
 import { Tooltip } from "antd";
+import { PiListChecks } from "react-icons/pi";
 
 const ClassroomLayout = ({ children }: { children: ReactNode }) => {
   const params = useParams();
@@ -37,67 +38,138 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
   );
   return (
     <>
-      <div className={"min-h-[82vh] "}>
-        <div >
-          <div className="pt-3 pl-10 font-timesNewRoman text-xl"><i>Chào mừng em đến với</i></div>
-          <div
-            className={"flex items-center mt-5 pl-10 mb-5"}
-          >
-            <div className="flex items-center">
-              <FaChalkboardTeacher className={"h-10 w-10 mr-4"} />
-              <p className={"text-2xl font-bold"}>{currentClass.name}</p>
-            </div>
+      <div className={"min-h-[82vh] w-full"}>
+        <div className={"flex flex-col w-full"}>
+          <div className={"mb-5 xl:h-[120px] h-[80px] w-full]"}>
+            <div
+              className={"navigation w-full"}
+              style={{
+                // position: "-webkit-sticky" /* Safari */,
+                position: "fixed",
+                // top: 0,
+                backgroundColor: "#fff",
+                zIndex: 1000,
+              }}
+            >
+              {/*<div className="pt-3 pl-10 font-timesNewRoman text-xl">*/}
+              {/*  <i>Chào mừng em đến với</i>*/}
+              {/*</div>*/}
+              <div className={"flex items-center mt-5 pl-10 mb-5"}>
+                <div className="flex items-center">
+                  <FaChalkboardTeacher className={"h-10 w-10 mr-4"} />
+                  <p className={"text-2xl font-bold"}>{currentClass.name}</p>
+                </div>
 
-            <div className="flex w-1/2 ml-[5vw] ">
-
-              <Tooltip className={"flex justify-center px-[4vw]  hover:bg-slate-200 cursor-pointer py-1 "} placement="top" title={"Thông báo"} color={"#367ff0"} arrow={false}>
-                <Link
-                  href={`${paths.classroom}/${classId}/${paths.classroomNotifications}`}
-                >
-                  {/*Notifications*/}
-                  <IoNotifications className={"h-6 w-6"} />
-                </Link>
-              </Tooltip>
-              <Tooltip className={"flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"} placement="top" title={"Bài tập"} color={"#367ff0"} arrow={false}>
-                <Link
-                  href={`${paths.classroom}/${classId}/${paths.classroomAssignments}`}
-                >
-                  {/*Assignments*/}
-                  <MdAssignmentTurnedIn className={"h-6 w-6"} />
-                </Link>
-              </Tooltip>
-              <Tooltip className={"flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"} placement="top" title={"Danh sách"} color={"#367ff0"} arrow={false}>
-                <Link
-                  href={`${paths.classroom}/${classId}/${paths.classroomMembers}`}
-                >
-                  {/*Members*/}
-                  <FaPeopleLine className={"h-6 w-6"} />
-                </Link>
-              </Tooltip>
-              {user.role === ROLE_TEACHER && (
-                <Tooltip className={"flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"} placement="top" title={"Bài chờ duyệt"} color={"#367ff0"} arrow={false}>
-                  <Link
-                    href={`${paths.classroom}/${classId}/${paths.pendingPosts}`}
+                <div className="flex w-1/2 ml-[5vw] ">
+                  <Tooltip
+                    className={
+                      "flex justify-center px-[4vw]  hover:bg-slate-200 cursor-pointer py-1 "
+                    }
+                    placement="top"
+                    title={"Thông báo"}
+                    color={"#367ff0"}
+                    arrow={false}
                   >
-                    {/*Appending Posts*/}
-                    <MdChecklistRtl className={"h-6 w-6"} />
-                  </Link>
-                </Tooltip>
-              )}
-              <Tooltip className={"flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"} placement="top" title={"Định hướng"} color={"#367ff0"} arrow={false}>
-                <Link
-                  href={`${paths.classroom}/${classId}/${paths.classroomOrientations}`}
-                >
-                  {/*Orientations*/}
-                  <MdOutlineWork className={"h-6 w-6"} />
-                </Link>
-              </Tooltip>
+                    <Link
+                      href={`${paths.classroom}/${classId}/${paths.classroomNotifications}`}
+                    >
+                      {/*Notifications*/}
+                      <IoNotifications className={"h-6 w-6"} />
+                    </Link>
+                  </Tooltip>
+                  <Tooltip
+                    className={
+                      "flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
+                    }
+                    placement="top"
+                    title={"Bài tập"}
+                    color={"#367ff0"}
+                    arrow={false}
+                  >
+                    <Link
+                      href={`${paths.classroom}/${classId}/${paths.classroomAssignments}`}
+                    >
+                      {/*Assignments*/}
+                      <MdAssignmentTurnedIn className={"h-6 w-6"} />
+                    </Link>
+                  </Tooltip>
+                  <Tooltip
+                    className={
+                      "flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
+                    }
+                    placement="top"
+                    title={"Danh sách"}
+                    color={"#367ff0"}
+                    arrow={false}
+                  >
+                    <Link
+                      href={`${paths.classroom}/${classId}/${paths.classroomMembers}`}
+                    >
+                      {/*Members*/}
+                      <FaPeopleLine className={"h-6 w-6"} />
+                    </Link>
+                  </Tooltip>
+                  {user.role === ROLE_TEACHER && (
+                    <Tooltip
+                      className={
+                        "flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
+                      }
+                      placement="top"
+                      title={"Bài chờ duyệt"}
+                      color={"#367ff0"}
+                      arrow={false}
+                    >
+                      <Link
+                        href={`${paths.classroom}/${classId}/${paths.pendingPosts}`}
+                      >
+                        {/*Appending Posts*/}
+                        <MdChecklistRtl className={"h-6 w-6"} />
+                      </Link>
+                    </Tooltip>
+                  )}
+                  <Tooltip
+                    className={
+                      "flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
+                    }
+                    placement="top"
+                    title={"Định hướng"}
+                    color={"#367ff0"}
+                    arrow={false}
+                  >
+                    <Link
+                      href={`${paths.classroom}/${classId}/${paths.classroomOrientations}`}
+                    >
+                      {/*Orientations*/}
+                      <MdOutlineWork className={"h-6 w-6"} />
+                    </Link>
+                  </Tooltip>
+                  {user.role === ROLE_TEACHER && (
+                    <Tooltip
+                      className={
+                        "flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
+                      }
+                      placement="top"
+                      title={"Tiêu chí đánh giá"}
+                      color={"#367ff0"}
+                      arrow={false}
+                    >
+                      <Link
+                        href={`${paths.classroom}/${classId}/${paths.evaluation}`}
+                      >
+                        {/*Appending Posts*/}
+                        <PiListChecks className={"h-6 w-6"} />
+                      </Link>
+                    </Tooltip>
+                  )}
+                </div>
+              </div>
             </div>
-
           </div>
-          {children}
+
+          {/*<div style={{ height: "150px" }} />*/}
+          <div>{children}</div>
         </div>
-      </div >
+      </div>
     </>
   );
 };

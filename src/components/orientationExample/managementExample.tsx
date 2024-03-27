@@ -6,7 +6,7 @@ const ManagementExample = ({ color }) => {
   return (
     <>
       <div className={"flex flex-row items-end"}>
-        <img className={"mr-5 w-[500px]"} src={"/images/quanly/quanly.svg"} />
+        <img className={"mr-20 w-[500px]"} src={"/images/quanly/quanly.svg"} />
         <div>
           <p className={"text-2xl font-bold mb-5"}>QUẢN LÝ</p>
           <div className={"flex flex-row"}>

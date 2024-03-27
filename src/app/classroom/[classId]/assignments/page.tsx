@@ -6,7 +6,6 @@ import {
   callGetAssigment,
   callGetAssignmentStatusStudent,
   callGetClass,
-  callSubmitAssignment,
 } from "@/apis/classAPI";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -14,7 +13,7 @@ import {
   getCurrentClassAction,
 } from "@/redux/slices/classSlice";
 import React, { useEffect, useRef, useState } from "react";
-import { Col, Modal, Row } from "antd";
+import { Button, Col, Modal, Row } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import {
   assignmentStatus,
@@ -72,6 +71,13 @@ const ClassAssignment = (props: any) => {
   const [updateFlag, setUpdateFlag] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showSubmitForm, setShowSubmitForm] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [formValues, setFormValues] = useState({
+    title: "",
+    content: "",
+    dueDateTime: "",
+    isForGroup: false,
+  });
 
   const getClassDetail = async () => {
     const classInfo = await callGetClass(classId);
@@ -105,13 +111,31 @@ const ClassAssignment = (props: any) => {
     getClassDetail();
   }, [updateFlag]);
 
+  const editorRef = useRef(null);
+
+  const handleSuccessModalClose = () => {
+    setSuccessModalVisible(false);
+    document.getElementById("assignmentForm").reset();
+    if (editorRef.current) {
+      editorRef.current.setContent("<p>Nhập nội dung ở đây</p>");
+    }
+    setFormValues({
+      title: "",
+      content: "",
+      dueDateTime: "",
+      isForGroup: false,
+    });
+  };
+
   const handleCreateAssignment = async (e) => {
     e.preventDefault();
     const title = `BÀI TẬP ${assignmentsList.length + 1}: ${e.target.elements.title.value}`;
     // const content = e.target.elements.content.value;
-    const content = editorRef.current.getContent();
-    const dueDateTime = e.target.elements.dueDateTime.value;
-    const isForGroup = e.target.elements.isForGroup.value;
+    const content = editorRef.current.getContent() as string;
+    const dueDateTime = e.target.elements.dueDateTime.value as string;
+    const isForGroup = e.target.elements.isForGroup.value as boolean;
+    console.log("c: ", isForGroup);
+
     const assignmentReq = {
       title: title,
       content: content,
@@ -122,10 +146,21 @@ const ClassAssignment = (props: any) => {
     console.log("check: ", res);
     setUpdateFlag(false);
     setIsModalOpen(false);
-    // if (res.status === "success") {
-    const notificationContent = `${title}: ${content}`;
-    await callCreateNotification(classId, notificationContent);
-    // }
+    if (res.status === "success") {
+      console.log(Boolean(isForGroup));
+      const type = Boolean(isForGroup) == true ? "Nhóm" : "Cá nhân";
+
+      const content = `${title}`;
+      const noti = await callCreateNotification(classId, content);
+      setSuccessModalVisible(true);
+      // Clear form values
+      setFormValues({
+        title: "",
+        content: "",
+        dueDateTime: "",
+        isForGroup: false,
+      });
+    }
   };
 
   const showModal = () => {
@@ -148,36 +183,6 @@ const ClassAssignment = (props: any) => {
     setShowSubmitForm(false);
   };
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-    assignmentId: number,
-  ) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-    const title = formData.get("title") as string;
-    const files = formData.getAll("files") as FileList;
-    const caption = editorRef.current.getContent();
-    const orientation = formData.get("orientation") as string;
-
-    const formDataWithFiles = new FormData();
-    formDataWithFiles.append("title", title);
-    formDataWithFiles.append("caption", caption);
-    formDataWithFiles.append("orientation", orientation);
-    for (let i = 0; i < files.length; i++) {
-      formDataWithFiles.append("files", files[i]);
-    }
-
-    const res = await callSubmitAssignment(assignmentId, formDataWithFiles);
-  };
-
-  const editorRef = useRef(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
-
   return (
     <>
       <Row>
@@ -197,13 +202,14 @@ const ClassAssignment = (props: any) => {
               onCancel={handleCancel}
               footer={null}
             >
-              <form onSubmit={handleCreateAssignment}>
+              <form id={"assignmentForm"} onSubmit={handleCreateAssignment}>
                 <div>
                   <input
                     type={"text"}
                     name={"title"}
                     placeholder={"Tiêu đề"}
                     className="border-[1px] rounded w-full px-4 py-1 mb-3"
+                    defaultValue={""}
                   />
                   {/*<input*/}
                   {/*  type={"text"}*/}
@@ -256,6 +262,7 @@ const ClassAssignment = (props: any) => {
                     type={"datetime-local"}
                     name={"dueDateTime"}
                     className={"border-[1px] w-full px-4 py-1 rounded mb-3"}
+                    defaultValue={""}
                   />
                   <label htmlFor={"type"} className={"mb-3 w-full my-3"}>
                     Hình thức
@@ -264,6 +271,7 @@ const ClassAssignment = (props: any) => {
                     id={"type"}
                     name={"isForGroup"}
                     className={"px-4 py-1 rounded border-[1px]"}
+                    defaultValue={"false"}
                   >
                     <option value={"false"}>Cá nhân</option>
                     <option value={"true"}>Nhóm</option>
@@ -276,6 +284,18 @@ const ClassAssignment = (props: any) => {
                   </button>
                 </div>
               </form>
+            </Modal>
+            <Modal
+              title="Tạo bài tập thành công"
+              visible={successModalVisible}
+              onCancel={handleSuccessModalClose}
+              footer={[
+                <Button key="back" onClick={handleSuccessModalClose}>
+                  Quay lại
+                </Button>,
+              ]}
+            >
+              <p>Bài tập đã được tạo thành công!</p>
             </Modal>
           </Col>
         )}
@@ -294,10 +314,10 @@ const ClassAssignment = (props: any) => {
 
           {assignmentsList.map((assignment) => (
             <>
-              <Row className={"mb-5 w-full"}>
+              <Row key={assignment.id} className={"mb-5 w-full"}>
                 <Col
                   span={21}
-                  className={"rounded-xl px-5 py-3 bg-blue_6 cursor-pointer"}
+                  className={"rounded-xl px-5 py-3 bg-purple_4 cursor-pointer"}
                   onClick={() =>
                     router.push(
                       `${paths.classroom}/${classId}/${paths.classroomAssignments}/${assignment.id}`,
@@ -307,7 +327,7 @@ const ClassAssignment = (props: any) => {
                   <p
                     className={"font-bold"}
                     style={{
-                      color: `${colors.blue_7}`,
+                      color: `${colors.purple_5}`,
                       textTransform: "uppercase",
                     }}
                   >

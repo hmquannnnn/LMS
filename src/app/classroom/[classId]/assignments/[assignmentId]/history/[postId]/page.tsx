@@ -34,10 +34,10 @@ const OldPost = ({ params }) => {
     <>
       {post?.id && currentAssignment?.id && (
         <Row className={"w-[90%] mx-auto min-h-[80vh] h-fit"}>
-          <Col span={10} className={"bg-blue_6 rounded-xl h-fit px-10 py-5"}>
+          <Col span={10} className={"bg-purple_4 rounded-xl h-fit px-10 py-5"}>
             <h4
               className={
-                "uppercase font-semibold text-xl text-blue_5 mb-5 text-center"
+                "uppercase font-semibold text-xl text-purple_5 mb-5 text-center"
               }
             >
               {currentAssignment.title}
