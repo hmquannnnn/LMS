@@ -71,7 +71,7 @@ const DocumentPreview = ({ props }) => {
                     window.open(
                         "https://www.facebook.com/sharer/sharer.php?u=" +
                         NEXT_PUBLIC_FRONTEND_URL +
-                        pathName,
+                        '/library/' + document?.id,
                         "facebook-share-dialog",
                         "width=600,height=600",
                     );
@@ -183,7 +183,7 @@ const DocumentPreview = ({ props }) => {
                                 <PracticeIcon />
                             </div>
                             <div className="font-josefin font-bold ">Luyện tập</div>
-                            <div className='font-light text-xs'>Thêm vào bộ sưu tập yêu thích để lưu lại những thông tin hữu ích!</div>
+                            <div className='font-light text-xs'>Thực hành hệ thống bài tập nhằm phát triển năng lực.</div>
                         </div>
                     </Dropdown>
 
@@ -193,7 +193,7 @@ const DocumentPreview = ({ props }) => {
                                 <ShareIcon />
                             </div>
                             <div className="font-josefin font-bold ">Chia sẻ</div>
-                            <div className='font-light text-xs'>Thêm vào bộ sưu tập yêu thích để lưu lại những thông tin hữu ích!</div>
+                            <div className='font-light text-xs'>Chia sẻ trên các nền tảng mạng xã hội nhằm lan tỏa giá trị.</div>
                         </div>
                     </Dropdown>
                 </div>

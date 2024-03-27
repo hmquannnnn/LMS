@@ -31,6 +31,8 @@ const Library = () => {
 
   return (
     <>
+      <title>Thư viện thông tin</title>
+
       <div className={"bg-sky"}>
         {/* <HeaderWithLogo /> */}
         <div className="w-full relative flex justify-end">

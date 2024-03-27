@@ -53,7 +53,7 @@ const ClassOrientations = (props: any) => {
           "text-center font-bold largelaptop:text-2xl xl:text-xl text-base mt-0"
         }
       >
-        CHÀO MỪNG EM KHÁM PHÁ THẾ GIỚI NGHỀ NGHIỆP KÌ THÚ
+        {/* CHÀO MỪNG EM KHÁM PHÁ THẾ GIỚI NGHỀ NGHIỆP KÌ THÚ */}
       </p>
       <div className="flex flex-row flex-wrap w-[60%] mx-auto">
         {Object.entries(Orientations).map(([key, value]) => (

@@ -3,13 +3,13 @@ export const MainTitle = () => {
         <div className=" select-none">
             <div className="font-iciel flex text-purple_1">
                 <div className="flex items-center">
-                    <div className="text-[12vw] leading-[4vw]">TH</div>
+                    <div className="text-[15vw] leading-[4.7vw]">TH</div>
                 </div>
                 <div className="flex flex-col justify-end">
-                    <div className="text-[4vw] leading-[4vw]">
+                    <div className="text-[4.7vw] leading-[4.7vw]">
                         Ư VIỆN
                     </div>
-                    <div className="text-[4vw] leading-[4vw]">
+                    <div className="text-[4.7vw] leading-[4.5vw]">
                         ÔNG TIN
                     </div>
                 </div>
