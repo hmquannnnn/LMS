@@ -24,15 +24,17 @@ function isJwtExpired(token: String) {
     return decodedPayload.exp < currentTime;
 }
 
-const topicNames = {
-    CULTURE: 'VĂN HÓA',
-    SPORT: 'THỂ THAO',
-    SOCIAL: 'XÃ HỘI',
-    TOURISM: 'DU LỊCH',
-    BUSINESS: 'KINH DOANH',
-    JOB: 'VIỆC LÀM',
-    HEALTH: 'SỨC KHỎE',
-    RELAX: 'GIẢI TRÍ'
+const topicMapping = {
+    "POLITICS": "Chính trị",
+    "ECONOMY": "Kinh tế",
+    "EDUCATION": "Giáo dục",
+    "LAW": "Pháp luật",
+    "MEDICAL": "Y tế",
+    "CULTURE": "Văn hóa",
+    "SPORT": "Thể thao",
+    "LIFE_ENTERTAINMENT": "Đời sống - Giải trí",
+    "SCIENCE_TECHNOLOGY": "Khoa học - Công nghệ",
+    "ENVIRONMENT": "Môi trường",
 }
 
 const TopicDetailPage = (props: any) => {
@@ -64,7 +66,7 @@ const TopicDetailPage = (props: any) => {
     useEffect(() => {
         const fetchDocuments = async () => {
             try {
-                const response = await callGetDocumentsWithPaging(null, props.params.topicName.toUpperCase(), currentPage - 1, pageSize);
+                const response = await callGetDocumentsWithPaging(null, props.params?.topicName?.toUpperCase(), currentPage - 1, pageSize);
                 console.log(response);
                 setDocumentList(response.content);
                 setTotal(response.totalElements);
@@ -149,7 +151,7 @@ const TopicDetailPage = (props: any) => {
                         <div className="flex items-center gap-4">
                             <Image src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSw5AP3H_GiJXKNUfyvPZye9h6XT0N01JcsIIn1OepH6N60fx-U" alt="Demo culture topic picture" width={110} height={110} />
                             <h1 className="font-headingOpenSans font-bold text-xl inline align-middle ml-4">
-                                {topicNames[props.params.topicName.toUpperCase()].toLocaleUpperCase()}
+                                {topicMapping[props.params.topicName?.toUpperCase()]?.toLocaleUpperCase()}
                             </h1>
 
                         </div>

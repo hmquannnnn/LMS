@@ -15,44 +15,34 @@ import { Popover, Dropdown } from 'antd';
 import { set } from 'react-hook-form';
 import { callSearchDocumentByTitle } from '@/apis/documentsAPI';
 
-const items: MenuProps["items"] = [
-    {
-        key: "1",
-        label: (
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://www.antgroup.com"
-            >
-                Kinh tế
-            </a>
-        ),
-    },
-    {
-        key: "2",
-        label: (
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://www.aliyun.com"
-            >
-                Văn hóa
-            </a>
-        ),
-    },
-    {
-        key: "3",
-        label: (
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://www.luohanacademy.com"
-            >
-                Xã hội
-            </a>
-        ),
-    },
-];
+
+
+const topicMapping = {
+    "POLITICS": "Chính trị",
+    "ECONOMY": "Kinh tế",
+    "EDUCATION": "Giáo dục",
+    "LAW": "Pháp luật",
+    "MEDICAL": "Y tế",
+    "CULTURE": "Văn hóa",
+    "SPORT": "Thể thao",
+    "LIFE_ENTERTAINMENT": "Đời sống - Giải trí",
+    "SCIENCE_TECHNOLOGY": "Khoa học - Công nghệ",
+    "ENVIRONMENT": "Môi trường",
+}
+
+const listTopics = [
+    "POLITICS",
+    "ECONOMY",
+    "EDUCATION",
+    "LAW",
+    "MEDICAL",
+    "CULTURE",
+    "SPORT",
+    "LIFE_ENTERTAINMENT",
+    "SCIENCE_TECHNOLOGY",
+    "ENVIRONMENT",
+]
+
 
 
 const Header = () => {
@@ -88,34 +78,19 @@ const Header = () => {
     const showTopics = (
         <div className="">
             <div className="flex gap-4">
-                <Link
-                    href={"/library/topics/culture"}
-                    className={"text-lg flex group group-hover:text-purple_1"}
-                >
-                    {/* <div className='h-full w-[1px] mr-2 my-[2px] bg-black group-hover:bg-purple_1'></div> */}
-                    Văn hóa
-                </Link>
-                <Link
-                    href={"/library/topics/sport"}
-                    className={"text-lg flex group group-hover:text-purple_1"}
-                >
-                    <div className="h-full w-[1px] mr-2 my-[2px] bg-black group-hover:bg-purple_1"></div>
-                    Thể thao
-                </Link>
-                <Link
-                    href={"/library/topics/social"}
-                    className={"text-lg flex group group-hover:text-purple_1"}
-                >
-                    <div className="h-full w-[1px] mr-2 my-[2px] bg-black group-hover:bg-purple_1"></div>
-                    Xã hội
-                </Link>
-                <Link
-                    href={"/library/topics/tourism"}
-                    className={"text-lg flex group group-hover:text-purple_1"}
-                >
-                    <div className="h-full w-[1px] mr-2 my-[2px] bg-black group-hover:bg-purple_1"></div>
-                    Du lịch
-                </Link>
+                {listTopics.map((topic, index) => {
+                    return (
+                        <Link
+                            key={index}
+                            href={`/library/topics/${topic.toLowerCase()}`}
+                            className={"text-lg flex group group-hover:text-purple_1"}
+                        >
+                            <div className="h-full w-[1px] mr-2 my-[2px] bg-black group-hover:bg-purple_1"></div>
+                            {topicMapping[topic]}
+                        </Link>
+                    )
+                }
+                )}
             </div>
         </div>
     );
@@ -184,12 +159,40 @@ const Header = () => {
                             }
                         >
                         </button> */}
-                            <Popover placement="bottom" content={showTopics}>
+                            <Dropdown menu={{
+                                items: [
+                                    {
+                                        key: 1,
+                                        label: (
+                                            <div className="flex gap-4">
+                                                {
+                                                    listTopics.map((topic, index) => {
+                                                        return (
+                                                            <Link
+                                                                key={index}
+                                                                href={`/library/topics/${topic.toLowerCase()}`}
+                                                            >
+                                                                <div className={`text-lg items-center flex group${index} group${index}-hover:text-purple_1 h-[4vh]  hover:border-y border-none hover:`}>
+                                                                    {index != 0 && <div className={`h-full w-[1px] mr-4 my-[2px] bg-black group${index}-hover:bg-purple_1`}></div>}
+                                                                    {topicMapping[topic]}
+                                                                </div>
+                                                            </Link>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                        )
+                                    }
+                                ]
+                            }}>
+
                                 <div className="flex items-center cursor-pointer">
                                     {/* <GiHamburgerMenu className={"mr-2.5 text-xl my-auto"} /> */}
                                     <p className={"text-purple_1 font-bold"}>DANH MỤC</p>
                                 </div>
-                            </Popover>
+                            </Dropdown>
+                            {/* <Popover placement="bottom" content={showTopics}>
+                            </Popover> */}
 
                             {/* <Drawer title="Basic Drawer" placement={"left"} onClose={onClose} open={open}>
                             <p>Some contents...</p>
