@@ -304,7 +304,7 @@ const Test = ({ params }) => {
                     <div key={question.id}>
                       <div className={"flex flex-row items-center"}>
                         <p>
-                          <b>Câu hỏi {questionIndex + 1}:</b>
+                          <b>Câu hỏi {questionIndex + 1}:&nbsp;</b>
                           {question.question}
                         </p>
                         {isSubmitted === true ? (
@@ -403,7 +403,12 @@ const Test = ({ params }) => {
                               >
                                 {isSubmitted === false && (
                                   <input
-                                    type="checkbox"
+                                    type={
+                                      question.type === "MULTIPLE_CHOICE"
+                                        ? "checkbox"
+                                        : "radio"
+                                    }
+                                    name={`question-${questionIndex}`}
                                     id={`${choice.id}`}
                                     onChange={() =>
                                       handleAnswerSelection(

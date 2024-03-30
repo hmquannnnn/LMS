@@ -328,7 +328,7 @@ const OrientationPostsList = (props: any) => {
         </div>
 
         <div className={"col-span-9"}>
-          <div className={"italic font-timesNewRoman text-lg"}>
+          <div className={"italic font-Arial text-lg"}>
             {theme[orientationName].greeting}
           </div>
           <div
