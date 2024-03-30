@@ -77,6 +77,8 @@ const Test = ({ params }) => {
   const questionCollection = useSelector(
     (state) => state?.test?.currentTest?.questions || [],
   );
+  const sortedQuestionCollection = [...questionCollection].sort((q1, q2) => q1.id - q2.id);
+
 
   const initializeCorrectAnswer = (questions) => {
     const initialAnswers = questions.map((question) => ({
@@ -224,6 +226,8 @@ const Test = ({ params }) => {
     );
   };
 
+
+
   return (
     <>
       <Breadcrumb
@@ -296,20 +300,19 @@ const Test = ({ params }) => {
             {showTest && (
               <div>
                 <h3 className={"mb-2 font-semibold"}>
-                  Đọc văn bản và thực hiện các yêu cầu bên dưới bằng cách chọn
-                  đáp án đúng:
+                  Đọc văn bản và thực hiện các yêu cầu dưới đây:
                 </h3>
                 {questionCollection?.length > 0 &&
-                  questionCollection.map((question, questionIndex: number) => (
-                    <div key={question.id}>
-                      <div className={"flex flex-row items-center"}>
+                  sortedQuestionCollection.map((question, questionIndex: number) => (
+                    <div key={question.id} className="mb-4">
+                      <div className={"flex flex-row items-center mb-2"}>
                         <p>
                           <b>Câu hỏi {questionIndex + 1}:&nbsp;</b>
                           {question.question}
                         </p>
                         {isSubmitted === true ? (
                           JSON.stringify(userAnswers[questionIndex]) ===
-                          JSON.stringify(correctAnswer[questionIndex]) ? (
+                            JSON.stringify(correctAnswer[questionIndex]) ? (
                             <FaCheck className={"text-green-500 text-xl"} />
                           ) : (
                             <MdCancel className={"text-red-600 text-xl"} />
@@ -319,7 +322,7 @@ const Test = ({ params }) => {
                       {question.type === "FILL_IN_THE_BLANK" ? (
                         <div>
                           {showHints && (
-                            <div className={"italic text-gray-500"}>
+                            <div className={"italic text-gray-500 text-sm"}>
                               {question?.hints?.length > 0 && <p>Gợi ý: </p>}
 
                               {question?.hints?.length > 0 &&
@@ -354,7 +357,7 @@ const Test = ({ params }) => {
                             placeholder={"Nhập câu trả lời ..."}
                           />
                           {showAnswerHints && (
-                            <div className={"italic text-red-500"}>
+                            <div className={"italic text-red-500 text-sm"}>
                               {question?.answerHints?.length > 0 && (
                                 <p>Đáp án gợi ý: </p>
                               )}
@@ -385,17 +388,17 @@ const Test = ({ params }) => {
                                 style={
                                   isSubmitted
                                     ? userAnswers[questionIndex]?.answers[
-                                        choiceIndex
-                                      ]
+                                      choiceIndex
+                                    ]
                                       ? compareCorrectAnswer(
-                                          questionIndex,
-                                          choiceIndex,
-                                        )
+                                        questionIndex,
+                                        choiceIndex,
+                                      )
                                         ? { backgroundColor: "#99f090" }
                                         : { backgroundColor: "#f09090" }
                                       : correctAnswer[questionIndex]?.answers[
-                                            choiceIndex
-                                          ] === true
+                                        choiceIndex
+                                      ] === true
                                         ? { backgroundColor: "#99f090" }
                                         : null
                                     : null
@@ -423,8 +426,8 @@ const Test = ({ params }) => {
                                   style={
                                     isSubmitted
                                       ? userAnswers[questionIndex]?.answers[
-                                          choiceIndex
-                                        ]
+                                        choiceIndex
+                                      ]
                                         ? { fontWeight: "bold" }
                                         : null
                                       : null
@@ -450,7 +453,7 @@ const Test = ({ params }) => {
                 <button
                   onClick={handleSubmit}
                   className={
-                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded"
+                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded hover:bg-purple_1 duration-300"
                   }
                 >
                   Nộp bài
@@ -459,7 +462,7 @@ const Test = ({ params }) => {
                 <button
                   onClick={() => handleRefresh()}
                   className={
-                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded"
+                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded hover:bg-purple_1 duration-300"
                   }
                 >
                   Làm lại
@@ -500,7 +503,7 @@ const Test = ({ params }) => {
                         <b>Câu {questionIndex + 1}:</b> {question.question}
                       </p>
                       {showHints && (
-                        <div className={"italic text-gray-500"}>
+                        <div className={"italic text-gray-500 text-sm"}>
                           {question?.hints?.length > 0 && <p>Gợi ý: </p>}
                           {question?.hints?.length > 0 &&
                             question.hints.map((hint, hintIndex) => (
@@ -535,7 +538,7 @@ const Test = ({ params }) => {
                         placeholder={"Nhập câu trả lời ..."}
                       />
                       {showAnswerHints && (
-                        <div className={"italic text-red-500"}>
+                        <div className={"italic text-red-500 text-sm"}>
                           {question?.answerHints?.length > 0 && (
                             <p>Đáp án gợi ý: </p>
                           )}
@@ -564,7 +567,7 @@ const Test = ({ params }) => {
                 <button
                   onClick={handleSubmit}
                   className={
-                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded"
+                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded hover:bg-purple_1 duration-300"
                   }
                 >
                   Nộp bài
@@ -573,7 +576,7 @@ const Test = ({ params }) => {
                 <button
                   onClick={() => handleRefresh()}
                   className={
-                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded"
+                    "bg-blue_9 text-white font-semibold px-4 py-1 rounded hover:bg-purple_1 duration-300"
                   }
                 >
                   Làm lại

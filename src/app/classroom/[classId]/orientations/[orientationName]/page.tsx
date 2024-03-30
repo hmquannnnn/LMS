@@ -303,7 +303,7 @@ const OrientationPostsList = (props: any) => {
         className={
           "h-full w-full mx-auto mb-8 grid grid-cols-10 overflow-hidden"
         }
-        // style={{ overflowY: "scroll" }}
+      // style={{ overflowY: "scroll" }}
       >
         <div className={"col-span-1 flex justify-center min-h-screen"}>
           <div
@@ -378,7 +378,7 @@ const OrientationPostsList = (props: any) => {
             >
               <IoMdArrowDropright className={"w-full h-full"} />
             </div>
-            <p className={"text-xl font-bold ml-3"}>CỘNG ĐỒNG THỂ HIỆN</p>
+            <p className={"text-xl font-bold ml-3"}>CỘNG ĐỒNG NGHỀ NGHIỆP</p>
           </div>
           {showPosts && (
             <div
