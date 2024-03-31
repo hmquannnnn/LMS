@@ -437,6 +437,9 @@ const Index = () => {
                                     <Select style={{ width: 120 }} onChange={(val) => setType(val)} defaultValue={'Chữ'}>
                                         <Select.Option value="TEXT">Chữ</Select.Option>
                                         <Select.Option value="AUDIO">Âm thanh</Select.Option>
+                                        <Select.Option value="INFOGRAPHIC">Infographic</Select.Option>
+                                        <Select.Option value="IMAGES">Ảnh</Select.Option>
+
                                         {/* <Select.Option value="SPORT">Thể thao</Select.Option>
                                 <Select.Option value="TOURISM">Du lịch</Select.Option> */}
                                     </Select>
