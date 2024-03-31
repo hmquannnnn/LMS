@@ -406,7 +406,12 @@ const Test = ({ params }) => {
                               >
                                 {isSubmitted === false && (
                                   <input
-                                    type="checkbox"
+                                    type={
+                                      question.type === "MULTIPLE_CHOICE"
+                                        ? "checkbox"
+                                        : "radio"
+                                    }
+                                    name={`question-${questionIndex}`}
                                     id={`${choice.id}`}
                                     onChange={() =>
                                       handleAnswerSelection(
