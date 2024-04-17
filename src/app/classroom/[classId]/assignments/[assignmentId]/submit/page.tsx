@@ -387,7 +387,7 @@ const SubmissionPage = (props: any) => {
                     </Button>,
                   ]}
                 >
-                  <p>Bài tập đã được tạo thành công!</p>
+                  <p>Nộp bài thành công</p>
                 </Modal>
               </Col>
             </form>

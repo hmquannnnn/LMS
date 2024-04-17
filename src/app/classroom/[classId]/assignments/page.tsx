@@ -18,7 +18,6 @@ import { Editor } from "@tinymce/tinymce-react";
 import {
   assignmentStatus,
   colors,
-  Orientations,
   ROLE_STUDENT,
   ROLE_TEACHER,
 } from "@/utils/constant";
@@ -26,6 +25,7 @@ import { MdPending } from "react-icons/md";
 import { FaCheck } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import paths from "@/app/paths";
+import DocumentSelector from "@/components/documentSelector";
 
 export const statusPriority = {
   APPROVED: 4,
@@ -78,6 +78,12 @@ const ClassAssignment = (props: any) => {
     dueDateTime: "",
     isForGroup: false,
   });
+  const [linkedDocumentId, setLinkedDocumentId] = useState(0);
+  console.log("check id: ", linkedDocumentId);
+
+  const getLinkDocumentId = (documentId) => {
+    setLinkedDocumentId(documentId);
+  };
 
   const getClassDetail = async () => {
     const classInfo = await callGetClass(classId);
@@ -211,12 +217,6 @@ const ClassAssignment = (props: any) => {
                     className="border-[1px] rounded w-full px-4 py-1 mb-3"
                     defaultValue={""}
                   />
-                  {/*<input*/}
-                  {/*  type={"text"}*/}
-                  {/*  name={"content"}*/}
-                  {/*  placeholder={"Content"}*/}
-                  {/*  className="border-[1px] rounded w-full px-4 py-1 mb-3"*/}
-                  {/*/>*/}
                   <Editor
                     name="caption"
                     apiKey="ty6mn9smak440qi6gv53qqivqdulai6ja9wl6ao0bt12odwr"
@@ -254,6 +254,12 @@ const ClassAssignment = (props: any) => {
                         "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                     }}
                   />
+                  <div>
+                    <label htmlFor="">Ngữ liệu liên kết</label>
+                    <DocumentSelector
+                      sendLinkedDocumentId={getLinkDocumentId}
+                    />
+                  </div>
                   <label htmlFor="deadline" className={"my-3"}>
                     Hạn nộp
                   </label>
@@ -264,18 +270,21 @@ const ClassAssignment = (props: any) => {
                     className={"border-[1px] w-full px-4 py-1 rounded mb-3"}
                     defaultValue={""}
                   />
-                  <label htmlFor={"type"} className={"mb-3 w-full my-3"}>
-                    Hình thức
-                  </label>
-                  <select
-                    id={"type"}
-                    name={"isForGroup"}
-                    className={"px-4 py-1 rounded border-[1px]"}
-                    defaultValue={"false"}
-                  >
-                    <option value={"false"}>Cá nhân</option>
-                    <option value={"true"}>Nhóm</option>
-                  </select>
+                  <div>
+                    <label htmlFor={"type"} className={"mb-3 w-full my-3"}>
+                      Hình thức
+                    </label>
+                    <select
+                      id={"type"}
+                      name={"isForGroup"}
+                      className={"px-4 py-1 rounded border-[1px] "}
+                      defaultValue={"false"}
+                    >
+                      <option value={"false"}>Cá nhân</option>
+                      <option value={"true"}>Nhóm</option>
+                    </select>
+                  </div>
+
                   <button
                     type={"submit"}
                     className="border-[1px] bg-blue_9 text-white rounded w-full text-center py-1 font-bold mt-3"
@@ -362,106 +371,6 @@ const ClassAssignment = (props: any) => {
                   )}
                 </Col>
               </Row>
-              <Modal
-                title={"Submit Form"}
-                open={showSubmitForm}
-                onCancel={handleCloseSubmit}
-                footer={null}
-              >
-                <div>
-                  <form onSubmit={(e) => handleSubmit(e, assignment.id)}>
-                    <Col>
-                      <div className={"my-2"}>
-                        <input
-                          name={"title"}
-                          type={"text"}
-                          placeholder={"Title"}
-                          className={"mb-2 rounded border-[1px]"}
-                        />
-                        <div>
-                          <label htmlFor="orientation">
-                            Select orientation
-                          </label>
-                          <select
-                            name="orientation"
-                            id="orientation"
-                            className={"border-[1px] px-2 p-0.5 rounded ml-2"}
-                          >
-                            <option value={`${Orientations.TECHNIQUE}`}>
-                              TECHNIQUE
-                            </option>
-                            <option value={`${Orientations.MAJOR}`}>
-                              MAJOR
-                            </option>
-                            <option value={`${Orientations.RESEARCH}`}>
-                              RESEARCH
-                            </option>
-                            <option value={`${Orientations.SOCIAL}`}>
-                              SOCIAL
-                            </option>
-                            <option value={`${Orientations.MANAGEMENT}`}>
-                              MANAGEMENT
-                            </option>
-                            <option value={`${Orientations.ART}`}> ART</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      <Editor
-                        name="caption"
-                        apiKey="ty6mn9smak440qi6gv53qqivqdulai6ja9wl6ao0bt12odwr"
-                        onInit={(evt, editor) => (editorRef.current = editor)}
-                        initialValue="<p>This is the initial content of the editor.</p>"
-                        init={{
-                          height: 500,
-                          menubar: false,
-                          plugins: [
-                            "advlist",
-                            "autolink",
-                            "lists",
-                            "link",
-                            "image",
-                            "charmap",
-                            "preview",
-                            "anchor",
-                            "searchreplace",
-                            "visualblocks",
-                            "code",
-                            "fullscreen",
-                            "insertdatetime",
-                            "media",
-                            "table",
-                            "code",
-                            "help",
-                            "wordcount",
-                          ],
-                          toolbar:
-                            "undo redo | blocks | " +
-                            "bold italic forecolor | alignleft aligncenter " +
-                            "alignright alignjustify | bullist numlist outdent indent | " +
-                            "removeformat | help",
-                          content_style:
-                            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                        }}
-                      />
-                      {/* <button onClick={log}>Log editor content</button> */}
-                      <input
-                        name="files"
-                        type="file"
-                        multiple
-                        className={"mt-2"}
-                      />
-
-                      <button
-                        type="submit"
-                        className="border-[1px] bg-rose-500 w-full rounded mt-2 text-white font-bold font-xl py-2"
-                      >
-                        Submit
-                      </button>
-                    </Col>
-                  </form>
-                </div>
-              </Modal>
             </>
           ))}
         </Col>

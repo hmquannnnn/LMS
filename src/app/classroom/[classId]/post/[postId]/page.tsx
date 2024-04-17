@@ -50,6 +50,7 @@ const PostDetails = (props: any) => {
 
   const [mediaIndex, setMediaIndex] = useState(0);
   const [isUpdate, setIsUpdate] = useState(true);
+  const [isUpdateComment, setIsUpdateComment] = useState(true);
   const [commentInput, setCommentInput] = useState("");
   const [textAreaHeight, setTextAreaHeight] = useState("auto");
   const textAreaRef = useRef(null);
@@ -57,6 +58,8 @@ const PostDetails = (props: any) => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [file, setFile] = useState<string>({ url: "" });
   const [commentsList, setCommentsList] = useState([]);
+  const [isLiked, setIsLiked] = useState(false);
+  const [numberOfLikes, setNumberOfLikes] = useState(0);
   // const [numPages, setNumPages] = useState(null);
   // const [pageNumber, setPageNumber] = useState(1);
 
@@ -81,33 +84,35 @@ const PostDetails = (props: any) => {
       setTextAreaHeight(`${target.scrollHeight}px`); // Set new height based on scroll height
   };
 
+  const getComment = async () => {
+    const comment = await callGetPostComments(postId);
+    const pinnedComments = comment.filter((comment) => comment.isPinned);
+    console.log("pin: ", pinnedComments);
+    const unpinnedComments = comment.filter((comment) => !comment.isPinned);
+    const sortedComment = [
+      ...pinnedComments.sort(
+        (a, b) => new Date(b.postTime) - new Date(a.postTime),
+      ),
+      ...unpinnedComments.sort(
+        (a, b) => new Date(b.postTime) - new Date(a.postTime),
+      ),
+    ];
+    setIsUpdateComment(false);
+    await setCommentsList(sortedComment);
+  };
+
   const getPostDetails = async () => {
     const res = await callGetPost(postId);
     if (res?.id) {
       dispatch(getCurrentPostAction(res));
+      setNumberOfLikes(res.numberOfLikes);
+      setIsLiked(res.isLiked);
       // const author = await callFetchUserById(res.authorId);
       const author = isManagementPost(res)
         ? await callGetGroup(post.authorId)
         : await callFetchUserById(post.authorId);
       dispatch(getCurrentAuthors(author));
-      const comment = await callGetPostComments(postId);
-      const pinnedComments = comment.filter((comment) => comment.isPinned);
-      console.log("pin: ", pinnedComments);
-      const unpinnedComments = comment.filter((comment) => !comment.isPinned);
-
-      // Sắp xếp các comment đã pin trước, sau đó sắp xếp các comment chưa pin
-      const sortedComment = [
-        // Sắp xếp các comment đã pin theo thứ tự thời gian giảm dần
-        ...pinnedComments.sort(
-          (a, b) => new Date(b.postTime) - new Date(a.postTime),
-        ),
-        // Sắp xếp các comment chưa pin theo thứ tự thời gian giảm dần
-        ...unpinnedComments.sort(
-          (a, b) => new Date(b.postTime) - new Date(a.postTime),
-        ),
-      ];
-
-      await setCommentsList(sortedComment);
+      getComment();
       console.log("check list: ", commentsList);
       // console.log("comment: ", comment);
       setIsUpdate(false);
@@ -121,6 +126,10 @@ const PostDetails = (props: any) => {
     getPostDetails();
     console.log(commentsList);
   }, [isUpdate]);
+
+  useEffect(() => {
+    getComment();
+  }, [isUpdateComment]);
 
   const handleImageSlider = (type: string) => {
     // console.log(type);
@@ -142,12 +151,16 @@ const PostDetails = (props: any) => {
   };
 
   const handleLikePost = async () => {
-    // console.log(post.isLiked);
+    console.log(isLiked);
 
-    const type = post.isLiked ? "unlike" : "like";
-    const res = await callHandleLikePost(post.id, type);
+    const type = isLiked ? "unlike" : "like";
+    setIsLiked(!isLiked);
+    type === "like"
+      ? setNumberOfLikes(numberOfLikes + 1)
+      : setNumberOfLikes(numberOfLikes - 1);
+    await callHandleLikePost(post.id, type);
     // console.log(">>>check res: ", res);
-    setIsUpdate(true);
+    // setIsUpdate(true);
   };
 
   const handleChangeCommentInput = (e) => {
@@ -168,7 +181,7 @@ const PostDetails = (props: any) => {
       post.type === assignmentStatus.PENDING
         ? await callTeacherComment(post.id, req)
         : await callCommentToPost(post.id, commentInput);
-    setIsUpdate(true);
+    setIsUpdateComment(true);
     // console.log(res);
     // console.log("press Enter");
     setCommentInput("");
@@ -223,7 +236,7 @@ const PostDetails = (props: any) => {
     type === "pin"
       ? await callPinComment(commentId)
       : await callUnpinComment(commentId);
-    setIsUpdate(true);
+    setIsUpdateComment(true);
   };
 
   console.log(theme[post.orientation]);
@@ -406,7 +419,7 @@ const PostDetails = (props: any) => {
             >
               <div className="flex">
                 {post.type != assignmentStatus.PENDING ? (
-                  post.isLiked ? (
+                  isLiked ? (
                     <IoIosHeart
                       className={"w-6 h-6"}
                       style={{ color: `${theme[post.orientation]?.textColor}` }}
@@ -421,7 +434,7 @@ const PostDetails = (props: any) => {
                   )
                 ) : null}
                 {post.type != assignmentStatus.PENDING && (
-                  <p className={" text-base ml-2"}>{post.numberOfLikes}</p>
+                  <p className={" text-base ml-2"}>{numberOfLikes}</p>
                 )}
               </div>
               <div>
@@ -454,19 +467,23 @@ const PostDetails = (props: any) => {
                             </p>
                           </Col>
                         </div>
-                        {comment?.isPinned === true ? (
-                          <AiFillPushpin
-                            className={"cursor-pointer h-5 w-5"}
-                            onClick={() =>
-                              handlePinComment(comment.id, "unpin")
-                            }
-                          />
-                        ) : (
-                          <AiOutlinePushpin
-                            className={"cursor-pointer h-5 w-5"}
-                            onClick={() => handlePinComment(comment.id, "pin")}
-                          />
-                        )}
+                        {user.id === post.submitterId ? (
+                          comment?.isPinned === true ? (
+                            <AiFillPushpin
+                              className={"cursor-pointer h-5 w-5"}
+                              onClick={() =>
+                                handlePinComment(comment.id, "unpin")
+                              }
+                            />
+                          ) : (
+                            <AiOutlinePushpin
+                              className={"cursor-pointer h-5 w-5"}
+                              onClick={() =>
+                                handlePinComment(comment.id, "pin")
+                              }
+                            />
+                          )
+                        ) : null}
                       </div>
                       <p
                         className={"mt-3  ml-12 max-w-full"}

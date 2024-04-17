@@ -303,7 +303,7 @@ const OrientationPostsList = (props: any) => {
         className={
           "h-full w-full mx-auto mb-8 grid grid-cols-10 overflow-hidden"
         }
-      // style={{ overflowY: "scroll" }}
+        // style={{ overflowY: "scroll" }}
       >
         <div className={"col-span-1 flex justify-center min-h-screen"}>
           <div
@@ -328,7 +328,7 @@ const OrientationPostsList = (props: any) => {
         </div>
 
         <div className={"col-span-9"}>
-          <div className={"italic font-Arial text-lg"}>
+          <div className={"italic font-Arial xl:text-sm text-xs"}>
             {theme[orientationName].greeting}
           </div>
           <div
