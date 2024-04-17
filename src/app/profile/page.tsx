@@ -7,6 +7,8 @@ import { ROLE_STUDENT } from "@/utils/constant";
 import Cropper from "@/components/Cropper";
 import { callGetPageFavoriteDocuments } from "@/apis/userAPI";
 import { formatDocumentTitle } from "@/app/library/[documentId]/page";
+import { FormatDate } from "@/utils/formatDate";
+import { useRouter } from "next/navigation";
 // import "./profile.scss";
 
 const Profile = () => {
@@ -14,6 +16,7 @@ const Profile = () => {
   const [src, setSrc] = useState(null);
   const [preview, setPreview] = useState(null);
   const [isRendered, setIsRendered] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setIsRendered(true);
@@ -75,10 +78,10 @@ const Profile = () => {
 
             <ul className="pl-2">
               {favoriteDocuments &&
-                favoriteDocuments.data.map((document, index) => {
+                favoriteDocuments?.data?.map((document, index) => {
                   return (
                     <li
-                      key={document.id}
+                      key={index}
                       className="hover:text-blue_5 line-clamp-2 text-[0.9rem] mb-2 cursor-pointer"
                       onClick={() => {
                         router.push(`/library/${document.id}`);
@@ -111,7 +114,7 @@ const Profile = () => {
                 <UserInfo label={"Tên tài khoản: "} value={user.username} />
                 <UserInfo
                   label={"Ngày sinh: "}
-                  value={user.dateOfBirth.split("").reverse().join("")}
+                  value={FormatDate(user.dateOfBirth)}
                 />
                 <UserInfo label={"Giới tính: "} value={user.gender} />
                 <UserInfo

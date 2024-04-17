@@ -16,15 +16,26 @@ export const callGetTest = (testId: number) => {
 export const callGetTestByDocument = (formData: FormData) => {
   const documentId = formData.get("documentId") as number;
   const type = formData.get("type") as string;
-  console.log(documentId, type);
-  // instance.defaults.headers.common = {
-  //   Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //   "Content-Type": "multipart/form-data",
-  // };
   return instance.get(`documents/${documentId}/tests`, {
     params: {
       documentId: documentId,
       type: type,
     },
   });
+};
+
+export const callSubmitTest = (testId: number, testAnswer) => {
+  return instance.post(`tests/${testId}/submit`, testAnswer);
+};
+
+export const callGetUserTestHistory = (testId: number) => {
+  return instance.get(`tests/${testId}/user-history`);
+};
+
+export const callGetTestHistory = (testId: number) => {
+  return instance.get(`tests/${testId}/history/`);
+};
+
+export const callGetTestHistoryByHistoryId = (historyId: number) => {
+  return instance.get(`tests/history/${historyId}`);
 };

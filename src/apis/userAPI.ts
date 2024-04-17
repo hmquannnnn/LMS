@@ -8,8 +8,8 @@ export const callChangeAvatar = (formData: FormData) => {
   instance.defaults.headers.common = {
     Authorization: `Bearer ${localStorage.getItem("token")}`,
     "Content-Type": "multipart/form-data",
-    // "Conten-Type": "application/json",
   };
+  console.log(formData.get("file"));
   return instance.post(`/users/update-avatar`, formData);
 };
 
