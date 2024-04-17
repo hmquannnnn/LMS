@@ -213,7 +213,7 @@ const DocumentIdPage = ({ params }) => {
       <title>{documentTitle.current}</title>
       <div className="flex relative w-full px-10">
 
-        <div className="min-h-full min-w-[300px] max-w-[300px]">
+        <div className="min-h-full min-w-[20%] max-w-[20%]">
           <div className=" h-full border-2 rounded-xl pl-4 pt-4 pr-6">
             <div className="flex">
 
@@ -265,7 +265,7 @@ const DocumentIdPage = ({ params }) => {
         </div>
 
 
-        <div className="flex flex-0 justify-start max-w-[1080] flex-col mx-auto pl-10  mr-[4vw] ">
+        <div className="flex flex-0 justify-start max-w-[80%] flex-col mx-auto pl-10  mr-[4vw] ">
           <div className=" pl-10 pr-20 mt-4">
             <Breadcrumb
               items={[
