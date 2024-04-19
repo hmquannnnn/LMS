@@ -260,92 +260,115 @@ const DocumentIdPage = ({ params }) => {
             </ul>
           </div>
         </div>
-      </div>
-      <div className="fixed right-0 flex flex-col gap-2 w-fit  pr-[2vw] pt-56 ">
-        <FacebookIcon
-          onClick={() => {
-            window.open(
-              "https://www.facebook.com/sharer/sharer.php?u=" +
-              NEXT_PUBLIC_FRONTEND_URL +
-              pathName,
-              "facebook-share-dialog",
-              "width=600,height=600",
-            );
-          }}
-        />
-        <TwitterIcon
-          onClick={() => {
-            window.open(
-              "https://twitter.com/intent/tweet?url=" +
-              NEXT_PUBLIC_FRONTEND_URL +
-              pathName,
-              "twitter-share-dialog",
-              "width=600,height=600",
-            );
-          }}
-        />
-        <div className="h-[1px] bg-gray-300 mx-1.5"></div>
 
-        {(!isLiked || isLiked == null) && (
-          <HeartLikeIcon onClick={() => onLike()} />
-        )}
-        {isLiked && <HeartUnLikeIcon onClick={() => onUnLike()} />}
-      </div>
 
-      <div className="flex justify-start flex-col mx-auto ml-[20vw] pr-[5vw] mr-[4vw] ">
+        <div className="flex flex-0 justify-start max-w-[80%] flex-col mx-auto pl-10  mr-[4vw] ">
+          <div className=" pl-10 pr-20 mt-4">
+            <Breadcrumb
+              items={[
+                {
+                  href: "/library",
+                  title: (
+                    <div className="flex group ">
+                      <svg
+                        className="group-hover:fill-black"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="#AAA"
+                        x="0px"
+                        y="0px"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M 12 2.0996094 L 1 12 L 4 12 L 4 21 L 11 21 L 11 15 L 13 15 L 13 21 L 20 21 L 20 12 L 23 12 L 12 2.0996094 z M 12 4.7910156 L 18 10.191406 L 18 11 L 18 19 L 15 19 L 15 13 L 9 13 L 9 19 L 6 19 L 6 10.191406 L 12 4.7910156 z"></path>
+                      </svg>
+                      &nbsp;
+                      <span>Thư viện</span>
+                    </div>
+                  ),
+                },
+                {
+                  href: "/library/topics/" + currentDocument?.topic,
+                  title: (
+                    <>
+                      <span>{topicMapping[currentDocument?.topic]}</span>
+                    </>
+                  ),
+                },
+              ]}
+            />
+            {data && (
+              <div className="font-headingOpenSans font-[550] mx-auto my-0  text-[2.5rem] mt-[0.25em] mb-[0.25em]">
+                {documentTitle.current}
+              </div>
+            )}
 
-        <div className=" pl-10 pr-20 mt-4">
-          <Breadcrumb
-            items={[
-              {
-                href: '/library',
-                title: <div className="flex group " >
-                  <svg className="group-hover:fill-black" xmlns="http://www.w3.org/2000/svg" fill="#AAA" x="0px" y="0px" width="20" height="20" viewBox="0 0 24 24">
-                    <path d="M 12 2.0996094 L 1 12 L 4 12 L 4 21 L 11 21 L 11 15 L 13 15 L 13 21 L 20 21 L 20 12 L 23 12 L 12 2.0996094 z M 12 4.7910156 L 18 10.191406 L 18 11 L 18 19 L 15 19 L 15 13 L 9 13 L 9 19 L 6 19 L 6 10.191406 L 12 4.7910156 z"></path>
-                  </svg>
-                  &nbsp;
-                  <span>Thư viện</span>
-                </div>,
-              },
-              {
-                href: '/library/topics/' + currentDocument?.topic,
-                title: (
-                  <>
-                    {/* <UserOutlined /> */}
-                    <span>{topicMapping[currentDocument?.topic]}</span>
-                  </>
-                ),
+
+            {data && <NotionRenderer blockMap={data} fullPage hideHeader />}
+          </div>
+          <div className={"flex flex-row justify-end mb-5 mt-5"}>
+            <Button
+              className={
+                "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
               }
-            ]}
-          />
-          {data && (
-            <div className="font-headingOpenSans font-[550] mx-auto my-0  text-[2.5rem] mt-[0.25em] mb-[0.25em]">
-              {documentTitle.current}
-            </div>
-          )}
-          {/* {postTime.current && (
+              onClick={() => router.push(`/library/${document.id}/counsellings`)}
+            >
+              Trải nghiệm hướng nghiệp
+            </Button>
+            <Button
+              className={
+                "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
+              }
+              onClick={() => handleDirectToTest("READING")}
+            >
+              {currentDocument?.type === "TEXT" ? "Đọc hiểu" : "Nói và nghe"}
+            </Button>
+            <Button
+              className={
+                "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded"
+              }
+              onClick={() => handleDirectToTest("WRITING")}
+            >
+              Viết
+            </Button>
+          </div>
+        </div>
+        {/* {postTime.current && (
             <p className="mx-auto my-0  text-sm text-gray-500">
               {postTime.current}
             </p>
           )} */}
 
-          {data && <NotionRenderer blockMap={data} fullPage hideHeader />}
-        </div>
-        <div className={"flex flex-row justify-end mb-5"}>
-          <Button
-            className={
-              "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
-            }
-            onClick={() => handleDirectToTest("READING")}
-          >
-            Nói và nghe
-          </Button>
-          <Button
-            className={"bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded"}
-            onClick={() => handleDirectToTest("WRITING")}
-          >
-            Viết
-          </Button>
+        <div className="fixed right-0 flex flex-col gap-2 w-fit  pr-[2vw] pt-56 ">
+
+          <FacebookIcon
+            onClick={() => {
+              window.open(
+                "https://www.facebook.com/sharer/sharer.php?u=" +
+                NEXT_PUBLIC_FRONTEND_URL +
+                pathName,
+                "facebook-share-dialog",
+                "width=600,height=600",
+              );
+            }}
+          />
+          <TwitterIcon
+            onClick={() => {
+              window.open(
+                "https://twitter.com/intent/tweet?url=" +
+                NEXT_PUBLIC_FRONTEND_URL +
+                pathName,
+                "twitter-share-dialog",
+                "width=600,height=600",
+              );
+            }}
+          />
+          <div className="h-[1px] bg-gray-300 mx-1.5"></div>
+
+          {(!isLiked || isLiked == null) && (
+            <HeartLikeIcon onClick={() => onLike()} />
+          )}
+          {isLiked && <HeartUnLikeIcon onClick={() => onUnLike()} />}
         </div>
       </div>
 
