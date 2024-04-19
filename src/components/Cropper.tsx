@@ -2,10 +2,12 @@
 
 import { useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
-import { Modal, Slider } from "antd";
+import { Avatar, Modal, Slider } from "antd";
 import { callChangeAvatar } from "@/apis/userAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { doGetAccountAction } from "@/redux/slices/accountSlice";
+import { UserOutlined } from "@ant-design/icons";
+import imageCompression from "browser-image-compression";
 // import "antd/dist/antd.css";
 
 const boxStyle = {
@@ -23,6 +25,22 @@ const modalStyle = {
   alignItems: "center",
 };
 
+const compressImage = async (canvas) => {
+	const options = {
+		maxSizeMB: 200, // Giới hạn kích thước của hình ảnh sau khi nén
+		maxWidthOrHeight: 1920, // Giới hạn chiều rộng hoặc chiều cao tối đa
+		useWebWorker: true, // Sử dụng Web Worker để tăng hiệu suất
+	};
+	
+	try {
+		const blob = await imageCompression(canvas.toDataURL('image/jpeg'), options);
+		return new File([blob], "newAvatar.jpg");
+	} catch (error) {
+		console.error('Error compressing image:', error);
+		return null;
+	}
+};
+
 const CropperModal = ({ src, modalOpen, setModalOpen, setPreview }) => {
   const [slideValue, setSlideValue] = useState(10);
   const cropRef = useRef(null);
@@ -31,7 +49,6 @@ const CropperModal = ({ src, modalOpen, setModalOpen, setPreview }) => {
   const handleSave = async () => {
     if (cropRef) {
       const dataUrl = cropRef.current.getImage().toDataURL();
-      console.log(dataUrl.slice(22));
       const result = await fetch(dataUrl);
       const blob = await result.blob();
       await setPreview(URL.createObjectURL(blob));
@@ -129,7 +146,7 @@ const Cropper = ({ imgSrc }) => {
       {/*  <h1>React Avatar Cropper</h1>*/}
       {/*  <hr />*/}
       {/*</header>*/}
-      <div className="container max-w-full rounded bg-blue_1 h-full flex items-center justify-center flex-col">
+      <div className="container max-w-full rounded bg-purple_4 h-full flex items-center justify-center flex-col">
         <CropperModal
           modalOpen={modalOpen}
           src={src}
@@ -158,6 +175,12 @@ const Cropper = ({ imgSrc }) => {
               // marginBottom: "10px",
             }}
           />
+          <Avatar
+            className={
+              "largelaptop:h-44 largelaptop:w-44 2xl:w-36 2xl:h-36 h-32 w-32 2xl:mb-2 mb-1"
+            }
+            icon={<UserOutlined />}
+          />
         </div>
         <p
           className={
@@ -170,7 +193,7 @@ const Cropper = ({ imgSrc }) => {
           href="/"
           onClick={handleInputClick}
           className={
-            "bg-[#95daf2] text-blue_5 2xl:py-2 2xl:px-6 rounded mx-auto block w-[60%] text-center text-sm py-1 px-4"
+            "bg-purple_7 2xl:py-2 2xl:px-6 rounded mx-auto block w-[60%] text-center text-white font-bold text-sm py-1 px-4"
           }
         >
           {/*<FcAddImage className="add-icon" />*/}

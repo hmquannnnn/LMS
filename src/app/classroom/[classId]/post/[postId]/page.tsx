@@ -6,15 +6,10 @@ import {
   getCurrentAuthors,
   getCurrentPostAction,
 } from "@/redux/slices/postSlice";
-import { assignmentStatus } from "@/utils/constant";
-import { Avatar, Col, Spin } from "antd";
+import { assignmentStatus, colors, ROLE_TEACHER } from "@/utils/constant";
+import { Avatar, Col, Modal, Spin } from "antd";
 import { callFetchUserById, callGetGroup } from "@/apis/userAPI";
-import {
-  IoIosArrowBack,
-  IoIosArrowForward,
-  IoIosHeart,
-  IoIosHeartEmpty,
-} from "react-icons/io";
+import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import { UserOutlined } from "@ant-design/icons";
 import {
   callCommentToPost,
@@ -30,6 +25,7 @@ import { AiFillPushpin, AiOutlinePushpin } from "react-icons/ai";
 import { callPinComment, callUnpinComment } from "@/apis/commentsAPI";
 import { FaRegPaperPlane } from "react-icons/fa";
 import { theme } from "@/app/classroom/[classId]/orientations/[orientationName]/page";
+import { useRouter } from "next/navigation";
 
 interface button {
   PREV: string;
@@ -54,6 +50,7 @@ const PostDetails = (props: any) => {
 
   const [mediaIndex, setMediaIndex] = useState(0);
   const [isUpdate, setIsUpdate] = useState(true);
+  const [isUpdateComment, setIsUpdateComment] = useState(true);
   const [commentInput, setCommentInput] = useState("");
   const [textAreaHeight, setTextAreaHeight] = useState("auto");
   const textAreaRef = useRef(null);
@@ -61,6 +58,8 @@ const PostDetails = (props: any) => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [file, setFile] = useState<string>({ url: "" });
   const [commentsList, setCommentsList] = useState([]);
+  const [isLiked, setIsLiked] = useState(false);
+  const [numberOfLikes, setNumberOfLikes] = useState(0);
   // const [numPages, setNumPages] = useState(null);
   // const [pageNumber, setPageNumber] = useState(1);
 
@@ -85,22 +84,36 @@ const PostDetails = (props: any) => {
       setTextAreaHeight(`${target.scrollHeight}px`); // Set new height based on scroll height
   };
 
+  const getComment = async () => {
+    const comment = await callGetPostComments(postId);
+    const pinnedComments = comment.filter((comment) => comment.isPinned);
+    console.log("pin: ", pinnedComments);
+    const unpinnedComments = comment.filter((comment) => !comment.isPinned);
+    const sortedComment = [
+      ...pinnedComments.sort(
+        (a, b) => new Date(b.postTime) - new Date(a.postTime),
+      ),
+      ...unpinnedComments.sort(
+        (a, b) => new Date(b.postTime) - new Date(a.postTime),
+      ),
+    ];
+    setIsUpdateComment(false);
+    await setCommentsList(sortedComment);
+  };
+
   const getPostDetails = async () => {
     const res = await callGetPost(postId);
     if (res?.id) {
       dispatch(getCurrentPostAction(res));
+      setNumberOfLikes(res.numberOfLikes);
+      setIsLiked(res.isLiked);
       // const author = await callFetchUserById(res.authorId);
       const author = isManagementPost(res)
         ? await callGetGroup(post.authorId)
         : await callFetchUserById(post.authorId);
       dispatch(getCurrentAuthors(author));
-      const comment = await callGetPostComments(postId);
-      const sortedComment = await comment.sort((a, b) => {
-        return new Date(b.postTime) - new Date(a.postTime);
-      });
-
-
-      await setCommentsList(comment);
+      getComment();
+      console.log("check list: ", commentsList);
       // console.log("comment: ", comment);
       setIsUpdate(false);
     }
@@ -113,6 +126,10 @@ const PostDetails = (props: any) => {
     getPostDetails();
     console.log(commentsList);
   }, [isUpdate]);
+
+  useEffect(() => {
+    getComment();
+  }, [isUpdateComment]);
 
   const handleImageSlider = (type: string) => {
     // console.log(type);
@@ -134,12 +151,16 @@ const PostDetails = (props: any) => {
   };
 
   const handleLikePost = async () => {
-    // console.log(post.isLiked);
+    console.log(isLiked);
 
-    const type = post.isLiked ? "unlike" : "like";
-    const res = await callHandleLikePost(post.id, type);
+    const type = isLiked ? "unlike" : "like";
+    setIsLiked(!isLiked);
+    type === "like"
+      ? setNumberOfLikes(numberOfLikes + 1)
+      : setNumberOfLikes(numberOfLikes - 1);
+    await callHandleLikePost(post.id, type);
     // console.log(">>>check res: ", res);
-    setIsUpdate(true);
+    // setIsUpdate(true);
   };
 
   const handleChangeCommentInput = (e) => {
@@ -160,15 +181,54 @@ const PostDetails = (props: any) => {
       post.type === assignmentStatus.PENDING
         ? await callTeacherComment(post.id, req)
         : await callCommentToPost(post.id, commentInput);
-    setIsUpdate(true);
+    setIsUpdateComment(true);
     // console.log(res);
     // console.log("press Enter");
     setCommentInput("");
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+    setIsUpdate(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    router.push(`classroom/${classId}/pending-posts`);
+  };
+
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+
+  const showRejectModal = () => {
+    setIsRejectModalOpen(true);
+  };
+
+  const handleRejectOk = () => {
+    setIsRejectModalOpen(false);
+    setIsUpdate(true);
+  };
+
+  const handleRejectCancel = () => {
+    setIsRejectModalOpen(false);
+    router.push(`classroom/${classId}/pending-posts`);
+  };
+
   const handlePost = async (postId: number, action: string) => {
     const res = await callHandlePendingPost(postId, action);
-    setIsUpdate(true);
+    console.log("action: ", res);
+    if (res?.type === assignmentStatus.APPROVED) {
+      console.log("ok");
+      await showModal();
+    } else {
+      await showRejectModal();
+    }
+    // setIsUpdate(true);
     // console.log(">> check res: ", res);
   };
 
@@ -176,7 +236,7 @@ const PostDetails = (props: any) => {
     type === "pin"
       ? await callPinComment(commentId)
       : await callUnpinComment(commentId);
-    setIsUpdate(true);
+    setIsUpdateComment(true);
   };
 
   console.log(theme[post.orientation]);
@@ -188,52 +248,12 @@ const PostDetails = (props: any) => {
         className={
           "flex justify-center max-h-[80vh] h-[80vh] mx-[2vw] my-5 rounded-2xl pr-5 "
         }
-        // style={{
-        //   border: `1px solid ${theme[post.orientation]?.textColor}`,
-        //   color: `${theme[post.orientation]?.textColor}`,
-        //   --orientation-color: theme[post.orientation]?.textColor
-        // }}
         style={{
           "--orientation-color": theme[post.orientation]?.textColor,
           color: `${theme[post.orientation]?.textColor}`,
-          border: `1px solid ${theme[post.orientation]?.textColor}`,
+          // border: `1px solid ${theme[post.orientation]?.textColor}`,
         }}
       >
-        {/* <Document className={"h-full overflow-y-scroll"} file={file.url} onLoadSuccess={onDocumentLoadSuccess}> */}
-        {/* <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} canvasBackground='white' /> */}
-        {/* {Array.from(
-            new Array(numPages),
-            (el, index) => (
-              <Page
-                renderTextLayer={false} renderAnnotationLayer={false} canvasBackground='white'
-                key={`page_${index + 1}`}
-                pageNumber={index + 1}
-              />
-            ),
-          )} */}
-        {/* </Document> */}
-        {/* <div>
-                      Page {pageNumber} of {numPages}
-                    </div> */}
-        {/* <div>
-                      <p>
-                        Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
-                      </p>
-                      <button
-                        type="button"
-                        disabled={pageNumber <= 1}
-                        onClick={previousPage}
-                      >
-                        Previous
-                      </button>
-                      <button
-                        type="button"
-                        disabled={pageNumber >= numPages}
-                        onClick={nextPage}
-                      >
-                        Next
-                      </button>
-                    </div> */}
         {post?.medias?.length > 0 && (
           <div className={"w-full relative flex-col items-center"}>
             <div
@@ -241,10 +261,22 @@ const PostDetails = (props: any) => {
                 "my-auto absolute w-full flex items-center justify-center h-full z-[2]"
               }
             >
-
-              <button className="p-2 " onClick={() => handleImageSlider(buttonType.PREV)}>
-                <svg className="h-12 w-12 hover:h-[4rem] hover:w-[4rem] duration-300 ease-in-out" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              <button
+                className="p-2 "
+                onClick={() => handleImageSlider(buttonType.PREV)}
+              >
+                <svg
+                  className="h-12 w-12 hover:h-[4rem] hover:w-[4rem] duration-300 ease-in-out"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
               </button>
               {media[mediaIndex].type.includes("image") ? (
@@ -282,7 +314,6 @@ const PostDetails = (props: any) => {
               ) : media[mediaIndex].type.includes("pdf") ? (
                 <div className="w-full h-full pl-[4vw]">
                   <div classNamw="w-min">
-
                     <GoogleDocsViewer
                       width="90%"
                       height="78vh"
@@ -295,12 +326,24 @@ const PostDetails = (props: any) => {
               ) : (
                 <p>Unsupported media type</p>
               )}
-              <button className="p-2" onClick={() => handleImageSlider(buttonType.NEXT)}>
-                <svg className="h-12 w-12 hover:h-[4rem] hover:w-[4rem] duration-300 ease-in-out" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <button
+                className="p-2"
+                onClick={() => handleImageSlider(buttonType.NEXT)}
+              >
+                <svg
+                  className="h-12 w-12 hover:h-[4rem] hover:w-[4rem] duration-300 ease-in-out"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </button>
-
             </div>
             <div className="absolute w-full h-full px-10 flex justify-center items-center z-[1]">
               <Spin />
@@ -329,7 +372,7 @@ const PostDetails = (props: any) => {
           >
             <div
               className="flex items-center mb-2 text-lg"
-            // style={{ color: `${colors.green_3}` }}
+              // style={{ color: `${colors.green_3}` }}
             >
               {isManagementPost(post) ? (
                 author?.students?.length &&
@@ -359,7 +402,7 @@ const PostDetails = (props: any) => {
             </div>
             <h4
               className={"uppercase font-bold text-2xl text-center my-5"}
-            // style={{ color: `${colors.green_3}` }}
+              // style={{ color: `${colors.green_3}` }}
             >
               {post.title}
             </h4>
@@ -376,7 +419,7 @@ const PostDetails = (props: any) => {
             >
               <div className="flex">
                 {post.type != assignmentStatus.PENDING ? (
-                  post.isLiked ? (
+                  isLiked ? (
                     <IoIosHeart
                       className={"w-6 h-6"}
                       style={{ color: `${theme[post.orientation]?.textColor}` }}
@@ -391,7 +434,7 @@ const PostDetails = (props: any) => {
                   )
                 ) : null}
                 {post.type != assignmentStatus.PENDING && (
-                  <p className={" text-base ml-2"}>{post.numberOfLikes}</p>
+                  <p className={" text-base ml-2"}>{numberOfLikes}</p>
                 )}
               </div>
               <div>
@@ -424,19 +467,23 @@ const PostDetails = (props: any) => {
                             </p>
                           </Col>
                         </div>
-                        {comment?.isPinned === true ? (
-                          <AiFillPushpin
-                            className={"cursor-pointer h-5 w-5"}
-                            onClick={() =>
-                              handlePinComment(comment.id, "unpin")
-                            }
-                          />
-                        ) : (
-                          <AiOutlinePushpin
-                            className={"cursor-pointer h-5 w-5"}
-                            onClick={() => handlePinComment(comment.id, "pin")}
-                          />
-                        )}
+                        {user.id === post.submitterId ? (
+                          comment?.isPinned === true ? (
+                            <AiFillPushpin
+                              className={"cursor-pointer h-5 w-5"}
+                              onClick={() =>
+                                handlePinComment(comment.id, "unpin")
+                              }
+                            />
+                          ) : (
+                            <AiOutlinePushpin
+                              className={"cursor-pointer h-5 w-5"}
+                              onClick={() =>
+                                handlePinComment(comment.id, "pin")
+                              }
+                            />
+                          )
+                        ) : null}
                       </div>
                       <p
                         className={"mt-3  ml-12 max-w-full"}
@@ -450,11 +497,11 @@ const PostDetails = (props: any) => {
 
               <div
                 className={"mb-7 flex w-full mt-auto items-end"}
-              // style={{
-              //   position: "absolute",
-              //   bottom: "2.5rem",
-              //   // right: "5rem",
-              // }}
+                // style={{
+                //   position: "absolute",
+                //   bottom: "2.5rem",
+                //   // right: "5rem",
+                // }}
               >
                 <Avatar
                   size={40}
@@ -481,8 +528,8 @@ const PostDetails = (props: any) => {
                         : "Thêm bình luận..."
                     }
                     onChange={(e) => handleChangeCommentInput(e)}
-                  // onKeyPress={}
-                  // onKeyDown={(e) => e.key === "Enter" && handleEnter(e)}
+                    // onKeyPress={}
+                    // onKeyDown={(e) => e.key === "Enter" && handleEnter(e)}
                   />
                   <FaRegPaperPlane
                     className={`w-8 h-8 ml-3 cursor-pointer text-{${theme[post.orientation]?.textColor}}`}
@@ -494,20 +541,74 @@ const PostDetails = (props: any) => {
           </div>
         </div>
       </div>
-      {post.type === assignmentStatus.PENDING && (
+      {post.type === assignmentStatus.PENDING && user.role === ROLE_TEACHER && (
         <div className={"flex flex-row justify-center"}>
           <button
-            className="bg-red-500 text-white px-3 py-1 mr-2 rounded"
+            className="bg-white text-purple_5 border-[2px] border-purple_5 px-3 py-1 mr-2 rounded font-bold"
             onClick={() => handlePost(post.id, "reject")}
           >
             CHƯA ĐẠT
           </button>
           <button
-            className="bg-green-500 text-white px-3 py-1 mr-2 rounded"
+            className="bg-purple_7 text-white px-6 py-1 mr-2 rounded font-bold"
             onClick={() => handlePost(post.id, "approve")}
           >
             DUYỆT
           </button>
+          <Modal
+            title="Duyệt bài thành công"
+            open={isModalOpen}
+            onOk={handleOk}
+            okButtonProps={{
+              style: {
+                backgroundColor: colors.purple_7,
+                color: "white",
+                borderRadius: "8px",
+                padding: "0.25rem 1rem",
+                fontWeight: "bold",
+              },
+            }}
+            okText={"Xem bài đăng"}
+            onCancel={handleCancel}
+            cancelButtonProps={{
+              style: {
+                backgroundColor: "white",
+                color: colors.pink_5,
+                borderRadius: "8px",
+                padding: "0.25rem 1rem",
+                border: `2px solid ${colors.purple_5}`,
+                fontWeight: "bold",
+              },
+            }}
+            cancelText={"Quay lại"}
+          ></Modal>
+          <Modal
+            title="Bài làm chưa đạt"
+            open={isRejectModalOpen}
+            onOk={handleRejectOk}
+            okButtonProps={{
+              style: {
+                backgroundColor: colors.purple_7,
+                color: "white",
+                borderRadius: "8px",
+                padding: "0.25rem 1rem",
+                fontWeight: "bold",
+              },
+            }}
+            okText={"Xem bài đăng"}
+            onCancel={handleRejectCancel}
+            cancelButtonProps={{
+              style: {
+                backgroundColor: "white",
+                color: colors.purple_5,
+                borderRadius: "8px",
+                padding: "0.25rem 1rem",
+                border: `2px solid ${colors.purple_5}`,
+                fontWeight: "bold",
+              },
+            }}
+            cancelText={"Quay lại"}
+          ></Modal>
         </div>
       )}
     </div>

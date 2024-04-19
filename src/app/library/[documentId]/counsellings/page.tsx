@@ -15,13 +15,42 @@ import {
 import { FaCheck } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { Breadcrumb } from "antd";
-
+import { colors } from "@/utils/constant";
 function formatTextToHTML(content) {
   const lines = content.split("\n");
   const filteredLines = lines.filter((line) => line.trim() !== "");
   const htmlContent = filteredLines.map((line) => `<p>${line}</p>`).join("\n");
   return htmlContent;
 }
+
+
+const dummyData = [
+  {
+    "id": 0,
+    "title": "string",
+    "content": "Hãy tưởng tượng bản thân là một hướng dẫn viên du lịch địa phương. Ngày mai em cần dẫn một đoàn khách tới tham quan các địa điểm du lịch tại địa phương em…….……... Hãy chuẩn bị một bài thuyết trình dưới hình thức video để giúp đoàn khách ấy hiểu rõ hơn về văn hóa của nơi đó nhé.",
+    "createAt": "2024-04-19T17:55:22.921Z",
+    "documentId": 0,
+    "orientation": "SOCIAL"
+  },
+  {
+    "id": 0,
+    "title": "string",
+    "content": "Hãy tưởng tượng bản thân là một hướng dẫn viên du lịch địa phương. Ngày mai em cần dẫn một đoàn khách tới tham quan các địa điểm du lịch tại địa phương em…….……... Hãy chuẩn bị một bài thuyết trình dưới hình thức video để giúp đoàn khách ấy hiểu rõ hơn về văn hóa của nơi đó nhé.",
+    "createAt": "2024-04-19T17:55:22.921Z",
+    "documentId": 0,
+    "orientation": "SOCIAL"
+  },
+  {
+    "id": 0,
+    "title": "string",
+    "content": "string",
+    "createAt": "2024-04-19T17:55:22.921Z",
+    "documentId": 0,
+    "orientation": "TECHNIQUE"
+  },
+]
+
 
 const Counselling = ({ params }) => {
   const documentId = params.documentId;
@@ -46,206 +75,53 @@ const Counselling = ({ params }) => {
   const [testId, setTestId] = useState(0);
   const [numberOfWritingQuestions, setNumberOfWritingQuestions] = useState(0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const document: any = await callGetDocumentById(documentId);
-        setCurrentDocument(document);
-        const notionPageId = document.notionPageId;
-        postTime.current = formatVietnameseDateTime(
-          new Date(document.postTime),
-        );
-        documentTitle.current = document.title;
-        const response = await fetch(
-          `https://notion-api.splitbee.io/v1/page/${notionPageId}`,
-        );
-        const data = await response.json();
-        setData(data);
 
-        // add delay to show loading spinner
-        // await new Promise(resolve => setTimeout(resolve, 2000));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setNotFound(true);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const items = [
+    {
+      type: "social",
+      title: "Xã hội",
+      bgColor: colors.green_1,
+      textColor: colors.green_3,
+      svgFill: colors.green_3
+    },
+    {
+      type: "research",
+      title: "Nghiên cứu",
+      bgColor: colors.purple_1,
+      textColor: colors.purple_3,
+      svgFill: colors.purple_3
+    },
+    {
+      type: "technique",
+      title: "Kỹ thuật",
+      bgColor: colors.blue_1,
+      textColor: colors.blue_3,
+      svgFill: colors.blue_3
+    },
+    {
+      type: "management",
+      title: "Quản lý",
+      bgColor: colors.yellow_1,
+      textColor: colors.yellow_3,
+      svgFill: colors.yellow_3
+    },
+    {
+      type: "major",
+      title: "Nghiệp vụ",
+      bgColor: colors.pink_1,
+      textColor: colors.pink_3,
+      svgFill: colors.pink_3
+    },
+    {
+      type: "art",
+      title: "Nghệ thuật",
+      bgColor: colors.grey_1,
+      textColor: colors.grey_2,
+      svgFill: colors.grey_2
+    },
+  ]
 
-    fetchData();
-  }, [documentId]);
 
-  const questionCollection = useSelector(
-    (state) => state?.test?.currentTest?.questions || [],
-  );
-  const sortedQuestionCollection = [...questionCollection].sort(
-    (q1, q2) => q1.id - q2.id,
-  );
-
-  const initializeCorrectAnswer = (questions) => {
-    const initialAnswers = questions.map((question) => ({
-      questionId: question.id,
-      choices: question.choices.map((choice) => ({
-        choiceId: choice.id,
-        isPicked: choice.isAnswer,
-        content: "",
-      })),
-    }));
-    setCorrectAnswer(initialAnswers);
-  };
-
-  const initializeUserAnswers = (questions) => {
-    const initialAnswers = questions.map((question) => ({
-      questionId: question.id,
-      choices:
-        question.type === "FILL_IN_THE_BLANK"
-          ? [
-            {
-              choiceId: null,
-              isPicked: null,
-              content: "",
-            },
-          ]
-          : question.choices.map((choice) => ({
-            choiceId: choice.id,
-            isPicked: false,
-            content: "",
-          })),
-    }));
-    setUserAnswers(initialAnswers);
-  };
-
-  const initializeReadingAnswers = (questions) => {
-    initializeUserAnswers(questions);
-    initializeCorrectAnswer(questions);
-  };
-
-  const initializeWritingAnswer = (questions) => {
-    const initialValues = questions.map((question) => ({
-      id: question.id,
-      value: "",
-    }));
-    setWritingAnswerValues(initialValues);
-  };
-
-  const handleChangeWritingAnswer = (e, questionId) => {
-    const { value } = e.target;
-    console.log(documentTitle);
-    setWritingAnswerValues((prevValues) =>
-      prevValues.map((item) =>
-        item.id === questionId ? { ...item, value: value } : item,
-      ),
-    );
-  };
-  console.log("writing: ", writingAnswerValues);
-  console.log("reading: ", userAnswers);
-
-  const handleAnswerSelection = (questionIndex, choiceIndex) => {
-    setUserAnswers((prevAnswers) => {
-      const updatedAnswers = prevAnswers.map((question, index) => {
-        if (index === questionIndex) {
-          const updatedChoices = question.choices.map((choice, index) => {
-            if (index === choiceIndex) {
-              return {
-                ...choice,
-                isPicked: !choice.isPicked,
-              };
-            }
-            return choice;
-          });
-          return {
-            ...question,
-            choices: updatedChoices,
-          };
-        }
-        return question;
-      });
-      return updatedAnswers;
-    });
-  };
-
-  const updateUserAnswer = () => {
-    const updatedUserAnswers = userAnswers.map((userAnswer) => {
-      const writingAnswer = writingAnswerValues.find(
-        (writingAnswer) => writingAnswer.id === userAnswer.questionId,
-      );
-
-      if (writingAnswer) {
-        userAnswer.choices.forEach((choice) => {
-          choice.content = writingAnswer.value;
-        });
-      }
-
-      return userAnswer;
-    });
-
-    setUserAnswers(updatedUserAnswers);
-  };
-
-  const handleSubmit = async () => {
-    updateUserAnswer();
-    console.log("final answer: ", userAnswers);
-    const res = await callSubmitTest(testId, userAnswers);
-    console.log("check submit response: ", res);
-    setShowTest(false);
-    setIsSubmitted(true);
-    setShowAnswerHints(true);
-    setShowHints(false);
-    window.scrollTo({
-      top: contentRef.current ? contentRef.current.offsetTop - 80 : 0,
-      behavior: "smooth",
-    });
-    if (testType === "READING") {
-      let score = 0;
-      userAnswers.forEach((userAnswer, index) => {
-        const correctAnswer = questionCollection[index].choices.map(
-          (choice) => choice.isAnswer,
-        );
-        if (
-          JSON.stringify(
-            userAnswer.choices.map((choice) => choice.isPicked),
-          ) === JSON.stringify(correctAnswer)
-        ) {
-          score++;
-        }
-      });
-      score -= numberOfWritingQuestions;
-      setScore(score);
-    }
-  };
-
-  const handleRefresh = () => {
-    setShowTest(true);
-    setIsRerendered(true);
-    setIsSubmitted(false);
-    setShowHints(true);
-    setShowAnswerHints(false);
-    initializeUserAnswers(questionCollection);
-    initializeWritingAnswer(questionCollection);
-    window.scrollTo({
-      top: contentRef.current ? contentRef.current.offsetTop - 80 : 0,
-      behavior: "smooth",
-    });
-  };
-
-  const getTest = async () => {
-    const type =
-      testType === "READING" ? testTypes.MULTIPLE_CHOICE : testTypes.WRITING;
-    const formData = new FormData();
-    formData.append("documentId", documentId);
-    formData.append("type", type);
-    const res = await callGetTestByDocument(formData);
-    res.questions.sort((a, b) => {
-      return a.id - b.id;
-    });
-
-    setTestId(res.id);
-    const countFillInTheBlankQuestions = res.questions.filter(
-      (question) => question.type === "FILL_IN_THE_BLANK",
-    ).length;
-    setNumberOfWritingQuestions(countFillInTheBlankQuestions);
-    dispatch(getCurrentTest(res));
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -268,25 +144,7 @@ const Counselling = ({ params }) => {
     fetchData();
   }, [documentId]);
 
-  useEffect(() => {
-    getTest();
-  }, []);
 
-  useEffect(() => {
-    initializeReadingAnswers(questionCollection);
-    initializeWritingAnswer(questionCollection);
-  }, [questionCollection, isRerendered]);
-
-  const indexToAlphabet = (index) => {
-    return String.fromCharCode(65 + index);
-  };
-
-  const compareCorrectAnswer = (questionIndex, choiceIndex) => {
-    return (
-      userAnswers[questionIndex].choices[choiceIndex].isPicked ===
-      correctAnswer[questionIndex].choices[choiceIndex].isPicked
-    );
-  };
 
   return (
     <>
@@ -354,6 +212,28 @@ const Counselling = ({ params }) => {
         </div>
         <div className="px-10">
           <div className="font-bold">Tham khảo bộ nhiệm vụ trải nghiệm nghề nghiệp dưới dây và hãy chọn thực hiện một nhiệm vụ em cảm thấy phù hợp nhé!</div>
+          {items.map((item, index) => {
+            if (dummyData.filter(d => d.orientation.toLowerCase() == item.type) == 0) return null;
+            return (
+              <div key={index} className="mt-5">
+                <div className="w-full text-center font-bold py-1" style={{ background: item.bgColor, color: item.textColor }}>
+                  {item.title}
+                </div>
+                {dummyData.filter(d => d.orientation.toLowerCase() == item.type).map((item1, index) =>
+                  <div key={index} className="flex mt-5 gap-2 ml-4">
+                    {/* <div>{item.title}</div> */}
+                    <div>
+                      <svg width="20" height="21" xmlns="http://www.w3.org/2000/svg" overflow="hidden"><g transform="translate(-687 -199)"><path d="M17.7083 7.08333 7.39583 7.08333 11.25 6.22917C11.8125 6.10417 12.1667 5.54167 12.0417 4.97917 11.9167 4.41667 11.3542 4.0625 10.7917 4.1875L5.16667 5.4375C4.95833 5.5 4.75 5.625 4.58333 5.83333L2.8125 8.125 1.25 8.125 1.25 14.1667 2.29167 14.1667C3.77083 14.1667 3.875 15.8333 6.66667 15.8333 7.33333 15.8333 9.54167 15.8333 10.4167 15.8333 11.1042 15.8333 11.6667 15.2708 11.6667 14.5833 11.6667 14.25 11.5417 13.9583 11.3333 13.75 11.375 13.75 11.4167 13.75 11.4583 13.75 12.1458 13.75 12.7083 13.1875 12.7083 12.5 12.7083 12.1667 12.5833 11.8542 12.3542 11.625 12.9167 11.5 13.3333 11 13.3333 10.4167 13.3333 9.72917 12.7708 9.16667 12.0833 9.16667L17.7083 9.16667C18.2917 9.16667 18.75 8.70833 18.75 8.125 18.75 7.54167 18.2917 7.08333 17.7083 7.08333Z"
+                        fill={item.svgFill} transform="matrix(1 0 0 1.05 687 199)" /></g></svg>
+                    </div>
+                    <div>{item1.content}</div>
+                  </div>
+                )}
+
+              </div>
+            )
+          })
+          }
         </div>
       </div>
     </>

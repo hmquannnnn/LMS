@@ -5,18 +5,18 @@ import { FaRegHandPointRight } from "react-icons/fa";
 const SocialExample = ({ color }) => {
   return (
     <>
-      <div className={"flex flex-row items-end"}>
+      <div className={"flex flex-row items-end my-10"}>
         <div>
-          <div className={"flex flex-row items-center justify-around"}>
+          <div className={"flex flex-row items-center justify-around p-32"}>
             <p className={"text-2xl font-bold mb-5"}>TRUYỀN THÔNG</p>
             <img
-              className={"mr-5 w-[500px]"}
+              className={"mx-10 w-[500px]"}
               src={"/images/xahoi/truyenthong.svg"}
             />
             <p className={"text-2xl font-bold mb-5"}>BÁO CHÍ</p>
           </div>
 
-          <p>
+          <p className={"mb-5"}>
             Đây là một nhóm ngành chuyên về lĩnh vực truyền tải thông tin, quảng
             bá hình ảnh, thương hiệu,… đến công chúng. Các ngành học trong nhóm
             ngành Truyền thông, Báo chí bao gồm báo chí, truyền hình, phát
@@ -159,11 +159,14 @@ const SocialExample = ({ color }) => {
           </div>
         </div>
       </div>
-      <div className={"flex flex-row items-end"}>
-        <img className={"mr-5"} src={"/images/xahoi/luatvaquanlynhanuoc.svg"} />
+      <div className={"flex flex-row items-end my-10"}>
+        <img
+          className={"mr-16"}
+          src={"/images/xahoi/luatvaquanlynhanuoc.svg"}
+        />
         <div>
           <p className={"text-2xl font-bold mb-5"}>LUẬT VÀ QUẢN LÝ NHÀ NƯỚC</p>
-          <p>
+          <p className={"mb-5"}>
             Những người theo Luật là những người có nhiệm vụ bảo vệ pháp luật,
             bảo vệ quyền và lợi ích hợp pháp của cá nhân, tổ chức trong xã hội.
             Họ chính là những luật sư, thẩm phán, kiểm sát viên, chuyên viên tư
@@ -201,10 +204,10 @@ const SocialExample = ({ color }) => {
           </div>
         </div>
       </div>
-      <div className={"flex flex-row items-end"}>
+      <div className={"flex flex-row items-end my-10"}>
         <div>
           <p className={"text-2xl font-bold mb-5"}>GIÁO DỤC VÀ ĐÀO TẠO</p>
-          <p>
+          <p className={"mb-5"}>
             Giáo dục là nền tảng của sự phát triển của mỗi cá nhân và xã hội.
             Bởi vậy vai trò của những cá nhân theo nhóm ngành này luôn chiếm một
             vị trí đặc biệt quan trọng, điển hình đó là những người thầy giáo,
@@ -238,13 +241,13 @@ const SocialExample = ({ color }) => {
             </p>
           </div>
         </div>
-        <img className={"mr-5"} src={"/images/xahoi/giaoducvadaotao.svg"} />
+        <img className={"ml-16"} src={"/images/xahoi/giaoducvadaotao.svg"} />
       </div>
-      <div className={"flex flex-row items-end"}>
-        <img className={"mr-5"} src={"/images/xahoi/ngonnguvangoaigiao.svg"} />
+      <div className={"flex flex-row items-end my-10"}>
+        <img className={"mr-16"} src={"/images/xahoi/ngonnguvangoaigiao.svg"} />
         <div>
           <p className={"text-2xl font-bold mb-5"}>NGÔN NGỮ VÀ NGOẠI GIAO</p>
-          <p>
+          <p className={"mb-5"}>
             Đây là một lĩnh vực học tập và nghiên cứu về việc giao tiếp và
             truyền đạt thông tin giữa các quốc gia và văn hóa khác nhau bằng các
             ngôn ngữ nước ngoài. Ngành này tập trung vào việc phát triển kỹ năng
@@ -280,10 +283,10 @@ const SocialExample = ({ color }) => {
           </div>
         </div>
       </div>
-      <div className={"flex flex-row items-end"}>
+      <div className={"flex flex-row items-end my-10"}>
         <div>
           <p className={"text-2xl font-bold mb-5"}>VĂN HÓA VÀ DU LỊCH</p>
-          <p>
+          <p className={"mb-5"}>
             Tập trung vào việc khám phá, bảo tồn và phát triển các giá trị văn
             hóa, du lịch và di sản của một quốc gia hoặc vùng đất cụ thể. Trong
             ngành Văn hóa và Du lịch, các em sẽ được học về các yếu tố văn hóa,
@@ -319,7 +322,7 @@ const SocialExample = ({ color }) => {
             </p>
           </div>
         </div>
-        <img className={"mr-5"} src={"/images/xahoi/vanhoavadulich.svg"} />
+        <img className={"ml-16"} src={"/images/xahoi/vanhoavadulich.svg"} />
       </div>
     </>
   );

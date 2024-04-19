@@ -7,6 +7,8 @@ import { ROLE_STUDENT } from "@/utils/constant";
 import Cropper from "@/components/Cropper";
 import { callGetPageFavoriteDocuments } from "@/apis/userAPI";
 import { formatDocumentTitle } from "@/app/library/[documentId]/page";
+import { FormatDate } from "@/utils/formatDate";
+import { useRouter } from "next/navigation";
 // import "./profile.scss";
 
 const Profile = () => {
@@ -14,6 +16,7 @@ const Profile = () => {
   const [src, setSrc] = useState(null);
   const [preview, setPreview] = useState(null);
   const [isRendered, setIsRendered] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setIsRendered(true);
@@ -44,8 +47,8 @@ const Profile = () => {
   }, [user]);
   return (
     <div className={"block mx-auto w-[90%]"}>
-      <h3 className={"font-bold text-2xl text-blue_8"}>THÔNG TIN CÁ NHÂN</h3>
-      <div className={"bg-blue_8 h-[1px] my-3 w-[70%]"} />
+      <h3 className={"font-bold text-2xl text-purple_5"}>THÔNG TIN CÁ NHÂN</h3>
+      <div className={"bg-purple_5 h-[1px] my-3 w-[70%]"} />
       <div
         className="min-h-[85vh] grid grid-cols-12 h-fit"
         // style={{ backgroundImage: "url(/sky.png)" }}
@@ -56,7 +59,7 @@ const Profile = () => {
         <div className="col-span-3 flex flex-col h-full gap-10 pr-10">
           {/* bg-gradient-to-br from-pink_1 to-yellow_1 */}
           {/* <div className="h-40 border-2  rounded-xl "></div> */}
-          <div className="h-full rounded pl-4 pt-4 pr-6 bg-blue_1">
+          <div className="h-full rounded pl-4 pt-4 pr-6 bg-purple_4">
             <svg
               aria-label="Unlike"
               className="x1lliihq x1n2onr6 xxk16z8 inline mr-1 fill-blue_5 cursor-pointer"
@@ -75,10 +78,10 @@ const Profile = () => {
 
             <ul className="pl-2">
               {favoriteDocuments &&
-                favoriteDocuments.data.map((document, index) => {
+                favoriteDocuments?.data?.map((document, index) => {
                   return (
                     <li
-                      key={document.id}
+                      key={index}
                       className="hover:text-blue_5 line-clamp-2 text-[0.9rem] mb-2 cursor-pointer"
                       onClick={() => {
                         router.push(`/library/${document.id}`);
@@ -96,10 +99,10 @@ const Profile = () => {
           <div className={"grid grid-cols-5 profile-user h-full"}>
             <div
               className={
-                "col-span-3 user-info h-full bg-blue_6 rounded-l rounded-tr px-5"
+                "col-span-3 user-info h-full bg-purple_6 rounded-l rounded-tr px-5"
               }
             >
-              <h2 className={"text-blue_8 font-bold text-2xl mt-5"}>
+              <h2 className={"text-purple_5 font-bold text-2xl mt-5"}>
                 HỒ SƠ CỦA TÔI
               </h2>
               <div className={"pl-5"}>
@@ -111,7 +114,7 @@ const Profile = () => {
                 <UserInfo label={"Tên tài khoản: "} value={user.username} />
                 <UserInfo
                   label={"Ngày sinh: "}
-                  value={user.dateOfBirth.split("").reverse().join("")}
+                  value={FormatDate(user.dateOfBirth)}
                 />
                 <UserInfo label={"Giới tính: "} value={user.gender} />
                 <UserInfo
@@ -134,7 +137,7 @@ const Profile = () => {
                 />
               </div>
 
-              <div className={"rounded-r bg-blue_6"} />
+              <div className={"rounded-r bg-purple_6"} />
             </div>
           </div>
         </div>

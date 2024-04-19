@@ -22,6 +22,7 @@ import ManagementExample from "@/components/orientationExample/managementExample
 export const theme = {
   // GREEN
   SOCIAL: {
+    icon: "/social.svg",
     vietnameseName: "XÃ HỘI",
     textColor: colors.green_3,
     mainColor: colors.green_1,
@@ -116,6 +117,7 @@ export const theme = {
   },
   // BLUE
   RESEARCH: {
+    icon: "/research.svg",
     vietnameseName: "NGHIÊN CỨU",
     textColor: colors.blue_10,
     mainColor: colors.blue_8,
@@ -191,6 +193,7 @@ export const theme = {
   },
   // YELLOW
   TECHNIQUE: {
+    icon: "/technique.svg",
     vietnameseName: "KĨ THUẬT",
     textColor: colors.yellow_2,
     mainColor: "#ffd78f",
@@ -264,6 +267,7 @@ export const theme = {
   },
   // LIGHT PINK
   ART: {
+    icon: "/art.svg",
     vietnameseName: "NGHỆ THUẬT",
     textColor: colors.pink_4,
     mainColor: "#f8bbc1",
@@ -403,6 +407,7 @@ export const theme = {
   },
   // GRAY
   MAJOR: {
+    icon: "/major.svg",
     vietnameseName: "NGHIỆP VỤ",
     textColor: colors.grey_2,
     mainColor: "#bfbfbf",
@@ -532,17 +537,15 @@ const OrientationPostsList = (props: any) => {
   return (
     <>
       <div
-        className={
-          "w-full mx-auto mb-8  overflow-hidden px-2"
-        }
+        className={"h-full w-full mx-auto mb-8"}
       // style={{ overflowY: "scroll" }}
       >
-        <div className={" flex justify-center p"}>
+        <div className={"flex justify-center p"}>
           <div
             className={
               "py-5 w-full rounded-xl flex justify-center items-center shadow-xl name mx-14 mb-4"
             }
-            style={{ backgroundColor: theme[orientationName].mainColor }}
+            style={{ backgroundColor: theme[orientationName].lightColor }}
           >
             <div
               className={
@@ -646,11 +649,19 @@ const OrientationPostsList = (props: any) => {
                     }
                   >
                     <div
-                      className={"h-full w-full rounded-2xl max-w-full"}
+                      className={
+                        "h-full w-full rounded-2xl max-w-full flex justify-center items-center"
+                      }
                       style={{
                         backgroundColor: theme[orientationName].lightColor,
                       }}
-                    ></div>
+                    >
+                      <img
+                        src={theme[orientationName].icon}
+                        className={"h-10 w-10"}
+                        alt=""
+                      />
+                    </div>
                     <div
                       className={
                         "h-full w-full rounded-2xl px-3 max-w-full text-ellipsis overflow-hidden flex items-center"

@@ -17,7 +17,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import "@/style/notion.css";
 // import "prismjs/themes/prism-tomorrow.css";
-import { Button, Modal, Spin, Breadcrumb } from "antd";
+import { Breadcrumb, Button, Modal, Spin } from "antd";
 import paths from "@/app/paths";
 
 export function formatVietnameseDateTime(dateTime: Date) {
@@ -72,12 +72,12 @@ function isJwtExpired(token: String) {
   return decodedPayload.exp < currentTime;
 }
 
-const topicMapping = {
-  "SOCIAL": "Xã hội",
-  "CULTURE": "Văn hóa",
-  "SPORT": "Thể thao",
-  "TOURISM": "Du lịch"
-}
+export const topicMapping = {
+  SOCIAL: "Xã hội",
+  CULTURE: "Văn hóa",
+  SPORT: "Thể thao",
+  TOURISM: "Du lịch",
+};
 
 const DocumentIdPage = ({ params }) => {
   const [data, setData] = useState(null);
@@ -210,37 +210,40 @@ const DocumentIdPage = ({ params }) => {
 
   return (
     <>
-      <div className=" fixed flex  flex-col h-[90vh] gap-10 w-[18%] mt-4  pl-10">
-        {/* bg-gradient-to-br from-pink_1 to-yellow_1 */}
-        {/* <div className="h-40 border-2  rounded-xl "></div> */}
-        <div className="h-screen pb-10">
-          <div className="h-full border-2 rounded-xl pl-4 pt-4 pr-6">
-            <svg
-              aria-label="Unlike"
-              className="x1lliihq x1n2onr6 xxk16z8 inline mr-1 fill-blue_5 cursor-pointer"
-              fill=""
-              height="18"
-              role="img"
-              viewBox="0 0 48 48"
-              width="18"
-            >
-              <title>Unlike</title>
-              <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
-            </svg>
-            <span
-              className="font-headingText text-blue_5 mb-3 inline-block cursor-pointer"
-              onClick={() => {
-                // check token from localStorage if it's not exist or expired, redirect to login page
-                const token = localStorage.getItem("token");
-                if (!token || isJwtExpired(token)) {
-                  setOpenRemindLoginModal(true);
-                  return;
-                }
-                router.push("/library/favorite");
-              }}
-            >
-              Danh sách yêu thích
-            </span>
+      <title>{documentTitle.current}</title>
+      <div className="flex relative w-full px-10">
+
+        <div className="min-h-full min-w-[20%] max-w-[20%]">
+          <div className=" h-full border-2 rounded-xl pl-4 pt-4 pr-6">
+            <div className="flex">
+
+              <svg
+                aria-label="Unlike"
+                className="x1lliihq min-w-[18px] x1n2onr6 xxk16z8 inline mr-1 fill-blue_5 cursor-pointer"
+                fill=""
+                height="18"
+                role="img"
+                viewBox="0 0 48 48"
+                width="18"
+              >
+                <title>Unlike</title>
+                <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
+              </svg>
+              <div
+                className="font-headingText text-blue_5 mb-3 inline-block cursor-pointer"
+                onClick={() => {
+                  // check token from localStorage if it's not exist or expired, redirect to login page
+                  const token = localStorage.getItem("token");
+                  if (!token || isJwtExpired(token)) {
+                    setOpenRemindLoginModal(true);
+                    return;
+                  }
+                  router.push("/library/favorite");
+                }}
+              >
+                Danh sách yêu thích
+              </div>
+            </div>
 
             <ul className="pl-2">
               {favoriteDocuments &&
@@ -311,7 +314,7 @@ const DocumentIdPage = ({ params }) => {
               className={
                 "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
               }
-              onClick={() => router.push(`/library/${document.id}/counsellings`)}
+              onClick={() => router.push(`/library/${documentId}/counsellings`)}
             >
               Trải nghiệm hướng nghiệp
             </Button>
@@ -370,7 +373,7 @@ const DocumentIdPage = ({ params }) => {
           )}
           {isLiked && <HeartUnLikeIcon onClick={() => onUnLike()} />}
         </div>
-      </div>
+      </div >
 
       <div className="z-[1000]">
         <Modal

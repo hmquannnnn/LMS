@@ -193,8 +193,8 @@ const ClassNotification = (props: any) => {
               <>
                 <div
                   key={notification.id}
-                  className={`mt-5 rounded-xl w-full py-3 bg-[${colors.blue_6}]`}
-                  style={{ backgroundColor: `${colors.blue_6}` }}
+                  className={`mt-5 rounded-xl w-full py-3 bg-purple_4`}
+                  // style={{ backgroundColor: `${colors.blue_6}` }}
                 >
                   <div className="px-5">
                     <Row className={"mb-2"}>
@@ -208,7 +208,7 @@ const ClassNotification = (props: any) => {
                         <Row>
                           <p
                             className={"font-semibold text-lg mr-1"}
-                            style={{ color: `${colors.blue_5}` }}
+                            style={{ color: `${colors.purple_5}` }}
                           >
                             {classInfo.teacherLastName +
                               " " +
@@ -216,7 +216,7 @@ const ClassNotification = (props: any) => {
                           </p>
                           <p
                             className={"relative top-[5px]"}
-                            style={{ color: `${colors.blue_5}` }}
+                            style={{ color: `${colors.purple_5}` }}
                           >
                             {" "}
                             đã đăng một thông báo
@@ -263,7 +263,7 @@ const ClassNotification = (props: any) => {
                         ?.comments.map((comment) => (
                           <div
                             key={comment.id}
-                            className={"mx-3 bg-blue-50 rounded-3xl p-2 mb-2"}
+                            className={"mx-3 bg-purple_6 rounded-3xl p-2 mb-2"}
                           >
                             <Row>
                               <Avatar
@@ -293,7 +293,7 @@ const ClassNotification = (props: any) => {
                       (notif) => notif.notificationId === notification.id,
                     )?.showComments ? (
                       <>
-                        <div className="mx-3 bg-blue-50 rounded-3xl p-2 ">
+                        <div className="mx-3 bg-purple_6 rounded-3xl p-2 ">
                           <Row>
                             <Avatar
                               size={42}

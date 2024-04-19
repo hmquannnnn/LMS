@@ -17,10 +17,12 @@ export const colors = {
   blue_8: "#4fc1e9",
   blue_9: "#b6cff9",
   blue_10: "#0b4582",
+  blue_11: "#5e86b4",
+  blue_12: "#d6e4fc",
   pink_1: "#fec5b9",
   pink_2: "#f49ba2",
   pink_3: "#f8bbc1",
-  pink_4: "#ed5565",
+  pink_4: "#920f1d",
   pink_5: "#aa280e",
   pink_6: "#fee2dc",
   pink_7: "#fbdde0",
@@ -56,12 +58,12 @@ export const assignmentStatus: AssignmentStatus = {
 };
 
 export const Orientations: Orientations = {
-  SOCIAL: "SOCIAL",
-  RESEARCH: "RESEARCH",
-  TECHNIQUE: "TECHNIQUE",
-  ART: "ART",
-  MANAGEMENT: "MANAGEMENT",
   MAJOR: "MAJOR",
+  TECHNIQUE: "TECHNIQUE",
+  RESEARCH: "RESEARCH",
+  MANAGEMENT: "MANAGEMENT",
+  SOCIAL: "SOCIAL",
+  ART: "ART",
 };
 
 export const testTypes: testTypes = {

@@ -29,6 +29,28 @@ export const callGetDocuments = (type: String | null, topic: String | null) => {
   return instance.get(`${documentUrl}`);
 };
 
+export const callGetDocumentsWithPaging = (
+  type: String | null,
+  topic: String | null,
+  page: number,
+  pageSize: number
+) => {
+  if (type != null && topic != null) {
+    return instance.get(
+      `${documentUrl}/page?type=${type}&topic=${topic}&pageSize=${pageSize}&page=${page}`
+    );
+  } else if (type != null) {
+    return instance.get(
+      `${documentUrl}/page?type=${type}&pageSize=${pageSize}&page=${page}`
+    );
+  } else if (topic != null) {
+    return instance.get(
+      `${documentUrl}/page?topic=${topic}&pageSize=${pageSize}&page=${page}`
+    );
+  }
+  return instance.get(`${documentUrl}/page?pageSize=${pageSize}&page=${page}`);
+};
+
 export const callGetDocumentsDetail = (
   type: String | null,
   topic: String | null

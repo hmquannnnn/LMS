@@ -16,6 +16,7 @@ const paths: Paths = {
   favoriteDocumentations: "favorite",
   sendVerificationEmail: "/verify-your-email",
   verifyEmail: "/verify-email",
+  evaluation: "evaluation",
 };
 
 export default paths;

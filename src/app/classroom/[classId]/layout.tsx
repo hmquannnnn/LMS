@@ -168,8 +168,8 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
 
           {/*<div style={{ height: "150px" }} />*/}
           <div>{children}</div>
-        </div>
-      </div>
+        </div >
+      </div >
     </>
   );
 };
