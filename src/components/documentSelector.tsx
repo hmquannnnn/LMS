@@ -4,27 +4,15 @@ import React, { useEffect, useState } from "react";
 import { Dropdown, MenuProps } from "antd";
 import { callSearchDocumentByTitle } from "@/apis/documentsAPI";
 import { MdOutlineCancel } from "react-icons/md";
-
-const onChange = (value: string) => {
-  console.log(`selected ${value}`);
-};
-
-const onSearch = (value: string) => {
-  console.log("search:", value);
-};
-
-// Filter `option.label` match the user type `input`
-const filterOption = (
-  input: string,
-  option?: { label: string; value: string },
-) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+import { updateLinkedDocument } from "@/redux/slices/classSlice";
+import { useDispatch } from "react-redux";
 
 const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
   const [isTypingSearch, setIsTypingSearch] = useState(false);
   const [searchItems, setSearchItems] = useState<MenuProps["items"]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [linkedDocument, setLinkedDocument] = useState(null);
-  console.log(linkedDocument);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const timeoutId = setTimeout(async () => {
@@ -53,14 +41,21 @@ const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
   const handleChooseLinkedDocument = (document) => {
     setLinkedDocument(document);
     sendLinkedDocumentId(document.id);
+    dispatch(updateLinkedDocument(document.id));
   };
 
   const handleOnChangeSearch = (event) => {
     setIsTypingSearch(true);
     setSearchValue(event.target.value);
   };
+
+  const handleCancelSelection = () => {
+    setLinkedDocument(null);
+    sendLinkedDocumentId(0);
+    dispatch(updateLinkedDocument(0));
+  };
   return (
-    <>
+    <div className={"my-2"}>
       {linkedDocument ? (
         <div
           className={
@@ -71,7 +66,7 @@ const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
 
           <MdOutlineCancel
             className={"text-red-600 cursor-pointer ml-5 text-lg"}
-            onClick={() => setLinkedDocument(null)}
+            onClick={handleCancelSelection}
           />
         </div>
       ) : (
@@ -128,7 +123,7 @@ const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
           </div>
         </Dropdown>
       )}
-    </>
+    </div>
   );
 };
 

@@ -1,6 +1,9 @@
 import Orientations from "@/types/orientations";
 import AssignmentStatus from "@/types/assignmentStatus";
 import testTypes from "@/types/testTypes";
+import AssignmentTypes from "@/types/assignmentTypes";
+import { documentTypes } from "@/types/documentTypes";
+import { questionTypes } from "@/types/questionTypes";
 
 export const ROLE_TEACHER: string = "ROLE_TEACHER";
 export const ROLE_STUDENT: string = "ROLE_STUDENT";
@@ -69,4 +72,24 @@ export const Orientations: Orientations = {
 export const testTypes: testTypes = {
   MULTIPLE_CHOICE: "MULTIPLE_CHOICE",
   WRITING: "WRITING",
+};
+
+export const assignmentTypes: AssignmentTypes = {
+  OTHER: "OTHER",
+  FOR_TEST: "FOR_TEST",
+  FOR_COUNSELLING: "FOR_COUNSELLING",
+};
+
+export const documentTypes: documentTypes = {
+  TEXT: "TEXT",
+  AUDIO: "AUDIO",
+  VIDEO: "VIDEO",
+  INFOGRAPHIC: "INFOGRAPHIC",
+  IMAGES: "IMAGES",
+};
+
+export const questionTypes: questionTypes = {
+  SINGLE_CHOICE: "SINGLE_CHOICE",
+  MULTIPLE_CHOICE: "MULTIPLE_CHOICE",
+  FILL_IN_THE_BLANK: "FILL_IN_THE_BLANK",
 };

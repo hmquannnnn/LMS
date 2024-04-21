@@ -150,7 +150,9 @@ const ClassMember = (props: any) => {
                               ) : status ===
                                 STATUS.NOT_YET_SUBMITTED ? null : status ===
                                 STATUS.REJECTED ? (
-                                <MdCancel className={"text-red-600 mx-auto"} />
+                                <MdCancel
+                                  className={"text-orange-500 mx-auto"}
+                                />
                               ) : null}
                             </th>
                           ),

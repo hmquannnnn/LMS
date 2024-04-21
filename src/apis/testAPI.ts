@@ -24,6 +24,10 @@ export const callGetTestByDocument = (formData: FormData) => {
   });
 };
 
+export const callGetAllTestsByDocument = (documentId: number) => {
+  return instance.get(`documents/${documentId}/tests`);
+};
+
 export const callSubmitTest = (testId: number, testAnswer) => {
   return instance.post(`tests/${testId}/submit`, testAnswer);
 };

@@ -1,52 +1,56 @@
-/* Khởi tạo kiểu cho radio */
-input[type="radio"],  input[type="checkbox"]{
-  display: none; /* Ẩn radio mặc định */
+.test-page {
+  /* Khởi tạo kiểu cho radio */
+  input[type="radio"],  input[type="checkbox"]{
+    display: none; /* Ẩn radio mặc định */
+  }
+
+  /* Kiểu cho radio tùy thuộc vào trạng thái checked */
+  input[type="radio"] + label span:before, input[type="checkbox"] + label span:before {
+    cursor: pointer;
+    content: "";
+    display: inline-block;
+    //vertical-align: middle;
+    width: 16px; /* Đường kính của radio */
+    height: 16px; /* Đường kính của radio */
+    border: 1px solid black; /* Viền của radio */
+    border-radius: 50%; /* Làm tròn radio */
+    margin-right: 8px; /* Khoảng cách giữa radio và nội dung */
+  }
+
+  /* Kiểu cho radio khi được chọn */
+  input[type="radio"]:checked + label span:before, input[type="checkbox"]:checked + label span:before {
+    box-shadow: 0 0 0 1px white, 0 0 0 2px black;
+    width: 13px;
+    height: 13px;
+    background-color: black; /* Màu nền của radio khi được chọn */
+    border-color: black; /* Màu viền của radio khi được chọn */
+    position: relative;
+    left: 1.5px;
+    margin-right: 11px;
+    //vertical-align: middle;
+  }
+
+  /* Kiểu cho radio khi được chọn và được focus */
+  input[type="radio"]:checked:focus + label span:before, input[type="checkbox"]:checked:focus + label span:before {
+    box-shadow: 0 0 0 3px rgba(20, 96, 200, 0.3); /* Đổ bóng khi radio được focus */
+  }
+
+  /* Không hiển thị đường viền khi radio được focus */
+  input[type="radio"]:focus + label span:before, input[type="checkbox"]:focus + label span:before {
+    outline: none; /* Xóa đường viền khi radio được focus */
+  }
+
+  //.scrollable-column {
+  //  overflow-y: scroll; /* Cho phép thanh cuộn dọc chỉ hiển thị khi cần thiết */
+  //}
+  //
+  //.test-page {
+  //  overflow: hidden;
+  //}
+  //
+  //body {
+  //  overflow: hidden;
+  //}
 }
 
-/* Kiểu cho radio tùy thuộc vào trạng thái checked */
-input[type="radio"] + label span:before, input[type="checkbox"] + label span:before {
-  cursor: pointer;
-  content: "";
-  display: inline-block;
-  //vertical-align: middle;
-  width: 16px; /* Đường kính của radio */
-  height: 16px; /* Đường kính của radio */
-  border: 1px solid black; /* Viền của radio */
-  border-radius: 50%; /* Làm tròn radio */
-  margin-right: 8px; /* Khoảng cách giữa radio và nội dung */
-}
 
-/* Kiểu cho radio khi được chọn */
-input[type="radio"]:checked + label span:before, input[type="checkbox"]:checked + label span:before {
-  box-shadow: 0 0 0 1px white, 0 0 0 2px black;
-  width: 13px;
-  height: 13px;
-  background-color: black; /* Màu nền của radio khi được chọn */
-  border-color: black; /* Màu viền của radio khi được chọn */
-  position: relative;
-  left: 1.5px;
-  margin-right: 11px;
-  //vertical-align: middle;
-}
-
-/* Kiểu cho radio khi được chọn và được focus */
-input[type="radio"]:checked:focus + label span:before, input[type="checkbox"]:checked:focus + label span:before {
-  box-shadow: 0 0 0 3px rgba(20, 96, 200, 0.3); /* Đổ bóng khi radio được focus */
-}
-
-/* Không hiển thị đường viền khi radio được focus */
-input[type="radio"]:focus + label span:before, input[type="checkbox"]:focus + label span:before {
-  outline: none; /* Xóa đường viền khi radio được focus */
-}
-
-//.scrollable-column {
-//  overflow-y: scroll; /* Cho phép thanh cuộn dọc chỉ hiển thị khi cần thiết */
-//}
-//
-//.test-page {
-//  overflow: hidden;
-//}
-//
-//body {
-//  overflow: hidden;
-//}

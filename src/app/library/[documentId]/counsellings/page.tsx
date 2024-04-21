@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { NotionRenderer } from "react-notion";
-import { callGetCounsellingByDocumentId, callGetDocumentById, } from "@/apis/documentsAPI";
+import { callGetDocumentCounselling, callGetDocumentById, } from "@/apis/documentsAPI";
 import {
   formatVietnameseDateTime,
   topicMapping,
@@ -86,7 +86,7 @@ const Counselling = ({ params }) => {
 
     const fetchCounselling = async () => {
       try {
-        const counselling = await callGetCounsellingByDocumentId(documentId);
+        const counselling = await callGetDocumentCounselling(documentId);
         setCounsellingItems(counselling);
       } catch (error) {
         console.error("Error fetching data:", error);

@@ -15,6 +15,9 @@ interface Paths {
   sendVerificationEmail: string;
   verifyEmail: string;
   evaluation: string;
+  admin: string;
+  createTest: string;
+  uploadDocumentation: string;
 }
 
 export default Paths;
