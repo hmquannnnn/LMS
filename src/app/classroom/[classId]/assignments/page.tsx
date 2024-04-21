@@ -171,7 +171,10 @@ const ClassAssignment = (props: any) => {
       isForGroup: isForGroup,
       type: creatingAssigment?.type,
       documentId: creatingAssigment?.documentId,
-      relatedTestId: creatingAssigment?.relatedTestId,
+      relatedTestId:
+        creatingAssigment?.relatedTestId > 0
+          ? creatingAssigment?.relatedTestId
+          : null,
     };
     const res = await callCreateAssigment(classId, assignmentReq);
     console.log("check: ", res);
