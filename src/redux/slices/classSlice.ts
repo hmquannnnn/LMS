@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { User } from "@/redux/slices/accountSlice";
+import { assignmentTypes } from "@/utils/constant";
 
 export interface Class {
   code: string;
@@ -113,6 +114,8 @@ export const classSlice = createSlice({
     updateLinkedDocument: (state, action) => {
       state.currentClass.assignments.creatingAssignment.documentId =
         action.payload;
+      state.currentClass.assignments.creatingAssignment.type =
+        assignmentTypes.FOR_COUNSELLING;
     },
     updateRelatedTest: (state, action) => {
       state.currentClass.assignments.creatingAssignment.relatedTestId =

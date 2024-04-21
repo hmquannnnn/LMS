@@ -4,8 +4,12 @@ import React, { useEffect, useState } from "react";
 import { Dropdown, MenuProps } from "antd";
 import { callSearchDocumentByTitle } from "@/apis/documentsAPI";
 import { MdOutlineCancel } from "react-icons/md";
-import { updateLinkedDocument } from "@/redux/slices/classSlice";
+import {
+  updateAssignmentType,
+  updateLinkedDocument,
+} from "@/redux/slices/classSlice";
 import { useDispatch } from "react-redux";
+import { assignmentTypes } from "@/utils/constant";
 
 const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
   const [isTypingSearch, setIsTypingSearch] = useState(false);
@@ -42,6 +46,7 @@ const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
     setLinkedDocument(document);
     sendLinkedDocumentId(document.id);
     dispatch(updateLinkedDocument(document.id));
+    dispatch(updateAssignmentType(assignmentTypes.FOR_COUNSELLING));
   };
 
   const handleOnChangeSearch = (event) => {
