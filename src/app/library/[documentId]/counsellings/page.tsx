@@ -1,81 +1,23 @@
 "use client";
 
-import { callGetTestByDocument, callSubmitTest } from "@/apis/testAPI";
-import { testTypes } from "@/utils/constant";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getCurrentTest } from "@/redux/slices/testSlice";
-// import "./test.scss";
 import { NotionRenderer } from "react-notion";
 import { callGetCounsellingByDocumentId, callGetDocumentById, } from "@/apis/documentsAPI";
 import {
   formatVietnameseDateTime,
   topicMapping,
 } from "@/app/library/[documentId]/page";
-import { FaCheck } from "react-icons/fa";
-import { MdCancel } from "react-icons/md";
+
 import { Breadcrumb } from "antd";
 import { colors } from "@/utils/constant";
-function formatTextToHTML(content) {
-  const lines = content.split("\n");
-  const filteredLines = lines.filter((line) => line.trim() !== "");
-  const htmlContent = filteredLines.map((line) => `<p>${line}</p>`).join("\n");
-  return htmlContent;
-}
-
-
-// const dummyData = [
-//   {
-//     "id": 0,
-//     "title": "string",
-//     "content": "Hãy tưởng tượng bản thân là một hướng dẫn viên du lịch địa phương. Ngày mai em cần dẫn một đoàn khách tới tham quan các địa điểm du lịch tại địa phương em…….……... Hãy chuẩn bị một bài thuyết trình dưới hình thức video để giúp đoàn khách ấy hiểu rõ hơn về văn hóa của nơi đó nhé.",
-//     "createAt": "2024-04-19T17:55:22.921Z",
-//     "documentId": 0,
-//     "orientation": "SOCIAL"
-//   },
-//   {
-//     "id": 0,
-//     "title": "string",
-//     "content": "Hãy tưởng tượng bản thân là một hướng dẫn viên du lịch địa phương. Ngày mai em cần dẫn một đoàn khách tới tham quan các địa điểm du lịch tại địa phương em…….……... Hãy chuẩn bị một bài thuyết trình dưới hình thức video để giúp đoàn khách ấy hiểu rõ hơn về văn hóa của nơi đó nhé.",
-//     "createAt": "2024-04-19T17:55:22.921Z",
-//     "documentId": 0,
-//     "orientation": "SOCIAL"
-//   },
-//   {
-//     "id": 0,
-//     "title": "string",
-//     "content": "string",
-//     "createAt": "2024-04-19T17:55:22.921Z",
-//     "documentId": 0,
-//     "orientation": "TECHNIQUE"
-//   },
-// ]
-
 
 const Counselling = ({ params }) => {
   const documentId = params.documentId;
-  const testType = params.testType;
-  const dispatch = useDispatch();
   const postTime = useRef();
   const documentTitle = useRef();
-  const contentRef = useRef(null);
   const [data, setData] = useState(null);
-  const [userAnswers, setUserAnswers] = useState([]);
-  const [correctAnswer, setCorrectAnswer] = useState([]);
-  const [score, setScore] = useState(0);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [showTest, setShowTest] = useState(true);
-  const [isRerendered, setIsRerendered] = useState(false);
-  const [showHints, setShowHints] = useState(true);
-  const [showAnswerHints, setShowAnswerHints] = useState(false);
-  const [writingAnswerValues, setWritingAnswerValues] = useState([]);
   const [currentDocument, setCurrentDocument] = useState();
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
-  const [testId, setTestId] = useState(0);
-  const [numberOfWritingQuestions, setNumberOfWritingQuestions] = useState(0);
   const [counsellingItems, setCounsellingItems] = useState([]);
-
 
   const items = [
     {
@@ -122,12 +64,11 @@ const Counselling = ({ params }) => {
     },
   ]
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const document = await callGetDocumentById(documentId);
+        setCurrentDocument(document);
         const notionPageId = document.notionPageId;
         postTime.current = formatVietnameseDateTime(
           new Date(document.postTime),
