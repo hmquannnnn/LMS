@@ -45,6 +45,7 @@ const initialState = {
         documentId: 0,
         type: "OTHER",
         relatedTestId: 0,
+        status: "",
       },
       creatingAssignment: {
         title: "",

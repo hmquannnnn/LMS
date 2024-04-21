@@ -43,3 +43,7 @@ export const callGetTestHistory = (testId: number) => {
 export const callGetTestHistoryByHistoryId = (historyId: number) => {
   return instance.get(`tests/history/${historyId}`);
 };
+
+export const callGetTestById = (testId: number) => {
+  return instance.get(`tests/${testId}`);
+};
