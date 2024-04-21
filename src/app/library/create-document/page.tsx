@@ -353,7 +353,7 @@ const Index = () => {
 
     return (
         <div className='flex gap-5'>
-            <div className='w-1/2 mt-4'>
+            <div className='w-1/3 mt-4'>
                 <FormProvider {...methods}  >
                     <form
                         onSubmit={e => e.preventDefault()}
@@ -427,10 +427,17 @@ const Index = () => {
                                     <div className='mr-2 font-bold'>Thể loại:</div>
                                     <Select onChange={(val) => setTopic(val)} defaultValue={'Văn hóa'}>
                                         <Select.Option value="CULTURE">Văn hóa</Select.Option>
-                                        <Select.Option value="SOCIAL">Xã hội</Select.Option>
+                                        <Select.Option value="POLITICS">Chính trị</Select.Option>
+                                        <Select.Option value="ECONOMY">Kinh tế</Select.Option>
+                                        <Select.Option value="EDUCATION">Giáo dục</Select.Option>
+                                        <Select.Option value="LAW">Pháp luật</Select.Option>
+                                        <Select.Option value="MEDICAL">Y tế</Select.Option>
                                         <Select.Option value="SPORT">Thể thao</Select.Option>
-                                        <Select.Option value="TOURISM">Du lịch</Select.Option>
+                                        <Select.Option value="LIFE_ENTERTAINMENT">Đời sống - Giải trí</Select.Option>
+                                        <Select.Option value="SCIENCE_TECHNOLOGY">Khoa học - Công nghệ</Select.Option>
+                                        <Select.Option value="ENVIRONMENT">Môi trường</Select.Option>
                                     </Select>
+
                                 </div>
                                 <div className='flex-1 flex  mr-2'>
                                     <div className='mr-2 font-bold'>Dạng thức</div>
@@ -446,7 +453,7 @@ const Index = () => {
                                 </div>
                             </div>
 
-                            <div className='flex-1 flex mb-4'>
+                            {/* <div className='flex-1 flex mb-4'>
                                 <div className='mr-2 font-bold'>Id document:</div>
                                 <input
                                     className='flex-auto border-b-[1px] border-black focus:outline-none'
@@ -483,7 +490,7 @@ const Index = () => {
                                 }}>Test</Button>
                             </div>
 
-
+ */}
 
 
                             <Button type="default"
@@ -494,14 +501,7 @@ const Index = () => {
                         </div>
                     </form>
                 </FormProvider>
-                <div className='flex justify-center pl-[2vw] mt-10'>
-                    <DocumentPreview props={
-                        {
-                            data: data, url: fileInput ? URL.createObjectURL(fileInput) : (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
-                            veryFirstText: veryFirstText == '' ? SHORT_DESCRIPTION_PLACEHOLDER : veryFirstText,
-                            title: documentTitle == '' ? TITLE_PLACEHOLDER : documentTitle
-                        }} />
-                </div>
+
                 {/* <div className='max-w-[600px]'>
                     {
                         firstImageUrl.current != '' &&
@@ -515,6 +515,15 @@ const Index = () => {
                 </div> */}
             </div>
             <div className='flex-1'>
+                <div className='flex justify-center pl-[2vw] mt-10 h-[400px] mb-10'>
+                    <DocumentPreview props={
+                        {
+                            // data: data, url: fileInput ? URL.createObjectURL(fileInput) : (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
+                            data: data, url: (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
+                            veryFirstText: veryFirstText == '' ? SHORT_DESCRIPTION_PLACEHOLDER : veryFirstText,
+                            title: documentTitle == '' ? TITLE_PLACEHOLDER : documentTitle
+                        }} />
+                </div>
                 <div className='border h-screen overflow-scroll'>
                     {data ? (
                         <div>

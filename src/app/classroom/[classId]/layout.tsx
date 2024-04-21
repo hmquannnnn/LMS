@@ -48,7 +48,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                 position: "fixed",
                 // top: 0,
                 backgroundColor: "#fff",
-                zIndex: 1000,
+                zIndex: 200,
               }}
             >
               {/*<div className="pt-3 pl-10 font-timesNewRoman text-xl">*/}
@@ -168,8 +168,8 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
 
           {/*<div style={{ height: "150px" }} />*/}
           <div>{children}</div>
-        </div>
-      </div>
+        </div >
+      </div >
     </>
   );
 };

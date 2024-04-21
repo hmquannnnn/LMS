@@ -77,6 +77,14 @@ export const topicMapping = {
   CULTURE: "Văn hóa",
   SPORT: "Thể thao",
   TOURISM: "Du lịch",
+  EDUCATION: "Giáo dục",
+  SCIENCE_TECHNOLOGY: "Khoa học - Công nghệ",
+  ECONOMY: "Kinh tế",
+  POLITICS: "Chính trị",
+  ENVIRONMENT: "Môi trường",
+  MEDICAL: "Y tế",
+  LAW: "Pháp luật",
+  LIFE_ENTERTAINMENT: "Đời sống - Giải trí",
 };
 
 const DocumentIdPage = ({ params }) => {
@@ -309,7 +317,15 @@ const DocumentIdPage = ({ params }) => {
 
             {data && <NotionRenderer blockMap={data} fullPage hideHeader />}
           </div>
-          <div className={"flex flex-row justify-end mb-5"}>
+          <div className={"flex flex-row justify-end mb-5 mt-5"}>
+            <Button
+              className={
+                "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
+              }
+              onClick={() => router.push(`/library/${documentId}/counsellings`)}
+            >
+              Trải nghiệm hướng nghiệp
+            </Button>
             <Button
               className={
                 "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
@@ -365,7 +381,7 @@ const DocumentIdPage = ({ params }) => {
           )}
           {isLiked && <HeartUnLikeIcon onClick={() => onUnLike()} />}
         </div>
-      </div>
+      </div >
 
       <div className="z-[1000]">
         <Modal
