@@ -36,7 +36,25 @@ const initialState = {
     assignments: {
       total: 0,
       assignmentsList: [],
-      currentAssignment: {},
+      currentAssignment: {
+        id: 0,
+        title: "",
+        content: "",
+        dueDateTime: "",
+        isForGroup: false,
+        documentId: 0,
+        type: "OTHER",
+        relatedTestId: 0,
+      },
+      creatingAssignment: {
+        title: "",
+        content: "",
+        dueDateTime: "",
+        isForGroup: false,
+        documentId: 0,
+        type: "OTHER",
+        relatedTestId: 0,
+      },
     },
     members: [
       {
@@ -88,6 +106,17 @@ export const classSlice = createSlice({
     getCurrentAssignment: (state, action) => {
       state.currentClass.assignments.currentAssignment = action.payload;
     },
+    updateAssignmentType: (state, action) => {
+      state.currentClass.assignments.creatingAssignment.type = action.payload;
+    },
+    updateLinkedDocument: (state, action) => {
+      state.currentClass.assignments.creatingAssignment.documentId =
+        action.payload;
+    },
+    updateRelatedTest: (state, action) => {
+      state.currentClass.assignments.creatingAssignment.relatedTestId =
+        action.payload;
+    },
   },
   extraReducers: (builder) => {},
 });
@@ -101,6 +130,9 @@ export const {
   getPendingPostsAction,
   getCurrentAssignment,
   getMembersWithoutStatusAction,
+  updateAssignmentType,
+  updateLinkedDocument,
+  updateRelatedTest,
 } = classSlice.actions;
 
 export default classSlice.reducer;

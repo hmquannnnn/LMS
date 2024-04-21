@@ -16,12 +16,16 @@ import { FaCheck } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { Breadcrumb } from "antd";
 
-function formatTextToHTML(content) {
+const formatTextToHTML = (content) => {
   const lines = content.split("\n");
   const filteredLines = lines.filter((line) => line.trim() !== "");
   const htmlContent = filteredLines.map((line) => `<p>${line}</p>`).join("\n");
   return htmlContent;
-}
+};
+
+export const indexToAlphabet = (index) => {
+  return String.fromCharCode(65 + index);
+};
 
 const Test = ({ params }) => {
   const documentId = params.documentId;
@@ -277,10 +281,6 @@ const Test = ({ params }) => {
     initializeWritingAnswer(questionCollection);
   }, [questionCollection, isRerendered]);
 
-  const indexToAlphabet = (index) => {
-    return String.fromCharCode(65 + index);
-  };
-
   const compareCorrectAnswer = (questionIndex, choiceIndex) => {
     return (
       userAnswers[questionIndex].choices[choiceIndex].isPicked ===
@@ -354,7 +354,7 @@ const Test = ({ params }) => {
         </div>
         {testType === "READING" ? (
           <div
-            className={"min-h-full h-full pl-5 scrollable-column"}
+            className={"min-h-full h-full pl-5 scrollable-column test-page"}
             ref={contentRef}
           >
             {showTest && (
