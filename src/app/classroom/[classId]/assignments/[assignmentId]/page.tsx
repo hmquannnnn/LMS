@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  callGetAssigment,
+  callGetAssignmentById,
   callGetAssignmentStatusStudent,
 } from "@/apis/classAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentAssignment } from "@/redux/slices/classSlice";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { assignmentStatus, ROLE_STUDENT, ROLE_TEACHER } from "@/utils/constant";
 import { FormatDate } from "@/utils/formatDate";
 import { useRouter } from "next/navigation";
@@ -21,17 +21,15 @@ const AssignmentDetails = (props: any) => {
     (state) =>
       state?.classes?.currentClass?.assignments?.currentAssignment || {},
   );
+  const [document, setDocument] = useState(null);
   const dispatch = useDispatch();
   const router = useRouter();
 
   const getAssignmentDetails = async () => {
     if (user.role === ROLE_TEACHER) {
-      const res = await callGetAssigment(classId);
-      const currentAssignment = res.find(
-        (assignment) => assignment.id == assignmentId,
-      );
+      const res = await callGetAssignmentById(assignmentId);
 
-      dispatch(getCurrentAssignment(currentAssignment));
+      dispatch(getCurrentAssignment(res));
     }
     if (user.role === ROLE_STUDENT) {
       const res = await callGetAssignmentStatusStudent(classId);

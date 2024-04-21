@@ -21,11 +21,12 @@ import {
   ROLE_STUDENT,
   ROLE_TEACHER,
 } from "@/utils/constant";
-import { MdPending } from "react-icons/md";
+import { MdCancel, MdPending } from "react-icons/md";
 import { FaCheck } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import paths from "@/app/paths";
-import DocumentSelector from "@/components/documentSelector";
+import AssignmentTypeSelector from "@/components/assignmentTypeSelector";
+import { FaRegCalendarTimes } from "react-icons/fa";
 
 export const statusPriority = {
   APPROVED: 4,
@@ -53,6 +54,13 @@ export const filterAndRemoveDuplicateAssignments = (assignments) => {
   return filteredAssignments;
 };
 
+const isMissedTheDeadline = (date) => {
+  const currentDate = new Date();
+  const deadline = new Date(date);
+  console.log(deadline, currentDate, deadline < currentDate);
+  return deadline < currentDate;
+};
+
 const ClassAssignment = (props: any) => {
   const classId = props.params.classId;
   const dispatch = useDispatch();
@@ -67,6 +75,9 @@ const ClassAssignment = (props: any) => {
     (state) => state.classes?.currentClass?.assignments?.total || 0,
   );
   const user = useSelector((state) => state.account.user);
+  const creatingAssigment = useSelector(
+    (state) => state?.classes?.currentClass?.assignments?.creatingAssignment,
+  );
   const userRole = user.role;
   const [updateFlag, setUpdateFlag] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,7 +90,18 @@ const ClassAssignment = (props: any) => {
     isForGroup: false,
   });
   const [linkedDocumentId, setLinkedDocumentId] = useState(0);
-  console.log("check id: ", linkedDocumentId);
+
+  const [linkedDocument, setLinkedDocument] = useState({
+    type: "",
+    documentId: 0,
+    relatedTestId: 0,
+  });
+  console.log("check link: ", linkedDocument);
+
+  const getLinkedDocument = (linkedDocument) => {
+    setLinkedDocument(linkedDocument);
+    console.log(linkedDocument);
+  };
 
   const getLinkDocumentId = (documentId) => {
     setLinkedDocumentId(documentId);
@@ -147,6 +169,9 @@ const ClassAssignment = (props: any) => {
       content: content,
       dueDateTime: dueDateTime,
       isForGroup: isForGroup,
+      type: creatingAssigment?.type,
+      documentId: creatingAssigment?.documentId,
+      relatedTestId: creatingAssigment?.relatedTestId,
     };
     const res = await callCreateAssigment(classId, assignmentReq);
     console.log("check: ", res);
@@ -254,12 +279,11 @@ const ClassAssignment = (props: any) => {
                         "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                     }}
                   />
-                  <div>
-                    <label htmlFor="">Ngữ liệu liên kết</label>
-                    <DocumentSelector
-                      sendLinkedDocumentId={getLinkDocumentId}
-                    />
-                  </div>
+                  <AssignmentTypeSelector
+                    sendLinkedDocument={getLinkedDocument}
+                    linkedDocument={linkedDocument}
+                  />
+
                   <label htmlFor="deadline" className={"my-3"}>
                     Hạn nộp
                   </label>
@@ -277,7 +301,7 @@ const ClassAssignment = (props: any) => {
                     <select
                       id={"type"}
                       name={"isForGroup"}
-                      className={"px-4 py-1 rounded border-[1px] "}
+                      className={"px-4 py-1 rounded border-[1px] ml-3"}
                       defaultValue={"false"}
                     >
                       <option value={"false"}>Cá nhân</option>
@@ -349,22 +373,24 @@ const ClassAssignment = (props: any) => {
                 </Col>
                 <Col span={3} className={"flex items-center"}>
                   {user.role === ROLE_STUDENT && (
-                    // <button
-                    //   className={
-                    //     "text-white font-semibold bg-green-500 rounded py-1 px-4 text-base"
-                    //   }
-                    //   onClick={openSubmitForm}
-                    // >
-                    //   Submit
-                    // </button>
                     <>
                       {assignment.status === assignmentStatus.APPROVED ? (
                         <FaCheck
-                          className={"text-green-500 mx-auto text-5xl"}
+                          className={"text-green-500 mx-auto text-4xl"}
                         />
                       ) : assignment.status === assignmentStatus.PENDING ? (
                         <MdPending
-                          className={"text-yellow-400  mx-auto text-5xl"}
+                          className={"text-yellow-400  mx-auto text-4xl"}
+                        />
+                      ) : assignment.status === assignmentStatus.REJECTED ? (
+                        <MdCancel
+                          className={"text-orange-500 mx-auto text-4xl"}
+                        />
+                      ) : assignment.status ===
+                          assignmentStatus.NOT_SUBMITTED &&
+                        isMissedTheDeadline(assignment.dueDateTime) ? (
+                        <FaRegCalendarTimes
+                          className={"text-red-600 mx-auto text-4xl"}
                         />
                       ) : null}
                     </>

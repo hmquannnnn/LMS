@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import paths from "@/app/paths";
-
+import { ROLE_ADMIN } from "@/utils/constant";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -21,10 +21,10 @@ export default function Home() {
   };
   useEffect(() => {
     getAccount();
-    router.push(`${paths.library}`);
+    user?.role === ROLE_ADMIN
+      ? router.push(paths.admin)
+      : router.push(paths.library);
   }, []);
 
-  return <>
-
-  </>;
+  return <></>;
 }
