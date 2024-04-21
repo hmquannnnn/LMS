@@ -8,7 +8,7 @@ const TestPreview = ({ testData }) => {
     <div className={"flex flex-col pl-10"}>
       <h1 className={"font-bold text-2xl"}>Xem trước</h1>
       {questionsList?.map((question, questionIndex: number) => (
-        <>
+        <div key={questionIndex}>
           <b>Câu {questionIndex + 1}:</b>
           {question?.type === "FILL_IN_BLANK" ? (
             <div className={"flex flex-col italic text-gray-500 text-sm"}>
@@ -32,13 +32,13 @@ const TestPreview = ({ testData }) => {
           ) : (
             <div className={"flex flex-col"}>
               {question?.choices?.map((choice, choiceIndex: number) => (
-                <p>
+                <p key={choiceIndex}>
                   <b>{indexToAlphabet(choiceIndex)}.&nbsp;</b> {choice.content}
                 </p>
               ))}
             </div>
           )}
-        </>
+        </div>
       ))}
     </div>
   );
