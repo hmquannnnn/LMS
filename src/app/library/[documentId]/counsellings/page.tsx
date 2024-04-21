@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCurrentTest } from "@/redux/slices/testSlice";
 // import "./test.scss";
 import { NotionRenderer } from "react-notion";
-import { callGetDocumentById } from "@/apis/documentsAPI";
+import { callGetCounsellingByDocumentId, callGetDocumentById, } from "@/apis/documentsAPI";
 import {
   formatVietnameseDateTime,
   topicMapping,
@@ -24,32 +24,32 @@ function formatTextToHTML(content) {
 }
 
 
-const dummyData = [
-  {
-    "id": 0,
-    "title": "string",
-    "content": "Hãy tưởng tượng bản thân là một hướng dẫn viên du lịch địa phương. Ngày mai em cần dẫn một đoàn khách tới tham quan các địa điểm du lịch tại địa phương em…….……... Hãy chuẩn bị một bài thuyết trình dưới hình thức video để giúp đoàn khách ấy hiểu rõ hơn về văn hóa của nơi đó nhé.",
-    "createAt": "2024-04-19T17:55:22.921Z",
-    "documentId": 0,
-    "orientation": "SOCIAL"
-  },
-  {
-    "id": 0,
-    "title": "string",
-    "content": "Hãy tưởng tượng bản thân là một hướng dẫn viên du lịch địa phương. Ngày mai em cần dẫn một đoàn khách tới tham quan các địa điểm du lịch tại địa phương em…….……... Hãy chuẩn bị một bài thuyết trình dưới hình thức video để giúp đoàn khách ấy hiểu rõ hơn về văn hóa của nơi đó nhé.",
-    "createAt": "2024-04-19T17:55:22.921Z",
-    "documentId": 0,
-    "orientation": "SOCIAL"
-  },
-  {
-    "id": 0,
-    "title": "string",
-    "content": "string",
-    "createAt": "2024-04-19T17:55:22.921Z",
-    "documentId": 0,
-    "orientation": "TECHNIQUE"
-  },
-]
+// const dummyData = [
+//   {
+//     "id": 0,
+//     "title": "string",
+//     "content": "Hãy tưởng tượng bản thân là một hướng dẫn viên du lịch địa phương. Ngày mai em cần dẫn một đoàn khách tới tham quan các địa điểm du lịch tại địa phương em…….……... Hãy chuẩn bị một bài thuyết trình dưới hình thức video để giúp đoàn khách ấy hiểu rõ hơn về văn hóa của nơi đó nhé.",
+//     "createAt": "2024-04-19T17:55:22.921Z",
+//     "documentId": 0,
+//     "orientation": "SOCIAL"
+//   },
+//   {
+//     "id": 0,
+//     "title": "string",
+//     "content": "Hãy tưởng tượng bản thân là một hướng dẫn viên du lịch địa phương. Ngày mai em cần dẫn một đoàn khách tới tham quan các địa điểm du lịch tại địa phương em…….……... Hãy chuẩn bị một bài thuyết trình dưới hình thức video để giúp đoàn khách ấy hiểu rõ hơn về văn hóa của nơi đó nhé.",
+//     "createAt": "2024-04-19T17:55:22.921Z",
+//     "documentId": 0,
+//     "orientation": "SOCIAL"
+//   },
+//   {
+//     "id": 0,
+//     "title": "string",
+//     "content": "string",
+//     "createAt": "2024-04-19T17:55:22.921Z",
+//     "documentId": 0,
+//     "orientation": "TECHNIQUE"
+//   },
+// ]
 
 
 const Counselling = ({ params }) => {
@@ -74,50 +74,51 @@ const Counselling = ({ params }) => {
   const [notFound, setNotFound] = useState(false);
   const [testId, setTestId] = useState(0);
   const [numberOfWritingQuestions, setNumberOfWritingQuestions] = useState(0);
+  const [counsellingItems, setCounsellingItems] = useState([]);
 
 
   const items = [
     {
       type: "social",
       title: "Xã hội",
-      bgColor: colors.green_1,
+      bgColor: colors.green_7,
       textColor: colors.green_3,
       svgFill: colors.green_3
     },
     {
       type: "research",
       title: "Nghiên cứu",
-      bgColor: colors.purple_1,
-      textColor: colors.purple_3,
-      svgFill: colors.purple_3
+      bgColor: colors.blue_6,
+      textColor: colors.blue_10,
+      svgFill: colors.blue_10
     },
     {
       type: "technique",
       title: "Kỹ thuật",
-      bgColor: colors.blue_1,
-      textColor: colors.blue_3,
-      svgFill: colors.blue_3
+      bgColor: colors.yellow_3,
+      textColor: colors.yellow_2,
+      svgFill: colors.yellow_2
     },
     {
       type: "management",
       title: "Quản lý",
-      bgColor: colors.yellow_1,
-      textColor: colors.yellow_3,
-      svgFill: colors.yellow_3
+      bgColor: colors.pink_6,
+      textColor: colors.pink_5,
+      svgFill: colors.pink_5
     },
     {
       type: "major",
       title: "Nghiệp vụ",
-      bgColor: colors.pink_1,
-      textColor: colors.pink_3,
-      svgFill: colors.pink_3
+      bgColor: colors.grey_3,
+      textColor: colors.grey_2,
+      svgFill: colors.grey_2
     },
     {
       type: "art",
       title: "Nghệ thuật",
-      bgColor: colors.grey_1,
-      textColor: colors.grey_2,
-      svgFill: colors.grey_2
+      bgColor: colors.pink_7,
+      textColor: colors.pink_4,
+      svgFill: colors.pink_4
     },
   ]
 
@@ -141,8 +142,19 @@ const Counselling = ({ params }) => {
         console.error("Error fetching data:", error);
       }
     };
+
+    const fetchCounselling = async () => {
+      try {
+        const counselling = await callGetCounsellingByDocumentId(documentId);
+        setCounsellingItems(counselling);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
     fetchData();
-  }, [documentId]);
+    fetchCounselling();
+  }, []);
 
 
 
@@ -213,13 +225,13 @@ const Counselling = ({ params }) => {
         <div className="px-10">
           <div className="font-bold">Tham khảo bộ nhiệm vụ trải nghiệm nghề nghiệp dưới dây và hãy chọn thực hiện một nhiệm vụ em cảm thấy phù hợp nhé!</div>
           {items.map((item, index) => {
-            if (dummyData.filter(d => d.orientation.toLowerCase() == item.type) == 0) return null;
+            if (counsellingItems.filter(d => d.orientation.toLowerCase() == item.type) == 0) return null;
             return (
               <div key={index} className="mt-5">
                 <div className="w-full text-center font-bold py-1" style={{ background: item.bgColor, color: item.textColor }}>
                   {item.title}
                 </div>
-                {dummyData.filter(d => d.orientation.toLowerCase() == item.type).map((item1, index) =>
+                {counsellingItems.filter(d => d.orientation.toLowerCase() == item.type).map((item1, index) =>
                   <div key={index} className="flex mt-5 gap-2 ml-4">
                     {/* <div>{item.title}</div> */}
                     <div>

@@ -86,3 +86,7 @@ export const callUnLikeDocument = (documentId: string) => {
   };
   return instance.put(`/users${documentUrl}/${documentId}/unlike`);
 };
+
+export const callGetCounsellingByDocumentId = (documentId: string) => {
+  return instance.get(`${documentUrl}/${documentId}/counsellings`);
+};
