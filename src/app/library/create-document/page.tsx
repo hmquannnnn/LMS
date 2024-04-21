@@ -353,7 +353,7 @@ const Index = () => {
 
     return (
         <div className='flex gap-5'>
-            <div className='w-1/2 mt-4'>
+            <div className='w-1/3 mt-4'>
                 <FormProvider {...methods}  >
                     <form
                         onSubmit={e => e.preventDefault()}
@@ -400,7 +400,7 @@ const Index = () => {
                                     />
                                 </div>
                             </div>
-                            {/* <div className='flex-1 flex mb-4'>
+                            <div className='flex-1 flex mb-4'>
                                 <div className='flex-1 flex  mr-2'>
                                     <div className='mr-2 font-bold'>Link ảnh:</div>
                                     <input
@@ -420,7 +420,7 @@ const Index = () => {
                                 <Upload {...uploadProps}>
                                     <Button icon={<UploadOutlined />}>Tải ảnh lên</Button>
                                 </Upload>
-                            </div> */}
+                            </div>
 
                             <div className='flex-1 flex mb-4'>
                                 <div className='flex-1 flex  mr-2'>
@@ -501,14 +501,7 @@ const Index = () => {
                         </div>
                     </form>
                 </FormProvider>
-                <div className='flex justify-center pl-[2vw] mt-10'>
-                    <DocumentPreview props={
-                        {
-                            data: data, url: fileInput ? URL.createObjectURL(fileInput) : (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
-                            veryFirstText: veryFirstText == '' ? SHORT_DESCRIPTION_PLACEHOLDER : veryFirstText,
-                            title: documentTitle == '' ? TITLE_PLACEHOLDER : documentTitle
-                        }} />
-                </div>
+
                 {/* <div className='max-w-[600px]'>
                     {
                         firstImageUrl.current != '' &&
@@ -522,6 +515,15 @@ const Index = () => {
                 </div> */}
             </div>
             <div className='flex-1'>
+                <div className='flex justify-center pl-[2vw] mt-10 h-[400px] mb-10'>
+                    <DocumentPreview props={
+                        {
+                            // data: data, url: fileInput ? URL.createObjectURL(fileInput) : (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
+                            data: data, url: (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
+                            veryFirstText: veryFirstText == '' ? SHORT_DESCRIPTION_PLACEHOLDER : veryFirstText,
+                            title: documentTitle == '' ? TITLE_PLACEHOLDER : documentTitle
+                        }} />
+                </div>
                 <div className='border h-screen overflow-scroll'>
                     {data ? (
                         <div>
