@@ -7,11 +7,64 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentAssignment } from "@/redux/slices/classSlice";
 import React, { useEffect, useState } from "react";
-import { assignmentStatus, ROLE_STUDENT, ROLE_TEACHER } from "@/utils/constant";
+import {
+  assignmentStatus,
+  assignmentTypes,
+  ROLE_STUDENT,
+  ROLE_TEACHER,
+  testTypes,
+} from "@/utils/constant";
 import { FormatDate } from "@/utils/formatDate";
 import { useRouter } from "next/navigation";
 import { filterAndRemoveDuplicateAssignments } from "@/app/classroom/[classId]/assignments/page";
-import { vietnamesePostStatus } from "@/app/classroom/[classId]/assignments/[assignmentId]/history/page";
+import { vietnamesePostStatus } from "@/components/submitHistory/normalAssignment";
+import { callGetTestById, callGetUserTestHistory } from "@/apis/testAPI";
+
+const initalAssignment = {
+  id: 0,
+  title: "",
+  content: "",
+  dueDateTime: "",
+  assignedDateTime: "",
+  isForGroup: false,
+  relatedDocumentId: 0,
+  type: "OTHER",
+  relatedTestId: 0,
+};
+
+const initalTest = {
+  id: 0,
+  authorId: 0,
+  documentId: 0,
+  title: "",
+  questions: [
+    {
+      id: 0,
+      type: "",
+      question: "",
+      choices: [
+        {
+          id: 0,
+          content: "",
+          isAnswer: true,
+        },
+      ],
+      hints: [
+        {
+          id: 0,
+          content: "",
+        },
+      ],
+      answerHints: [
+        {
+          id: 0,
+          content: "",
+        },
+      ],
+    },
+  ],
+  type: "",
+};
 
 const AssignmentDetails = (props: any) => {
   const classId = Number(props.params.classId);
@@ -22,6 +75,10 @@ const AssignmentDetails = (props: any) => {
       state?.classes?.currentClass?.assignments?.currentAssignment || {},
   );
   const [document, setDocument] = useState(null);
+  const [assignmentWithDocument, setAssignmentWithDocument] =
+    useState(initalAssignment);
+  const [test, setTest] = useState(initalTest);
+  const [isDone, setIsDone] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -33,18 +90,51 @@ const AssignmentDetails = (props: any) => {
     }
     if (user.role === ROLE_STUDENT) {
       const res = await callGetAssignmentStatusStudent(classId);
+      const currentAssignmentWithDocument =
+        await callGetAssignmentById(assignmentId);
+      setAssignmentWithDocument(currentAssignmentWithDocument);
       const filteredRes = filterAndRemoveDuplicateAssignments(res);
       const current = filteredRes.find(
         (assignment) => assignment.id == assignmentId,
       );
       // console.log(currentAssignment);
-      dispatch(getCurrentAssignment(current));
+      dispatch(
+        getCurrentAssignment({
+          ...currentAssignmentWithDocument,
+          status: current.status,
+        }),
+      );
+
+      //fetch test if assignment type is FOR_TEST
+      if (currentAssignmentWithDocument?.relatedTestId) {
+        const testId = currentAssignmentWithDocument?.relatedTestId;
+        const relatedTest = await callGetTestById(testId);
+        await setTest(relatedTest);
+        const history = await callGetUserTestHistory(testId);
+        if (history?.length > 0) {
+          setIsDone(true);
+        }
+      }
     }
   };
 
   useEffect(() => {
     getAssignmentDetails();
   }, [user]);
+
+  const convertTestType = (testType: string) => {
+    return testType === testTypes.MULTIPLE_CHOICE ? "READING" : "WRITING";
+  };
+
+  const handleSubmit = () => {
+    currentAssignment.type === assignmentTypes.FOR_TEST
+      ? router.push(`/library/${test.documentId}/${convertTestType(test.type)}`)
+      : router.push(`${assignmentId}/submit`);
+  };
+
+  const isTestDone = () => {
+    return isDone ? "Hoàn thành" : "Chưa hoàn thành";
+  };
 
   return (
     <>
@@ -82,7 +172,9 @@ const AssignmentDetails = (props: any) => {
               <th
                 className={"border border-collapse font-normal text-left px-5"}
               >
-                {vietnamesePostStatus[currentAssignment.status]}
+                {currentAssignment.type === assignmentTypes.FOR_TEST
+                  ? isTestDone()
+                  : vietnamesePostStatus[currentAssignment?.status]}
               </th>
             </tr>
             <tr>
@@ -99,9 +191,11 @@ const AssignmentDetails = (props: any) => {
                   className={
                     "rounded bg-purple_7 px-3 py-1 font-semibold text-white mr-5"
                   }
-                  onClick={() => router.push(`${assignmentId}/submit`)}
+                  onClick={handleSubmit}
                 >
-                  Nộp bài
+                  {currentAssignment.type === assignmentTypes.FOR_TEST
+                    ? "Làm bài"
+                    : "Nộp bài"}
                 </button>
                 {currentAssignment?.status !=
                   assignmentStatus.NOT_SUBMITTED && (
@@ -114,6 +208,17 @@ const AssignmentDetails = (props: any) => {
                     Lịch sử nộp bài
                   </button>
                 )}
+                {currentAssignment.type === assignmentTypes.FOR_TEST &&
+                  isDone && (
+                    <button
+                      className={
+                        "rounded bg-purple_7 px-3 py-1 font-semibold text-white"
+                      }
+                      onClick={() => router.push(`${assignmentId}/history`)}
+                    >
+                      Lịch sử làm bài
+                    </button>
+                  )}
               </th>
             </tr>
           </table>

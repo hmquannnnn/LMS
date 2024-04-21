@@ -2,11 +2,10 @@
 
 import { useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
-import { Avatar, Modal, Slider } from "antd";
+import { Modal, Slider } from "antd";
 import { callChangeAvatar } from "@/apis/userAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { doGetAccountAction } from "@/redux/slices/accountSlice";
-import { UserOutlined } from "@ant-design/icons";
 import imageCompression from "browser-image-compression";
 // import "antd/dist/antd.css";
 
@@ -26,19 +25,22 @@ const modalStyle = {
 };
 
 const compressImage = async (canvas) => {
-	const options = {
-		maxSizeMB: 200, // Giới hạn kích thước của hình ảnh sau khi nén
-		maxWidthOrHeight: 1920, // Giới hạn chiều rộng hoặc chiều cao tối đa
-		useWebWorker: true, // Sử dụng Web Worker để tăng hiệu suất
-	};
-	
-	try {
-		const blob = await imageCompression(canvas.toDataURL('image/jpeg'), options);
-		return new File([blob], "newAvatar.jpg");
-	} catch (error) {
-		console.error('Error compressing image:', error);
-		return null;
-	}
+  const options = {
+    maxSizeMB: 200, // Giới hạn kích thước của hình ảnh sau khi nén
+    maxWidthOrHeight: 1920, // Giới hạn chiều rộng hoặc chiều cao tối đa
+    useWebWorker: true, // Sử dụng Web Worker để tăng hiệu suất
+  };
+
+  try {
+    const blob = await imageCompression(
+      canvas.toDataURL("image/jpeg"),
+      options,
+    );
+    return new File([blob], "newAvatar.jpg");
+  } catch (error) {
+    console.error("Error compressing image:", error);
+    return null;
+  }
 };
 
 const CropperModal = ({ src, modalOpen, setModalOpen, setPreview }) => {
@@ -174,12 +176,6 @@ const Cropper = ({ imgSrc }) => {
               margin: "auto",
               // marginBottom: "10px",
             }}
-          />
-          <Avatar
-            className={
-              "largelaptop:h-44 largelaptop:w-44 2xl:w-36 2xl:h-36 h-32 w-32 2xl:mb-2 mb-1"
-            }
-            icon={<UserOutlined />}
           />
         </div>
         <p
