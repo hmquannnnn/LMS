@@ -195,9 +195,9 @@ const AssignmentDetails = (props: any) => {
               >
                 Bài tập&nbsp;
                 {test?.types === testTypes.WRITING
-                  ? "Viết"
+                  ? "Viết "
                   : document?.type === documentTypes.TEXT
-                    ? "Đọc hiểu"
+                    ? "Đọc hiểu "
                     : "Nghe và nói "}
                 Ngữ liệu&nbsp; &quot;{document?.title}&quot;
               </Link>
