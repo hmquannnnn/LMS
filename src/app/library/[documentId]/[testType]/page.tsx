@@ -239,7 +239,7 @@ const Test = ({ params }) => {
     formData.append("documentId", documentId);
     formData.append("type", type);
     const res = await callGetTestByDocument(formData);
-    res.questions.sort((a, b) => {
+    res?.questions?.sort((a, b) => {
       return a.id - b.id;
     });
 

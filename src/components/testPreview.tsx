@@ -9,8 +9,11 @@ const TestPreview = ({ testData }) => {
       <h1 className={"font-bold text-2xl"}>Xem trước</h1>
       {questionsList?.map((question, questionIndex: number) => (
         <div key={questionIndex}>
-          <b>Câu {questionIndex + 1}:</b>
-          {question?.type === "FILL_IN_BLANK" ? (
+          <p>
+            <b>Câu {questionIndex + 1}:</b> &nbsp; {question.question}
+          </p>
+
+          {question?.type === "FILL_IN_THE_BLANK" ? (
             <div className={"flex flex-col italic text-gray-500 text-sm"}>
               <p>Gợi ý:</p>
               {question?.hints.map((hint, hintIndex) => (
