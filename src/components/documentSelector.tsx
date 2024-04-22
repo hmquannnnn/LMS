@@ -11,7 +11,7 @@ import {
 import { useDispatch } from "react-redux";
 import { assignmentTypes } from "@/utils/constant";
 
-const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
+const DocumentSelector: React.FC = ({ sendLinkedDocument }) => {
   const [isTypingSearch, setIsTypingSearch] = useState(false);
   const [searchItems, setSearchItems] = useState<MenuProps["items"]>([]);
   const [searchValue, setSearchValue] = useState("");
@@ -44,7 +44,7 @@ const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
 
   const handleChooseLinkedDocument = (document) => {
     setLinkedDocument(document);
-    sendLinkedDocumentId(document.id);
+    sendLinkedDocument(document);
     dispatch(updateLinkedDocument(document.id));
     dispatch(updateAssignmentType(assignmentTypes.FOR_COUNSELLING));
   };
@@ -56,7 +56,7 @@ const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
 
   const handleCancelSelection = () => {
     setLinkedDocument(null);
-    sendLinkedDocumentId(0);
+    sendLinkedDocument(null);
     dispatch(updateLinkedDocument(0));
   };
   return (
@@ -64,7 +64,7 @@ const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
       {linkedDocument ? (
         <div
           className={
-            "flex flex-row items-center bg-gray-300 rounded px-3 py-1 "
+            "flex flex-row items-center bg-gray-300 rounded px-3 py-2 w-fit"
           }
         >
           <p>{linkedDocument.title}</p>
@@ -118,7 +118,7 @@ const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
 
             <input
               className={
-                "flex-1 font-bold h-8 rounded border-0   caret-white focus:outline-none border-gray-200 pl-2 my-auto ml-2 outline-none "
+                "flex-1 font-semibold h-8 rounded border-0    caret-white focus:outline-none border-gray-200 pl-2 my-auto ml-2 outline-none "
               }
               onChange={handleOnChangeSearch}
               value={searchValue}
