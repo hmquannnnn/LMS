@@ -114,9 +114,9 @@ const ClassAssignment = (props: any) => {
       dispatch(getCurrentClassAction(classInfo));
       if (userRole === ROLE_TEACHER) {
         const assignmentList = await callGetAssigment(classId);
-        // console.log(assignmentList);
+        console.log(assignmentList);
         assignmentList.sort((a: object, b: object) => {
-          return new Date(a.id) - new Date(b.id);
+          return b.id - a.id;
         });
         dispatch(getAssignmentsAction(assignmentList));
       }
@@ -126,7 +126,7 @@ const ClassAssignment = (props: any) => {
           filterAndRemoveDuplicateAssignments(assignmentList);
         console.log("filter: ", filteredAssignment);
         filteredAssignment.sort((a: object, b: object) => {
-          return new Date(a.id) - new Date(b.id);
+          return b.id - a.id;
         });
         dispatch(getAssignmentsAction(filteredAssignment));
       }

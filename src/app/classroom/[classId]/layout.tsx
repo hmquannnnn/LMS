@@ -149,7 +149,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                         "flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
                       }
                       placement="top"
-                      title={"Tiêu chí đánh giá"}
+                      title={"Tiêu chí kiểm tra đánh giá"}
                       color={"#367ff0"}
                       arrow={false}
                     >
@@ -168,8 +168,8 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
 
           {/*<div style={{ height: "150px" }} />*/}
           <div>{children}</div>
-        </div >
-      </div >
+        </div>
+      </div>
     </>
   );
 };
