@@ -148,7 +148,7 @@ const Header = () => {
         </div>
         <div className="flex flex-auto items-center justify-between w-2/3">
           <div className={"h-fit my-auto flex-1"}>
-            <div className="flex items-center relative cursor-pointer" onMouseEnter={() => setMenuActive(true)}>
+            <div className="flex items-center relative cursor-pointer" >
 
               {/*<Dropdown className={"my-auto"} menu={{items}}>*/}
               {/* <button
@@ -193,7 +193,7 @@ const Header = () => {
                                 ]
                             }}> */}
 
-              <div className="flex items-center cursor-pointer">
+              <div className="flex items-center cursor-pointer " onMouseEnter={() => setMenuActive(true)}>
                 {/* <GiHamburgerMenu className={"mr-2.5 text-xl my-auto"} /> */}
                 <p className={"text-purple_1 font-bold"}>DANH MỤC</p>
               </div>
@@ -271,7 +271,7 @@ const Header = () => {
         <div className="w-1/6 flex-1"></div>
         {
           menuActive &&
-          <div className="flex absolute w-full bottom-[-32px] left-0 z-[10] justify-center gap-5 bg-white shadow-lg py-2 ">
+          <div className="flex absolute w-full top-[100%] left-0 z-[10] justify-center gap-5 bg-white shadow-lg py-2 ">
             {
               listTopics.map((topic, index) => {
                 return (
