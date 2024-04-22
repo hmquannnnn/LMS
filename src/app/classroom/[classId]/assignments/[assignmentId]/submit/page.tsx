@@ -289,6 +289,13 @@ const SubmissionPage = (props: any) => {
     setCounselling(null);
   };
 
+  const isLinkedDocumentAssignment = (assignment) => {
+    return (
+      assignment.type === assignmentTypes.FOR_COUNSELLING ||
+      assignment.type === assignmentTypes.FOR_TEST
+    );
+  };
+
   console.log("check items: ", counsellingItems);
 
   return (
@@ -306,15 +313,14 @@ const SubmissionPage = (props: any) => {
             dangerouslySetInnerHTML={{ __html: currentAssignment.content }}
           />
 
-          {currentAssignment?.type === assignmentTypes.FOR_COUNSELLING ||
-            (currentAssignment?.type === assignmentTypes.FOR_TEST && (
-              <p>
-                Ngữ liệu liên kết :{" "}
-                <Link href={`/library/${document?.id}`} className={"font-bold"}>
-                  {document?.title}
-                </Link>
-              </p>
-            ))}
+          {isLinkedDocumentAssignment(currentAssignment) && (
+            <p>
+              Ngữ liệu liên kết :{" "}
+              <Link href={`/library/${document?.id}`} className={"font-bold"}>
+                {document?.title}
+              </Link>
+            </p>
+          )}
         </Col>
         <Col span={14} className={"pl-10"}>
           <div>
