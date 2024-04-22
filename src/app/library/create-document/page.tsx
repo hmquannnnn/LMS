@@ -58,7 +58,7 @@ const Index = () => {
                 topic: topic,
                 veryFirstText: veryFirstText,
                 notionPageId: inputValue
-            }, null
+            }, fileInput
         )
     })
 
@@ -446,6 +446,7 @@ const Index = () => {
                                         <Select.Option value="AUDIO">Âm thanh</Select.Option>
                                         <Select.Option value="INFOGRAPHIC">Infographic</Select.Option>
                                         <Select.Option value="IMAGES">Ảnh</Select.Option>
+                                        <Select.Option value="VIDEO">Video</Select.Option>
 
                                         {/* <Select.Option value="SPORT">Thể thao</Select.Option>
                                 <Select.Option value="TOURISM">Du lịch</Select.Option> */}
@@ -518,8 +519,8 @@ const Index = () => {
                 <div className='flex justify-center pl-[2vw] mt-10 h-[400px] mb-10'>
                     <DocumentPreview props={
                         {
-                            // data: data, url: fileInput ? URL.createObjectURL(fileInput) : (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
-                            data: data, url: (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
+                            data: data, url: fileInput ? URL.createObjectURL(fileInput) : (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
+                            // data: data, url: (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
                             veryFirstText: veryFirstText == '' ? SHORT_DESCRIPTION_PLACEHOLDER : veryFirstText,
                             title: documentTitle == '' ? TITLE_PLACEHOLDER : documentTitle
                         }} />
