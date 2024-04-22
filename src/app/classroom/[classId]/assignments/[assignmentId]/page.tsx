@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import {
   assignmentStatus,
   assignmentTypes,
+  documentTypes,
   ROLE_STUDENT,
   ROLE_TEACHER,
   testTypes,
@@ -19,6 +20,8 @@ import { useRouter } from "next/navigation";
 import { filterAndRemoveDuplicateAssignments } from "@/app/classroom/[classId]/assignments/page";
 import { vietnamesePostStatus } from "@/components/submitHistory/normalAssignment";
 import { callGetTestById, callGetUserTestHistory } from "@/apis/testAPI";
+import Link from "next/link";
+import { callGetDocumentById } from "@/apis/documentsAPI";
 
 const initalAssignment = {
   id: 0,
@@ -74,19 +77,29 @@ const AssignmentDetails = (props: any) => {
     (state) =>
       state?.classes?.currentClass?.assignments?.currentAssignment || {},
   );
-  const [document, setDocument] = useState(null);
   const [assignmentWithDocument, setAssignmentWithDocument] =
     useState(initalAssignment);
   const [test, setTest] = useState(initalTest);
   const [isDone, setIsDone] = useState(false);
+  const [document, setDocument] = useState();
   const dispatch = useDispatch();
   const router = useRouter();
 
   const getAssignmentDetails = async () => {
     if (user.role === ROLE_TEACHER) {
       const res = await callGetAssignmentById(assignmentId);
+      const relatedDocument = await callGetDocumentById(res?.relatedDocumentId);
 
+      console.log(relatedDocument);
+      setDocument(relatedDocument);
       dispatch(getCurrentAssignment(res));
+
+      //fetch test if assignment type is FOR_TEST
+      if (res?.relatedTestId) {
+        const testId = res?.relatedTestId;
+        const relatedTest = await callGetTestById(testId);
+        await setTest(relatedTest);
+      }
     }
     if (user.role === ROLE_STUDENT) {
       const res = await callGetAssignmentStatusStudent(classId);
@@ -105,6 +118,12 @@ const AssignmentDetails = (props: any) => {
         }),
       );
 
+      const relatedDocument = await callGetDocumentById(
+        currentAssignmentWithDocument?.relatedDocumentId,
+      );
+      console.log(relatedDocument);
+      setDocument(relatedDocument);
+
       //fetch test if assignment type is FOR_TEST
       if (currentAssignmentWithDocument?.relatedTestId) {
         const testId = currentAssignmentWithDocument?.relatedTestId;
@@ -120,8 +139,10 @@ const AssignmentDetails = (props: any) => {
 
   useEffect(() => {
     getAssignmentDetails();
-  }, [user]);
 
+    console.log("document: ", document);
+  }, [user]);
+  console.log("test: ", test);
   const convertTestType = (testType: string) => {
     return testType === testTypes.MULTIPLE_CHOICE ? "READING" : "WRITING";
   };
@@ -134,6 +155,13 @@ const AssignmentDetails = (props: any) => {
 
   const isTestDone = () => {
     return isDone ? "Hoàn thành" : "Chưa hoàn thành";
+  };
+
+  const isLinkedDocumentAssignment = (assignment) => {
+    return (
+      assignment.type === assignmentTypes.FOR_COUNSELLING ||
+      assignment.type === assignmentTypes.FOR_TEST
+    );
   };
 
   return (
@@ -150,6 +178,31 @@ const AssignmentDetails = (props: any) => {
           <div
             dangerouslySetInnerHTML={{ __html: currentAssignment.content }}
           />
+          {currentAssignment?.type === assignmentTypes.FOR_COUNSELLING && (
+            <p>
+              Ngữ liệu liên kết :&nbsp;
+              <Link href={`/library/${document?.id}`} className={"font-bold"}>
+                {document?.title}
+              </Link>
+            </p>
+          )}
+          {currentAssignment?.type === assignmentTypes.FOR_TEST && (
+            <p>
+              Bài tập ngữ liệu liên kết:&nbsp;
+              <Link
+                href={`/library/${document?.id}/${test?.type}`}
+                className={"font-bold"}
+              >
+                Bài tập&nbsp;
+                {test?.types === testTypes.WRITING
+                  ? "Viết"
+                  : document?.type === documentTypes.TEXT
+                    ? "Đọc hiểu"
+                    : "Nghe và nói "}
+                Ngữ liệu&nbsp; &quot;{document?.title}&quot;
+              </Link>
+            </p>
+          )}
         </div>
         {user.role === ROLE_STUDENT && (
           <table className={"w-[90%] mx-auto px-4 text-left"}>
