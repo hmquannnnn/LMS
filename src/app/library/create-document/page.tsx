@@ -169,6 +169,8 @@ const Index = () => {
             formData.append("thumbnail", file);
             isCanPost = true;
         } else {
+            // handleCheckImageSaveAbility(firstImageUrl)
+
             const isGetImageSuccess = await blobUrlToFile(firstImageUrl).then((file) => {
                 formData.append("thumbnail", file);
                 return true
@@ -194,7 +196,7 @@ const Index = () => {
                     // resolve(res);
                 }).catch((error) => {
                     console.error('Error fetching data:', error);
-                    alert("Đăng bài thất bại");
+                    alert("Đăng bài thất bại. Vui lòng chọn ảnh có kích thước nhỏ hơn.");
                     setIsLoadingSubmit(false);
                 });
 
@@ -256,7 +258,7 @@ const Index = () => {
         beforeUpload: (file) => {
             const isXlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
             if (!isXlsx) {
-                message.error(`${file.name} không hợp lệ, vui lòng chọn ảnh đuôi .png/.jpg.`);
+                message.error(`${file.name} không hợp lệ, vui lòng chọn file đuôi .xlsx.`);
             }
             return isXlsx || Upload.LIST_IGNORE;
         },
@@ -278,7 +280,7 @@ const Index = () => {
                     };
                     console.log(jsonData)
                     jsonData[0] = jsonData[0].map((item) => item.toString().toUpperCase().trim());
-                    for (let i = 2; i < jsonData.length; i++) {
+                    for (let i = 1; i < jsonData.length; i++) {
                         if (jsonData[i][0] == null || jsonData[i][0] == '') break;
                         const question = jsonData[i][0];
                         let questionType = jsonData[i][1]?.toString()?.toUpperCase().trim();
@@ -489,9 +491,9 @@ const Index = () => {
                                     setIsLoadingCreateTest(false)
 
                                 }}>Test</Button>
-                            </div>
+                            </div> */}
 
- */}
+
 
 
                             <Button type="default"

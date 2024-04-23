@@ -170,6 +170,106 @@ const CreateTestForm = () => {
     setTestData({ ...testData, questions: updatedQuestions });
   };
 
+  const uploadTestProps: UploadProps = {
+    beforeUpload: (file) => {
+      const isXlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      if (!isXlsx) {
+        message.error(`${file.name} không hợp lệ, vui lòng chọn ảnh đuôi .png/.jpg.`);
+      }
+      return isXlsx || Upload.LIST_IGNORE;
+    },
+    onChange: (info) => {
+
+      const parseExcelToJson = (file: File) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+
+          const data = e.target?.result;
+          const workbook = XLSX.read(data, { type: 'binary' });
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          const outputJson = {
+            documentId: documentTestId,
+            title: documentTitle,
+            questions: [],
+            type: testType
+          };
+          console.log(jsonData)
+          jsonData[0] = jsonData[0].map((item) => item.toString().toUpperCase().trim());
+          for (let i = 1; i < jsonData.length; i++) {
+            if (jsonData[i][0] == null || jsonData[i][0] == '') break;
+            const question = jsonData[i][0];
+            let questionType = jsonData[i][1]?.toString()?.toUpperCase().trim();
+            if (questionType.toString().toUpperCase() == 'FILL-IN-THE-BLANK') {
+              questionType = 'FILL_IN_THE_BLANK';
+            }
+            if (questionType.toString().toUpperCase() == 'MULTIPLE CHOICE') {
+              questionType = 'MULTIPLE_CHOICE';
+            }
+            const choices = [];
+            const hints = [];
+            const answerHints = [];
+
+            for (let j = 2; jsonData[0][j].includes('OPTION'); j++) {
+              if (jsonData[i][j]) {
+                choices.push({
+                  content: jsonData[i][j],
+                  isAnswer: false
+                });
+              }
+            }
+
+            const correctAnswerColumnIndex = jsonData[0].indexOf(('Correct Answer').toUpperCase());
+            const correctAnswer = jsonData[i][correctAnswerColumnIndex];
+            if (correctAnswer) {
+              correctAnswer.toString().split(',').forEach((choiceIndex, index) => {
+                choices[parseInt(choiceIndex) - 1].isAnswer = true;
+              });
+            }
+
+            const hintColumnIndex = jsonData[0].indexOf(('HINT').toUpperCase());
+            console.log("header: " + jsonData[0])
+            console.log("hintCI: " + hintColumnIndex)
+            if (jsonData[i][hintColumnIndex]) {
+              hints.push({
+                content: jsonData[i][hintColumnIndex]
+              });
+            }
+            const answerHintColumnIndex = hintColumnIndex + 1;
+            if (jsonData[i][answerHintColumnIndex]) {
+              answerHints.push({
+                content: jsonData[i][answerHintColumnIndex]
+              });
+            }
+
+            const questionObj = {
+              question,
+              type: questionType,
+              choices,
+              hints,
+              answerHints
+            };
+
+            outputJson.questions.push(questionObj);
+          }
+
+          console.log(outputJson);
+          setTestData(outputJson);
+        };
+        reader.readAsBinaryString(file);
+      };
+
+      // ...
+
+      const file = info.file.originFileObj;
+      parseExcelToJson(file);
+
+    },
+    multiple: false,
+    maxCount: 1
+  };
+
+
   useEffect(() => {
     console.log(testData);
   }, [testData]);
