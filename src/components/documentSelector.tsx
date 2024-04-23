@@ -57,7 +57,7 @@ const DocumentSelector: React.FC = ({ sendLinkedDocument }) => {
   const handleCancelSelection = () => {
     setLinkedDocument(null);
     sendLinkedDocument(null);
-    dispatch(updateLinkedDocument(0));
+    dispatch(updateLinkedDocument(null));
   };
   return (
     <div className={"my-2"}>

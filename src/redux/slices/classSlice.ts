@@ -53,9 +53,9 @@ const initialState = {
         content: "",
         dueDateTime: "",
         isForGroup: false,
-        documentId: 0,
+        documentId: null,
         type: "OTHER",
-        relatedTestId: 0,
+        relatedTestId: null,
       },
     },
     members: [
