@@ -188,9 +188,8 @@ const AssignmentDetails = (props: any) => {
           )}
           {currentAssignment?.type === assignmentTypes.FOR_TEST && (
             <p>
-              Bài tập ngữ liệu liên kết:&nbsp;
               <Link
-                href={`/library/${document?.id}/${test?.type}`}
+                href={`/library/${document?.id}/${test?.type === testTypes.MULTIPLE_CHOICE ? "READING" : testTypes.WRITING}`}
                 className={"font-bold"}
               >
                 Bài tập&nbsp;

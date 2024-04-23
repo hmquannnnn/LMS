@@ -4,11 +4,14 @@ import { callGetAssignmentById } from "@/apis/classAPI";
 import { callGetTestById, callGetUserTestHistory } from "@/apis/testAPI";
 import React, { useEffect, useState } from "react";
 import { FormatDateTime } from "@/utils/formatDate";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const ForTestAssignmentHistory = ({ params }) => {
   const classId = params.classId;
   const assignmentId = params.assignmentId;
   const [history, setHistory] = useState();
+  const router = useRouter();
   console.log(params);
 
   const getTestHistory = async () => {
@@ -66,7 +69,12 @@ const ForTestAssignmentHistory = ({ params }) => {
                 {submission.totalScore} /{" "}
                 {submission.questions.length - countWritingQuestion(submission)}
               </th>
-              <th className={"border border-slate-400 font-normal"}>Xem lại</th>
+              <th
+                className={"border border-slate-400 font-normal"}
+                // onClick={() => router.push(`test/${history.id}`)}
+              >
+                <Link href={`history/test/${submission.id}`}>Xem lại</Link>
+              </th>
             </tr>
           </>
         ))}
