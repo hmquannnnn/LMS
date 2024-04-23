@@ -213,7 +213,7 @@ const Test = ({ params }) => {
           score++;
         }
       });
-      score -= numberOfWritingQuestions;
+      // score -= numberOfWritingQuestions;
       setScore(score);
     }
   };
