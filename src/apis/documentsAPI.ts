@@ -51,6 +51,10 @@ export const callGetDocumentsWithPaging = (
   return instance.get(`${documentUrl}/page?pageSize=${pageSize}&page=${page}`);
 };
 
+export const callDeleteDocumentById = (documentId: string) => {
+  return instance.delete(`${documentUrl}/${documentId}`);
+};
+
 export const callGetDocumentsDetail = (
   type: String | null,
   topic: String | null

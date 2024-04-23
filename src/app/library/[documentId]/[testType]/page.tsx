@@ -104,17 +104,17 @@ const Test = ({ params }) => {
       choices:
         question.type === "FILL_IN_THE_BLANK"
           ? [
-              {
-                choiceId: null,
-                isPicked: null,
-                content: "",
-              },
-            ]
-          : question.choices.map((choice) => ({
-              choiceId: choice.id,
-              isPicked: false,
+            {
+              choiceId: null,
+              isPicked: null,
               content: "",
-            })),
+            },
+          ]
+          : question.choices.map((choice) => ({
+            choiceId: choice.id,
+            isPicked: false,
+            content: "",
+          })),
     }));
     setUserAnswers(initialAnswers);
   };
@@ -231,6 +231,7 @@ const Test = ({ params }) => {
       behavior: "smooth",
     });
   };
+
 
   const getTest = async () => {
     const type =
@@ -372,9 +373,9 @@ const Test = ({ params }) => {
                             {question.question}
                           </p>
                           {isSubmitted === true &&
-                          question.type != "FILL_IN_THE_BLANK" ? (
+                            question.type != "FILL_IN_THE_BLANK" ? (
                             JSON.stringify(userAnswers[questionIndex]) ===
-                            JSON.stringify(correctAnswer[questionIndex]) ? (
+                              JSON.stringify(correctAnswer[questionIndex]) ? (
                               <FaCheck className={"text-green-500 text-xl"} />
                             ) : (
                               <MdCancel className={"text-red-600 text-xl"} />
@@ -451,17 +452,17 @@ const Test = ({ params }) => {
                                 style={
                                   isSubmitted
                                     ? userAnswers[questionIndex]?.choices[
-                                        choiceIndex
-                                      ]?.isPicked
+                                      choiceIndex
+                                    ]?.isPicked
                                       ? compareCorrectAnswer(
-                                          questionIndex,
-                                          choiceIndex,
-                                        )
+                                        questionIndex,
+                                        choiceIndex,
+                                      )
                                         ? { backgroundColor: "#99f090" }
                                         : { backgroundColor: "#f09090" }
                                       : correctAnswer[questionIndex]?.choices[
-                                            choiceIndex
-                                          ]?.isPicked
+                                        choiceIndex
+                                      ]?.isPicked
                                         ? { backgroundColor: "#99f090" }
                                         : null
                                     : null
@@ -489,8 +490,8 @@ const Test = ({ params }) => {
                                   style={
                                     isSubmitted
                                       ? userAnswers[questionIndex]?.choices[
-                                          choiceIndex
-                                        ]?.isPicked
+                                        choiceIndex
+                                      ]?.isPicked
                                         ? { fontWeight: "bold" }
                                         : null
                                       : null

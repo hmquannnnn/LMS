@@ -328,7 +328,7 @@ const DocumentIdPage = ({ params }) => {
               }
               onClick={() => handleDirectToTest("READING")}
             >
-              {currentDocument?.type === "TEXT" ? "Đọc hiểu" : "Nói và nghe"}
+              {currentDocument?.type !== "AUDIO" && currentDocument?.type !== "VIDEO" ? "Đọc hiểu" : "Nói và nghe"}
             </Button>
             <Button
               className={
@@ -351,8 +351,8 @@ const DocumentIdPage = ({ params }) => {
             onClick={() => {
               window.open(
                 "https://www.facebook.com/sharer/sharer.php?u=" +
-                  NEXT_PUBLIC_FRONTEND_URL +
-                  pathName,
+                NEXT_PUBLIC_FRONTEND_URL +
+                pathName,
                 "facebook-share-dialog",
                 "width=600,height=600",
               );
@@ -362,8 +362,8 @@ const DocumentIdPage = ({ params }) => {
             onClick={() => {
               window.open(
                 "https://twitter.com/intent/tweet?url=" +
-                  NEXT_PUBLIC_FRONTEND_URL +
-                  pathName,
+                NEXT_PUBLIC_FRONTEND_URL +
+                pathName,
                 "twitter-share-dialog",
                 "width=600,height=600",
               );
