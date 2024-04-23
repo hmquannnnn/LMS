@@ -24,6 +24,16 @@ const AdminPage = () => {
           className={
             "font-semibold bg-pink-300 rounded-xl px-4 py-2 my-2 text-white w-96"
           }
+          onClick={() =>
+            router.push(`${paths.admin}/document`)
+          }
+        >
+          Quản lý ngữ liệu
+        </button>
+        <button
+          className={
+            "font-semibold bg-pink-300 rounded-xl px-4 py-2 my-2 text-white w-96"
+          }
           onClick={() => router.push(`${paths.admin}/${paths.createTest}`)}
         >
           Tạo bài tập ngữ liệu
