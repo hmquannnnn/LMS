@@ -19,7 +19,7 @@ const paths: Paths = {
   evaluation: "evaluation",
   admin: "/admin",
   createTest: "create-test",
-  uploadDocumentation: "upload-documentation",
+  uploadDocument: "upload-document",
 };
 
 export default paths;

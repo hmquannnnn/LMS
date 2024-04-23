@@ -17,7 +17,7 @@ interface Paths {
   evaluation: string;
   admin: string;
   createTest: string;
-  uploadDocumentation: string;
+  uploadDocument: string;
 }
 
 export default Paths;
