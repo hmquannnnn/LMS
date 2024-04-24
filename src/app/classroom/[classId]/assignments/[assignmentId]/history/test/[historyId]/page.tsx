@@ -96,7 +96,7 @@ const TestHistory = ({ params }) => {
         </p>
 
         {testHistory.questions.map((question, questionIndex: number) => (
-          <div className={"flex flex-col"} key={quesstion.id}>
+          <div className={"flex flex-col"} key={question.id}>
             <p className={"flex flex-row items-center"}>
               <b>Câu {questionIndex + 1}:&nbsp;</b> {question.question} &nbsp;
               {question.type !== questionTypes.FILL_IN_THE_BLANK ? (
