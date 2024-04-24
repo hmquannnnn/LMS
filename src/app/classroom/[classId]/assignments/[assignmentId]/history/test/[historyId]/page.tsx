@@ -96,7 +96,7 @@ const TestHistory = ({ params }) => {
         </p>
 
         {testHistory.questions.map((question, questionIndex: number) => (
-          <div className={"flex flex-col"}>
+          <div className={"flex flex-col"} key={question.id}>
             <p className={"flex flex-row items-center"}>
               <b>Câu {questionIndex + 1}:&nbsp;</b> {question.question} &nbsp;
               {question.type !== questionTypes.FILL_IN_THE_BLANK ? (
@@ -121,7 +121,7 @@ const TestHistory = ({ params }) => {
             ) : (
               <div className={"flex flex-col"}>
                 {question.choices.map((choice, choiceIndex) => (
-                  <p
+                  <p key={choice.id}
                     style={choiceStyle(choice)}
                     className={"my-0.5 px-2 py-1 rounded-2xl"}
                   >
