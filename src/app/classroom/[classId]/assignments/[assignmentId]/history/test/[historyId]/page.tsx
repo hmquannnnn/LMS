@@ -123,6 +123,7 @@ const TestHistory = ({ params }) => {
                 {question.choices.map((choice, choiceIndex) => (
                   <p key={choice.id}
                     style={choiceStyle(choice)}
+                    key={choice.id}
                     className={"my-0.5 px-2 py-1 rounded-2xl"}
                   >
                     <b className={"w-6"}>
