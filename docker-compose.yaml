@@ -1,0 +1,7 @@
+version: '3'
+services:
+  nextjs-app:
+    image: research-web
+    container_name: lms-fe
+    ports:
+      - "3000:3000"

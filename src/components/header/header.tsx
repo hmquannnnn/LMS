@@ -52,6 +52,7 @@ const Header = () => {
     const [searchItems, setSearchItems] = useState<MenuProps["items"]>([]);
     const [searchResult, setSearchResult] = useState([] as any[]);
     const [searchValue, setSearchValue] = useState("");
+    const [menuActive, setMenuActive] = useState(false);
     const pathName = usePathname();
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
@@ -132,6 +133,7 @@ const Header = () => {
             <div
                 className={"sticky top-0 py-4 flex justify-center"}
                 style={{ zIndex: "500" }}
+                onMouseLeave={() => setMenuActive(false)}
             >
                 <div className="w-1/6 flex items-center justify-center">
                     <Link href={"/library"}>
@@ -146,7 +148,8 @@ const Header = () => {
                 </div>
                 <div className="flex flex-auto items-center justify-between w-2/3">
                     <div className={"h-fit my-auto flex-1"}>
-                        <div className="flex items-center">
+                        <div className="flex items-center relative cursor-pointer" onMouseEnter={() => setMenuActive(true)}>
+
                             {/*<Dropdown className={"my-auto"} menu={{items}}>*/}
                             {/* <button
                             className={"border-[1px] text-center border-white text-white font-semibold h-8 rounded my-auto px-2 text-lg"}
@@ -159,7 +162,7 @@ const Header = () => {
                             }
                         >
                         </button> */}
-                            <Dropdown menu={{
+                            {/* <Dropdown menu={{
                                 items: [
                                     {
                                         key: 1,
@@ -168,7 +171,7 @@ const Header = () => {
                                                 {
                                                     listTopics.map((topic, index) => {
                                                         return (
-                                                            <>
+                                                            <div key={index}>
                                                                 {index != 0 &&
                                                                     <div className={`h-full w-[1px] ml-2 mr-2 my-[2px] bg-black `}></div>
                                                                 }
@@ -180,7 +183,7 @@ const Header = () => {
                                                                         {topicMapping[topic]}
                                                                     </div>
                                                                 </Link>
-                                                            </>
+                                                            </div>
                                                         )
                                                     })
                                                 }
@@ -188,13 +191,13 @@ const Header = () => {
                                         )
                                     }
                                 ]
-                            }}>
+                            }}> */}
 
-                                <div className="flex items-center cursor-pointer">
-                                    {/* <GiHamburgerMenu className={"mr-2.5 text-xl my-auto"} /> */}
-                                    <p className={"text-purple_1 font-bold"}>DANH MỤC</p>
-                                </div>
-                            </Dropdown>
+                            <div className="flex items-center cursor-pointer">
+                                {/* <GiHamburgerMenu className={"mr-2.5 text-xl my-auto"} /> */}
+                                <p className={"text-purple_1 font-bold"}>DANH MỤC</p>
+                            </div>
+                            {/* </Dropdown> */}
                             {/* <Popover placement="bottom" content={showTopics}>
                             </Popover> */}
 
@@ -242,15 +245,15 @@ const Header = () => {
                         </div>
                     </div>
                     <div className={"h-fit my-auto flex justify-end gap-5 items-center"}>
-                        {pathName.includes("/library") ? (
-                            <Link
-                                href={"/my-classes"}
-                                className={
-                                    "font-semibold border border-transparent rounded-lg px-4 py-1 text-lg text-purple_1"
-                                }
-                            >
-                                Lớp học
-                            </Link>
+                        <Link
+                            href={"/my-classes"}
+                            className={
+                                "font-semibold border border-transparent rounded-lg px-4 py-1 text-lg text-purple_1"
+                            }
+                        >
+                            Lớp học
+                        </Link>
+                        {/* {pathName.includes("/library") ? (
                         ) : (
                             <Link
                                 href={"/library"}
@@ -260,13 +263,38 @@ const Header = () => {
                             >
                                 Thư viện
                             </Link>
-                        )}
+                        )} */}
                         {/*<Link href={"/profile"} className={"font-semibold text-lg"}>Profile</Link>*/}
                         {isAuthenticated ? <LoggedInDropdown /> : <DefaultDropdown />}
                     </div>
                 </div>
                 <div className="w-1/6 flex-1"></div>
-            </div>
+                {
+                    menuActive &&
+                    <div className="flex absolute w-full bottom-[-32px] left-0 z-[10] justify-center gap-5 bg-white shadow-lg py-2 ">
+                        {
+                            listTopics.map((topic, index) => {
+                                return (
+                                    <div className="flex" key={index}>
+                                        {/* {index != 0 &&
+                                        <div className={`h-full w-[1px] ml-2 mr-2 my-[2px] bg-black `}></div>
+                                    } */}
+                                        <Link
+                                            key={index}
+                                            href={`/library/topics/${topic.toLowerCase()}`}
+                                        >
+                                            <div className={`text-sm text-nowrap items-center flex group${index} group${index}-hover:text-purple_1 h-[4vh]  hover:border-y border-purple_1 `}>
+                                                {topicMapping[topic]}
+                                            </div>
+                                        </Link>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div >
+                }
+
+            </div >
         </>
     );
 };

@@ -17,6 +17,9 @@ const paths: Paths = {
   sendVerificationEmail: "/verify-your-email",
   verifyEmail: "/verify-email",
   evaluation: "evaluation",
+  admin: "/admin",
+  createTest: "create-test",
+  uploadDocument: "upload-document",
 };
 
 export default paths;

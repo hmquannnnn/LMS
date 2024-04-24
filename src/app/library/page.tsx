@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { callGetDocumentsDetail } from "@/apis/documentsAPI";
+import { callGetDocumentsDetail, callGetDocumentsWithPaging } from "@/apis/documentsAPI";
 import DocumentPreview from "@/app/library/documentPreview";
-import { Spin } from "antd";
+import { Spin, Pagination } from "antd";
 import Image from "next/image";
 import { MainTitle } from "./MainTitle";
 import Link from "next/link";
@@ -14,20 +14,48 @@ const MEDIA_URL = process.env.NEXT_PUBLIC_BACKEND_URL + "/media/";
 const Library = () => {
   const [data, setData] = useState([]);
   const router = useRouter();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        callGetDocumentsDetail(null, null).then((res) => {
-          setData(res);
-          console.log(res);
-        });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
+  const [pageSize, setPageSize] = useState(10);
+  const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       callGetDocumentsDetail(null, null).then((res) => {
+  //         setData(res);
+  //         console.log(res);
+  //       });
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
+
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const response = await callGetDocumentsWithPaging(null, null, currentPage - 1, pageSize);
+        console.log(response);
+        setData(response.content);
+        setTotal(response.totalElements);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    fetchDocuments();
+  }, [currentPage, pageSize])
+
+  if (loading) {
+    return (
+      <div className="w-full flex justify-center h-screen mt-[50vh]">
+        <Spin />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -73,7 +101,7 @@ const Library = () => {
                 // .filter((item, index) => index >= 1 && index <= 3)
                 .map((item, index) => {
                   return (
-                    <div key={item.id} className="mb-28 px-[8vw]">
+                    <div key={item.id} className="mb-28 px-[8vw] h-[450px]">
                       <DocumentPreview
                         props={{
                           data: item,
@@ -89,6 +117,7 @@ const Library = () => {
                   );
                 })}
             </div>
+
             {/* <div className="w-min text-center text-md">
               {data
                 .filter((item, index) => index >= 4 && index <= 5)
@@ -131,6 +160,19 @@ const Library = () => {
             </div> */}
           </div>
         )}
+        <div className="flex justify-center">
+          <Pagination defaultCurrent={currentPage} total={total} pageSize={pageSize} onChange={(page, pageSize) => {
+            // scrollToTop 
+
+            window.scrollTo({
+              top: 600,
+              behavior: "auto"
+            });
+            setLoading(true);
+            setCurrentPage(page);
+            setPageSize(pageSize);
+          }} />
+        </div>
       </div>
     </>
   );

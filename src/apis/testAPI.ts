@@ -16,12 +16,16 @@ export const callGetTest = (testId: number) => {
 export const callGetTestByDocument = (formData: FormData) => {
   const documentId = formData.get("documentId") as number;
   const type = formData.get("type") as string;
-  return instance.get(`documents/${documentId}/tests`, {
+  return instance.get(`documents/${documentId}/test`, {
     params: {
       documentId: documentId,
       type: type,
     },
   });
+};
+
+export const callGetAllTestsByDocument = (documentId: number) => {
+  return instance.get(`documents/${documentId}/tests`);
 };
 
 export const callSubmitTest = (testId: number, testAnswer) => {
@@ -38,4 +42,8 @@ export const callGetTestHistory = (testId: number) => {
 
 export const callGetTestHistoryByHistoryId = (historyId: number) => {
   return instance.get(`tests/history/${historyId}`);
+};
+
+export const callGetTestById = (testId: number) => {
+  return instance.get(`tests/${testId}`);
 };

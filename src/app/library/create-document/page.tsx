@@ -58,7 +58,7 @@ const Index = () => {
                 topic: topic,
                 veryFirstText: veryFirstText,
                 notionPageId: inputValue
-            }, null
+            }, fileInput
         )
     })
 
@@ -169,6 +169,8 @@ const Index = () => {
             formData.append("thumbnail", file);
             isCanPost = true;
         } else {
+            // handleCheckImageSaveAbility(firstImageUrl)
+
             const isGetImageSuccess = await blobUrlToFile(firstImageUrl).then((file) => {
                 formData.append("thumbnail", file);
                 return true
@@ -194,7 +196,7 @@ const Index = () => {
                     // resolve(res);
                 }).catch((error) => {
                     console.error('Error fetching data:', error);
-                    alert("Đăng bài thất bại");
+                    alert("Đăng bài thất bại. Vui lòng chọn ảnh có kích thước nhỏ hơn.");
                     setIsLoadingSubmit(false);
                 });
 
@@ -256,7 +258,7 @@ const Index = () => {
         beforeUpload: (file) => {
             const isXlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
             if (!isXlsx) {
-                message.error(`${file.name} không hợp lệ, vui lòng chọn ảnh đuôi .png/.jpg.`);
+                message.error(`${file.name} không hợp lệ, vui lòng chọn file đuôi .xlsx.`);
             }
             return isXlsx || Upload.LIST_IGNORE;
         },
@@ -278,7 +280,7 @@ const Index = () => {
                     };
                     console.log(jsonData)
                     jsonData[0] = jsonData[0].map((item) => item.toString().toUpperCase().trim());
-                    for (let i = 2; i < jsonData.length; i++) {
+                    for (let i = 1; i < jsonData.length; i++) {
                         if (jsonData[i][0] == null || jsonData[i][0] == '') break;
                         const question = jsonData[i][0];
                         let questionType = jsonData[i][1]?.toString()?.toUpperCase().trim();
@@ -353,7 +355,7 @@ const Index = () => {
 
     return (
         <div className='flex gap-5'>
-            <div className='w-1/2 mt-4'>
+            <div className='w-1/3 mt-4'>
                 <FormProvider {...methods}  >
                     <form
                         onSubmit={e => e.preventDefault()}
@@ -427,10 +429,17 @@ const Index = () => {
                                     <div className='mr-2 font-bold'>Thể loại:</div>
                                     <Select onChange={(val) => setTopic(val)} defaultValue={'Văn hóa'}>
                                         <Select.Option value="CULTURE">Văn hóa</Select.Option>
-                                        <Select.Option value="SOCIAL">Xã hội</Select.Option>
+                                        <Select.Option value="POLITICS">Chính trị</Select.Option>
+                                        <Select.Option value="ECONOMY">Kinh tế</Select.Option>
+                                        <Select.Option value="EDUCATION">Giáo dục</Select.Option>
+                                        <Select.Option value="LAW">Pháp luật</Select.Option>
+                                        <Select.Option value="MEDICAL">Y tế</Select.Option>
                                         <Select.Option value="SPORT">Thể thao</Select.Option>
-                                        <Select.Option value="TOURISM">Du lịch</Select.Option>
+                                        <Select.Option value="LIFE_ENTERTAINMENT">Đời sống - Giải trí</Select.Option>
+                                        <Select.Option value="SCIENCE_TECHNOLOGY">Khoa học - Công nghệ</Select.Option>
+                                        <Select.Option value="ENVIRONMENT">Môi trường</Select.Option>
                                     </Select>
+
                                 </div>
                                 <div className='flex-1 flex  mr-2'>
                                     <div className='mr-2 font-bold'>Dạng thức</div>
@@ -439,6 +448,7 @@ const Index = () => {
                                         <Select.Option value="AUDIO">Âm thanh</Select.Option>
                                         <Select.Option value="INFOGRAPHIC">Infographic</Select.Option>
                                         <Select.Option value="IMAGES">Ảnh</Select.Option>
+                                        <Select.Option value="VIDEO">Video</Select.Option>
 
                                         {/* <Select.Option value="SPORT">Thể thao</Select.Option>
                                 <Select.Option value="TOURISM">Du lịch</Select.Option> */}
@@ -446,7 +456,7 @@ const Index = () => {
                                 </div>
                             </div>
 
-                            <div className='flex-1 flex mb-4'>
+                            {/* <div className='flex-1 flex mb-4'>
                                 <div className='mr-2 font-bold'>Id document:</div>
                                 <input
                                     className='flex-auto border-b-[1px] border-black focus:outline-none'
@@ -481,7 +491,7 @@ const Index = () => {
                                     setIsLoadingCreateTest(false)
 
                                 }}>Test</Button>
-                            </div>
+                            </div> */}
 
 
 
@@ -494,14 +504,7 @@ const Index = () => {
                         </div>
                     </form>
                 </FormProvider>
-                <div className='flex justify-center pl-[2vw] mt-10'>
-                    <DocumentPreview props={
-                        {
-                            data: data, url: fileInput ? URL.createObjectURL(fileInput) : (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
-                            veryFirstText: veryFirstText == '' ? SHORT_DESCRIPTION_PLACEHOLDER : veryFirstText,
-                            title: documentTitle == '' ? TITLE_PLACEHOLDER : documentTitle
-                        }} />
-                </div>
+
                 {/* <div className='max-w-[600px]'>
                     {
                         firstImageUrl.current != '' &&
@@ -515,6 +518,15 @@ const Index = () => {
                 </div> */}
             </div>
             <div className='flex-1'>
+                <div className='flex justify-center pl-[2vw] mt-10 h-[400px] mb-10'>
+                    <DocumentPreview props={
+                        {
+                            data: data, url: fileInput ? URL.createObjectURL(fileInput) : (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
+                            // data: data, url: (firstImageUrl != '' ? firstImageUrl : IMAGE_PLACEHOLDER),
+                            veryFirstText: veryFirstText == '' ? SHORT_DESCRIPTION_PLACEHOLDER : veryFirstText,
+                            title: documentTitle == '' ? TITLE_PLACEHOLDER : documentTitle
+                        }} />
+                </div>
                 <div className='border h-screen overflow-scroll'>
                     {data ? (
                         <div>

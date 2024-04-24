@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { User } from "@/redux/slices/accountSlice";
+import { assignmentTypes } from "@/utils/constant";
 
 export interface Class {
   code: string;
@@ -36,7 +37,26 @@ const initialState = {
     assignments: {
       total: 0,
       assignmentsList: [],
-      currentAssignment: {},
+      currentAssignment: {
+        id: 0,
+        title: "",
+        content: "",
+        dueDateTime: "",
+        isForGroup: false,
+        documentId: 0,
+        type: "OTHER",
+        relatedTestId: 0,
+        status: "",
+      },
+      creatingAssignment: {
+        title: "",
+        content: "",
+        dueDateTime: "",
+        isForGroup: false,
+        documentId: null,
+        type: "OTHER",
+        relatedTestId: null,
+      },
     },
     members: [
       {
@@ -88,6 +108,19 @@ export const classSlice = createSlice({
     getCurrentAssignment: (state, action) => {
       state.currentClass.assignments.currentAssignment = action.payload;
     },
+    updateAssignmentType: (state, action) => {
+      state.currentClass.assignments.creatingAssignment.type = action.payload;
+    },
+    updateLinkedDocument: (state, action) => {
+      state.currentClass.assignments.creatingAssignment.documentId =
+        action.payload;
+      state.currentClass.assignments.creatingAssignment.type =
+        assignmentTypes.FOR_COUNSELLING;
+    },
+    updateRelatedTest: (state, action) => {
+      state.currentClass.assignments.creatingAssignment.relatedTestId =
+        action.payload;
+    },
   },
   extraReducers: (builder) => {},
 });
@@ -101,6 +134,9 @@ export const {
   getPendingPostsAction,
   getCurrentAssignment,
   getMembersWithoutStatusAction,
+  updateAssignmentType,
+  updateLinkedDocument,
+  updateRelatedTest,
 } = classSlice.actions;
 
 export default classSlice.reducer;

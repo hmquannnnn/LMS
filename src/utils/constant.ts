@@ -1,6 +1,9 @@
 import Orientations from "@/types/orientations";
 import AssignmentStatus from "@/types/assignmentStatus";
 import testTypes from "@/types/testTypes";
+import AssignmentTypes from "@/types/assignmentTypes";
+import { documentTypes } from "@/types/documentTypes";
+import { questionTypes } from "@/types/questionTypes";
 
 export const ROLE_TEACHER: string = "ROLE_TEACHER";
 export const ROLE_STUDENT: string = "ROLE_STUDENT";
@@ -24,16 +27,22 @@ export const colors = {
   pink_3: "#f8bbc1",
   pink_4: "#920f1d",
   pink_5: "#aa280e",
+  pink_6: "#fee2dc",
+  pink_7: "#fbdde0",
   yellow_1: "#ffe5b5",
   yellow_2: "#a26900",
+  yellow_3: "#fff2da",
+  yellow_4: "#f5c064",
   green_1: "#c6e5a4",
   green_2: "#0fb251",
   green_3: "#517b23",
   green_4: "#b6c8a3",
   green_5: "#d9eec3",
   green_6: "#ecf4d0",
+  green_7: "#ecf6e1",
   grey_1: "#d9d9d9",
   grey_2: "#404040",
+  grey_3: "#f2f2f2",
   purple_1: "#367ff0",
   purple_2: "#b3cbfb",
   purple_3: "#6d9ef3",
@@ -41,6 +50,7 @@ export const colors = {
   purple_5: "#072251",
   purple_6: "#e9f1fd",
   purple_7: "#97b0ec",
+  black_1: "#464646",
 };
 
 export const assignmentStatus: AssignmentStatus = {
@@ -62,4 +72,24 @@ export const Orientations: Orientations = {
 export const testTypes: testTypes = {
   MULTIPLE_CHOICE: "MULTIPLE_CHOICE",
   WRITING: "WRITING",
+};
+
+export const assignmentTypes: AssignmentTypes = {
+  OTHER: "OTHER",
+  FOR_TEST: "FOR_TEST",
+  FOR_COUNSELLING: "FOR_COUNSELLING",
+};
+
+export const documentTypes: documentTypes = {
+  TEXT: "TEXT",
+  AUDIO: "AUDIO",
+  VIDEO: "VIDEO",
+  INFOGRAPHIC: "INFOGRAPHIC",
+  IMAGES: "IMAGES",
+};
+
+export const questionTypes: questionTypes = {
+  SINGLE_CHOICE: "SINGLE_CHOICE",
+  MULTIPLE_CHOICE: "MULTIPLE_CHOICE",
+  FILL_IN_THE_BLANK: "FILL_IN_THE_BLANK",
 };

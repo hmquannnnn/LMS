@@ -77,6 +77,14 @@ export const topicMapping = {
   CULTURE: "Văn hóa",
   SPORT: "Thể thao",
   TOURISM: "Du lịch",
+  EDUCATION: "Giáo dục",
+  SCIENCE_TECHNOLOGY: "Khoa học - Công nghệ",
+  ECONOMY: "Kinh tế",
+  POLITICS: "Chính trị",
+  ENVIRONMENT: "Môi trường",
+  MEDICAL: "Y tế",
+  LAW: "Pháp luật",
+  LIFE_ENTERTAINMENT: "Đời sống - Giải trí",
 };
 
 const DocumentIdPage = ({ params }) => {
@@ -212,11 +220,9 @@ const DocumentIdPage = ({ params }) => {
     <>
       <title>{documentTitle.current}</title>
       <div className="flex relative w-full px-10">
-
         <div className="min-h-full min-w-[20%] max-w-[20%]">
           <div className=" h-full border-2 rounded-xl pl-4 pt-4 pr-6">
             <div className="flex">
-
               <svg
                 aria-label="Unlike"
                 className="x1lliihq min-w-[18px] x1n2onr6 xxk16z8 inline mr-1 fill-blue_5 cursor-pointer"
@@ -264,7 +270,6 @@ const DocumentIdPage = ({ params }) => {
           </div>
         </div>
 
-
         <div className="flex flex-0 justify-start max-w-[80%] flex-col mx-auto pl-10  mr-[4vw] ">
           <div className=" pl-10 pr-20 mt-4">
             <Breadcrumb
@@ -306,17 +311,24 @@ const DocumentIdPage = ({ params }) => {
               </div>
             )}
 
-
             {data && <NotionRenderer blockMap={data} fullPage hideHeader />}
           </div>
-          <div className={"flex flex-row justify-end mb-5"}>
+          <div className={"flex flex-row justify-end mb-5 mt-5"}>
+            <Button
+              className={
+                "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
+              }
+              onClick={() => router.push(`/library/${documentId}/counsellings`)}
+            >
+              Hướng nghiệp
+            </Button>
             <Button
               className={
                 "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
               }
               onClick={() => handleDirectToTest("READING")}
             >
-              {currentDocument?.type === "TEXT" ? "Đọc hiểu" : "Nói và nghe"}
+              {currentDocument?.type !== "AUDIO" && currentDocument?.type !== "VIDEO" ? "Đọc hiểu" : "Nói và nghe"}
             </Button>
             <Button
               className={
@@ -335,7 +347,6 @@ const DocumentIdPage = ({ params }) => {
           )} */}
 
         <div className="fixed right-0 flex flex-col gap-2 w-fit  pr-[2vw] pt-56 ">
-
           <FacebookIcon
             onClick={() => {
               window.open(

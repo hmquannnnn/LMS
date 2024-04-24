@@ -4,27 +4,19 @@ import React, { useEffect, useState } from "react";
 import { Dropdown, MenuProps } from "antd";
 import { callSearchDocumentByTitle } from "@/apis/documentsAPI";
 import { MdOutlineCancel } from "react-icons/md";
+import {
+  updateAssignmentType,
+  updateLinkedDocument,
+} from "@/redux/slices/classSlice";
+import { useDispatch } from "react-redux";
+import { assignmentTypes } from "@/utils/constant";
 
-const onChange = (value: string) => {
-  console.log(`selected ${value}`);
-};
-
-const onSearch = (value: string) => {
-  console.log("search:", value);
-};
-
-// Filter `option.label` match the user type `input`
-const filterOption = (
-  input: string,
-  option?: { label: string; value: string },
-) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-
-const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
+const DocumentSelector: React.FC = ({ sendLinkedDocument }) => {
   const [isTypingSearch, setIsTypingSearch] = useState(false);
   const [searchItems, setSearchItems] = useState<MenuProps["items"]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [linkedDocument, setLinkedDocument] = useState(null);
-  console.log(linkedDocument);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const timeoutId = setTimeout(async () => {
@@ -52,26 +44,34 @@ const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
 
   const handleChooseLinkedDocument = (document) => {
     setLinkedDocument(document);
-    sendLinkedDocumentId(document.id);
+    sendLinkedDocument(document);
+    dispatch(updateLinkedDocument(document.id));
+    dispatch(updateAssignmentType(assignmentTypes.FOR_COUNSELLING));
   };
 
   const handleOnChangeSearch = (event) => {
     setIsTypingSearch(true);
     setSearchValue(event.target.value);
   };
+
+  const handleCancelSelection = () => {
+    setLinkedDocument(null);
+    sendLinkedDocument(null);
+    dispatch(updateLinkedDocument(null));
+  };
   return (
-    <>
+    <div className={"my-2"}>
       {linkedDocument ? (
         <div
           className={
-            "flex flex-row items-center bg-gray-300 rounded px-3 py-1 "
+            "flex flex-row items-center bg-gray-300 rounded px-3 py-2 w-fit"
           }
         >
           <p>{linkedDocument.title}</p>
 
           <MdOutlineCancel
             className={"text-red-600 cursor-pointer ml-5 text-lg"}
-            onClick={() => setLinkedDocument(null)}
+            onClick={handleCancelSelection}
           />
         </div>
       ) : (
@@ -118,7 +118,7 @@ const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
 
             <input
               className={
-                "flex-1 font-bold h-8 rounded border-0   caret-white focus:outline-none border-gray-200 pl-2 my-auto ml-2 outline-none "
+                "flex-1 font-semibold h-8 rounded border-0    caret-white focus:outline-none border-gray-200 pl-2 my-auto ml-2 outline-none "
               }
               onChange={handleOnChangeSearch}
               value={searchValue}
@@ -128,7 +128,7 @@ const DocumentSelector: React.FC = ({ sendLinkedDocumentId }) => {
           </div>
         </Dropdown>
       )}
-    </>
+    </div>
   );
 };
 

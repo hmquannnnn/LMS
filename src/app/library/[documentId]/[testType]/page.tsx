@@ -16,12 +16,16 @@ import { FaCheck } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { Breadcrumb } from "antd";
 
-function formatTextToHTML(content) {
+const formatTextToHTML = (content) => {
   const lines = content.split("\n");
   const filteredLines = lines.filter((line) => line.trim() !== "");
   const htmlContent = filteredLines.map((line) => `<p>${line}</p>`).join("\n");
   return htmlContent;
-}
+};
+
+export const indexToAlphabet = (index) => {
+  return String.fromCharCode(65 + index);
+};
 
 const Test = ({ params }) => {
   const documentId = params.documentId;
@@ -100,17 +104,17 @@ const Test = ({ params }) => {
       choices:
         question.type === "FILL_IN_THE_BLANK"
           ? [
-              {
-                choiceId: null,
-                isPicked: null,
-                content: "",
-              },
-            ]
-          : question.choices.map((choice) => ({
-              choiceId: choice.id,
-              isPicked: false,
+            {
+              choiceId: null,
+              isPicked: null,
               content: "",
-            })),
+            },
+          ]
+          : question.choices.map((choice) => ({
+            choiceId: choice.id,
+            isPicked: false,
+            content: "",
+          })),
     }));
     setUserAnswers(initialAnswers);
   };
@@ -209,7 +213,7 @@ const Test = ({ params }) => {
           score++;
         }
       });
-      score -= numberOfWritingQuestions;
+      // score -= numberOfWritingQuestions;
       setScore(score);
     }
   };
@@ -228,6 +232,7 @@ const Test = ({ params }) => {
     });
   };
 
+
   const getTest = async () => {
     const type =
       testType === "READING" ? testTypes.MULTIPLE_CHOICE : testTypes.WRITING;
@@ -235,7 +240,7 @@ const Test = ({ params }) => {
     formData.append("documentId", documentId);
     formData.append("type", type);
     const res = await callGetTestByDocument(formData);
-    res.questions.sort((a, b) => {
+    res?.questions?.sort((a, b) => {
       return a.id - b.id;
     });
 
@@ -276,10 +281,6 @@ const Test = ({ params }) => {
     initializeReadingAnswers(questionCollection);
     initializeWritingAnswer(questionCollection);
   }, [questionCollection, isRerendered]);
-
-  const indexToAlphabet = (index) => {
-    return String.fromCharCode(65 + index);
-  };
 
   const compareCorrectAnswer = (questionIndex, choiceIndex) => {
     return (
@@ -354,7 +355,7 @@ const Test = ({ params }) => {
         </div>
         {testType === "READING" ? (
           <div
-            className={"min-h-full h-full pl-5 scrollable-column"}
+            className={"min-h-full h-full pl-5 scrollable-column test-page"}
             ref={contentRef}
           >
             {showTest && (
@@ -372,9 +373,9 @@ const Test = ({ params }) => {
                             {question.question}
                           </p>
                           {isSubmitted === true &&
-                          question.type != "FILL_IN_THE_BLANK" ? (
+                            question.type != "FILL_IN_THE_BLANK" ? (
                             JSON.stringify(userAnswers[questionIndex]) ===
-                            JSON.stringify(correctAnswer[questionIndex]) ? (
+                              JSON.stringify(correctAnswer[questionIndex]) ? (
                               <FaCheck className={"text-green-500 text-xl"} />
                             ) : (
                               <MdCancel className={"text-red-600 text-xl"} />
@@ -451,17 +452,17 @@ const Test = ({ params }) => {
                                 style={
                                   isSubmitted
                                     ? userAnswers[questionIndex]?.choices[
-                                        choiceIndex
-                                      ]?.isPicked
+                                      choiceIndex
+                                    ]?.isPicked
                                       ? compareCorrectAnswer(
-                                          questionIndex,
-                                          choiceIndex,
-                                        )
+                                        questionIndex,
+                                        choiceIndex,
+                                      )
                                         ? { backgroundColor: "#99f090" }
                                         : { backgroundColor: "#f09090" }
                                       : correctAnswer[questionIndex]?.choices[
-                                            choiceIndex
-                                          ]?.isPicked
+                                        choiceIndex
+                                      ]?.isPicked
                                         ? { backgroundColor: "#99f090" }
                                         : null
                                     : null
@@ -489,8 +490,8 @@ const Test = ({ params }) => {
                                   style={
                                     isSubmitted
                                       ? userAnswers[questionIndex]?.choices[
-                                          choiceIndex
-                                        ]?.isPicked
+                                        choiceIndex
+                                      ]?.isPicked
                                         ? { fontWeight: "bold" }
                                         : null
                                       : null

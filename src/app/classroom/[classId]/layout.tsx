@@ -48,7 +48,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                 position: "fixed",
                 // top: 0,
                 backgroundColor: "#fff",
-                zIndex: 1000,
+                zIndex: 200,
               }}
             >
               {/*<div className="pt-3 pl-10 font-timesNewRoman text-xl">*/}
@@ -149,7 +149,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                         "flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
                       }
                       placement="top"
-                      title={"Tiêu chí đánh giá"}
+                      title={"Tiêu chí kiểm tra đánh giá"}
                       color={"#367ff0"}
                       arrow={false}
                     >

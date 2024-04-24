@@ -5,7 +5,7 @@ import "./globals.css";
 import { usePathname, useRouter } from "next/navigation";
 import { StoreProvider } from "@/redux/storeProvider";
 import paths from "@/app/paths";
-import Header from "@/components/header/header";
+import Header from "@/components/header/user/header";
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import Head from "next/head";

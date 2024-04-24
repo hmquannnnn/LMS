@@ -51,6 +51,10 @@ export const callGetDocumentsWithPaging = (
   return instance.get(`${documentUrl}/page?pageSize=${pageSize}&page=${page}`);
 };
 
+export const callDeleteDocumentById = (documentId: string) => {
+  return instance.delete(`${documentUrl}/${documentId}`);
+};
+
 export const callGetDocumentsDetail = (
   type: String | null,
   topic: String | null
@@ -85,4 +89,8 @@ export const callUnLikeDocument = (documentId: string) => {
     Authorization: `Bearer ${localStorage.getItem("token")}`,
   };
   return instance.put(`/users${documentUrl}/${documentId}/unlike`);
+};
+
+export const callGetDocumentCounselling = (documentId: number) => {
+  return instance.get(`documents/${documentId}/counsellings`);
 };

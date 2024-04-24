@@ -3,7 +3,7 @@
 import { callGetAssigment, callGetPost } from "@/apis/classAPI";
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "antd";
-import { vietnamesePostStatus } from "@/app/classroom/[classId]/assignments/[assignmentId]/history/page";
+import { vietnamesePostStatus } from "@/components/submitHistory/normalAssignment";
 
 const OldPost = ({ params }) => {
   const classId = params.classId;

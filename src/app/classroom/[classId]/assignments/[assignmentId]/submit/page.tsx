@@ -1,9 +1,15 @@
 "use client";
 
 import { useDispatch, useSelector } from "react-redux";
-import { Orientations, ROLE_STUDENT, ROLE_TEACHER } from "@/utils/constant";
+import {
+  assignmentTypes,
+  Orientations,
+  ROLE_STUDENT,
+  ROLE_TEACHER,
+} from "@/utils/constant";
 import {
   callGetAssigment,
+  callGetAssignmentById,
   callGetStudentsList,
   callSubmitAssignment,
 } from "@/apis/classAPI";
@@ -25,6 +31,12 @@ import {
 import { Editor } from "@tinymce/tinymce-react";
 import { UserOutlined } from "@ant-design/icons";
 import { MdOutlineCancel } from "react-icons/md";
+import {
+  callGetDocumentById,
+  callGetDocumentCounselling,
+} from "@/apis/documentsAPI";
+import Link from "next/link";
+import { theme } from "@/app/classroom/[classId]/orientations/[orientationName]/page";
 
 interface MembersItem {
   key: number;
@@ -40,6 +52,15 @@ type Teammate = {
   role: string;
   dateOfBirth: string;
   avatarId: string;
+};
+
+const initalCounselling = {
+  id: 0,
+  title: "",
+  content: "",
+  createAt: "",
+  documentId: 0,
+  orientation: "",
 };
 
 const SubmissionPage = (props: any) => {
@@ -59,11 +80,13 @@ const SubmissionPage = (props: any) => {
   const [showSubmitForm, setShowSubmitForm] = useState(false);
   const [membersMenu, setMembersMenu] = useState([]);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [document, setDocument] = useState(null);
   // const [teammate, setTeammate] = useState([]);
   const teammate = useRef([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const editorRef = useRef(null);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [counselling, setCounselling] = useState(initalCounselling);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -96,7 +119,7 @@ const SubmissionPage = (props: any) => {
   const getAssignmentDetails = async () => {
     if (user.role === ROLE_TEACHER) {
       const res = await callGetAssigment(classId);
-      console.log("check res: ", res);
+      // console.log("check res: ", res);
       const currentAssignment = res.find(
         (assignment) => assignment.id == assignmentId,
       );
@@ -105,7 +128,7 @@ const SubmissionPage = (props: any) => {
     }
     if (user.role === ROLE_STUDENT) {
       const res = await callGetAssigment(classId);
-      console.log("check res: ", res);
+      // console.log("check res: ", res);
       const membersList = await callGetStudentsList(classId);
       const filteredMemberList = membersList.filter(
         (student) => student.id != user.id,
@@ -135,9 +158,24 @@ const SubmissionPage = (props: any) => {
         ),
       }));
       await setMembersMenu(menu);
-      const currentAssignment = res.find(
-        (assignment) => assignment.id == assignmentId,
-      );
+      const currentAssignment = await callGetAssignmentById(assignmentId);
+      if (currentAssignment?.id) {
+        const linkedDocument = await callGetDocumentById(
+          currentAssignment?.relatedDocumentId,
+        );
+        if (linkedDocument?.id) {
+          setDocument(linkedDocument);
+          const counsellings = await callGetDocumentCounselling(
+            currentAssignment.relatedDocumentId,
+          );
+          console.log("check fetch counselling: ", counsellings);
+          if (counsellings?.length > 0) {
+            await setCounsellingsList(counsellings);
+          }
+        }
+
+        console.log("check document", linkedDocument);
+      }
       // console.log(currentAssignment);
       dispatch(getCurrentAssignment(currentAssignment));
       dispatch(
@@ -151,7 +189,8 @@ const SubmissionPage = (props: any) => {
 
   useEffect(() => {
     getAssignmentDetails();
-  }, [user]);
+    currentAssignment?.relatedDocumentId && getLinkedDocument();
+  }, [currentAssignment?.relatedDocumentId]);
 
   const handleCloseSubmit = () => {
     setShowSubmitForm(false);
@@ -159,6 +198,13 @@ const SubmissionPage = (props: any) => {
 
   const openSubmitForm = () => {
     setShowSubmitForm(true);
+  };
+
+  const isLinkedDocumentAssignmet = (assignment) => {
+    return (
+      assignment.type === assignmentTypes.FOR_TEST ||
+      assignment.type === assignmentTypes.FOR_COUNSELLING
+    );
   };
 
   const handleSubmit = async (
@@ -171,14 +217,17 @@ const SubmissionPage = (props: any) => {
     const title = formData.get("title") as string;
     const files = formData.getAll("files") as FileList;
     const caption = editorRef.current.getContent();
-    const orientation = currentAssignment.isForGroup
-      ? Orientations.MANAGEMENT
-      : (formData.get("orientation") as string);
+    const orientation = isLinkedDocumentAssignmet(currentAssignment)
+      ? counselling.orientation
+      : currentAssignment.isForGroup
+        ? Orientations.MANAGEMENT
+        : (formData.get("orientation") as string);
 
     const formDataWithFiles = new FormData();
     formDataWithFiles.append("title", title);
     formDataWithFiles.append("caption", caption);
     formDataWithFiles.append("orientation", orientation);
+    formDataWithFiles.append("counselling-id", counselling.id);
     if (currentAssignment.isForGroup) {
       teammate.current.map((member, index) =>
         formDataWithFiles.append("member-ids", member.id),
@@ -203,10 +252,51 @@ const SubmissionPage = (props: any) => {
     teammate.current = [];
   };
 
+  // console.log("check current: ", currentAssignment);
+
+  const [counsellingsList, setCounsellingsList] = useState([]);
+  const getLinkedDocument = async () => {
+    const res = await callGetDocumentById(currentAssignment?.relatedDocumentId);
+    if (res?.id) {
+      setDocument(res);
+      const counsellings = await callGetDocumentCounselling(res?.id);
+      console.log("check fetch counselling: ", counsellings);
+      if (counsellings?.length > 0) {
+        await setCounsellingsList(counsellings);
+      }
+    }
+
+    console.log("check document", res);
+  };
+
   const items: MenuProps["items"] = membersMenu.map((member) => ({
     key: member.key.toString(),
     label: member.label,
   }));
+
+  const counsellingItems: MenuProps["items"] = counsellingsList?.map(
+    (counselling) => ({
+      key: counselling?.id,
+      label: (
+        <div onClick={() => setCounselling(counselling)}>
+          {counselling.content.slice(0, 70)}...
+        </div>
+      ),
+    }),
+  );
+
+  const handleCancelSelection = () => {
+    setCounselling(null);
+  };
+
+  const isLinkedDocumentAssignment = (assignment) => {
+    return (
+      assignment.type === assignmentTypes.FOR_COUNSELLING ||
+      assignment.type === assignmentTypes.FOR_TEST
+    );
+  };
+
+  console.log("check items: ", counsellingItems);
 
   return (
     <>
@@ -222,6 +312,15 @@ const SubmissionPage = (props: any) => {
           <div
             dangerouslySetInnerHTML={{ __html: currentAssignment.content }}
           />
+
+          {isLinkedDocumentAssignment(currentAssignment) && (
+            <p>
+              Ngữ liệu liên kết :{" "}
+              <Link href={`/library/${document?.id}`} className={"font-bold"}>
+                {document?.title}
+              </Link>
+            </p>
+          )}
         </Col>
         <Col span={14} className={"pl-10"}>
           <div>
@@ -230,6 +329,48 @@ const SubmissionPage = (props: any) => {
               onSubmit={(e) => handleSubmit(e, assignmentId)}
             >
               <Col>
+                {currentAssignment?.type != assignmentTypes.OTHER ? (
+                  counselling?.id ? (
+                    <div>
+                      <div
+                        className={
+                          "flex flex-row items-center bg-gray-300 rounded px-3 py-1 w-fit"
+                        }
+                      >
+                        <p>{counselling.content.slice(0, 70)}...</p>
+
+                        <MdOutlineCancel
+                          className={"text-red-600 cursor-pointer ml-5 text-lg"}
+                          onClick={handleCancelSelection}
+                        />
+                      </div>
+                      <div className={"my-2"}>
+                        Định hướng:{" "}
+                        {theme[counselling.orientation].vietnameseName}
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <label htmlFor={"select-counselling"}>
+                        Chọn bài tập hướng nghiệp:
+                      </label>
+                      <Dropdown
+                        trigger={"click"}
+                        overlay={<Menu items={counsellingItems} />}
+                        placement={"bottom"}
+                        id={"select-counselling"}
+                      >
+                        <div
+                          className={
+                            "border-[1px] rounded px-4 py-1 h-fit my-1.5 text-sm text-gray-400"
+                          }
+                        >
+                          Chọn bài tập hướng nghiệp
+                        </div>
+                      </Dropdown>
+                    </>
+                  )
+                ) : null}
                 <div className={"my-2"}>
                   <div>
                     <label htmlFor={"title"}>Tiêu đề: </label>
@@ -238,13 +379,13 @@ const SubmissionPage = (props: any) => {
                       id={"title"}
                       type={"text"}
                       placeholder={"Tiêu đề"}
-                      className={"mb-2 rounded border-[1px]"}
+                      className={"my-2 rounded border-[1px] px-4 py-1"}
                       defaultValue={""}
                     />
                   </div>
                   {currentAssignment?.isForGroup === true && (
                     <div className={"flex flex-row items-center"}>
-                      <label>Choose your teammates: </label>
+                      <label>Chọn thành viên nhóm: </label>
                       {teammate.current.length < 2 && (
                         <Dropdown
                           trigger={"click"}
@@ -297,31 +438,37 @@ const SubmissionPage = (props: any) => {
                   )}
 
                   {currentAssignment?.isForGroup === false && (
-                    <div>
-                      <label htmlFor="orientation">Chọn định hướng: </label>
-                      <select
-                        name="orientation"
-                        id="orientation"
-                        className={"border-[1px] px-2 p-0.5 rounded ml-2"}
-                        defaultValue={`${Orientations.TECHNIQUE}`}
-                      >
-                        <option value={`${Orientations.TECHNIQUE}`}>
-                          KĨ THUẬT
-                        </option>
-                        <option value={`${Orientations.MAJOR}`}>
-                          NGHIỆP VỤ
-                        </option>
-                        <option value={`${Orientations.RESEARCH}`}>
-                          NGHIÊN CỨU
-                        </option>
-                        <option value={`${Orientations.SOCIAL}`}>XÃ HỘI</option>
+                    <>
+                      {currentAssignment?.type === assignmentTypes.OTHER && (
+                        <div>
+                          <label htmlFor="orientation">Chọn định hướng: </label>
+                          <select
+                            name="orientation"
+                            id="orientation"
+                            className={"border-[1px] px-2 p-0.5 rounded ml-2"}
+                            defaultValue={`${Orientations.TECHNIQUE}`}
+                          >
+                            <option value={`${Orientations.TECHNIQUE}`}>
+                              KĨ THUẬT
+                            </option>
+                            <option value={`${Orientations.MAJOR}`}>
+                              NGHIỆP VỤ
+                            </option>
+                            <option value={`${Orientations.RESEARCH}`}>
+                              NGHIÊN CỨU
+                            </option>
+                            <option value={`${Orientations.SOCIAL}`}>
+                              XÃ HỘI
+                            </option>
 
-                        <option value={`${Orientations.ART}`}>
-                          {" "}
-                          NGHỆ THUẬT
-                        </option>
-                      </select>
-                    </div>
+                            <option value={`${Orientations.ART}`}>
+                              {" "}
+                              NGHỆ THUẬT
+                            </option>
+                          </select>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
 
