@@ -13,7 +13,8 @@ const AssignmentTypeSelector = ({ sendLinkedDocument, linkedDocument }) => {
   const [testsList, setTestsList] = useState([]);
   const dispatch = useDispatch();
 
-  const getLinkDocumentId = (documentId) => {
+  const getLinkDocumentId = (document) => {
+    const documentId = document.id;
     setLinkedDocumentId(documentId);
     sendLinkedDocument({ ...linkedDocument, documentId: documentId });
   };
@@ -57,15 +58,15 @@ const AssignmentTypeSelector = ({ sendLinkedDocument, linkedDocument }) => {
         </option>
       </select>
       {selectedType != assignmentTypes.OTHER && (
-        <DocumentSelector sendLinkedDocumentId={getLinkDocumentId} />
+        <DocumentSelector sendLinkedDocument={getLinkDocumentId} />
       )}
-      {linkedDocument.documentId && (
+      {linkedDocument.documentId ? (
         <TestSelector
           sendTestsId={getRelatedTestId}
           documentId={linkedDocument.documentId}
           sendAssignmentType={getAssigmentType}
         />
-      )}
+      ) : null}
     </div>
   );
 };
