@@ -193,7 +193,7 @@ const AssignmentDetails = (props: any) => {
                 className={"font-bold"}
               >
                 Bài tập&nbsp;
-                {test?.types === testTypes.WRITING
+                {test?.type === testTypes.WRITING
                   ? "Viết "
                   : document?.type === documentTypes.TEXT
                     ? "Đọc hiểu "
