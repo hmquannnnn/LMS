@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import type { TableColumnsType } from "antd";
-import { Table } from "antd";
+import { Spin, Table } from "antd";
 import { callGetTestById, callGetTestHistory } from "@/apis/testAPI";
 import { FormatDateTime } from "@/utils/formatDate";
 import { callGetDocumentById } from "@/apis/documentsAPI";
@@ -205,7 +205,19 @@ const StudentTestHistory: React.FC = ({ params }) => {
 
   return (
     <>
-      <TestHistoryTable testHistory={testHistory} />
+      {loading ? (
+        <Spin tip="Loading" size="large">
+          <div
+            style={{
+              padding: "50px",
+              background: "rgba(0, 0, 0, 0.05)",
+              borderRadius: "4px",
+            }}
+          />
+        </Spin>
+      ) : (
+        <TestHistoryTable testHistory={testHistory} />
+      )}
     </>
   );
 };
