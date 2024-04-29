@@ -75,7 +75,7 @@ const SubmissionPage = (props: any) => {
     (state) => state?.classes?.currentClass?.members?.student || [],
   );
   // console.log(members);
-  console.log(currentAssignment);
+  // console.log(currentAssignment);
   const dispatch = useDispatch();
   const [showSubmitForm, setShowSubmitForm] = useState(false);
   const [membersMenu, setMembersMenu] = useState([]);
@@ -112,7 +112,7 @@ const SubmissionPage = (props: any) => {
     teammate.current = teammate.current.filter(
       (member) => member.id != memberId,
     );
-    console.log(teammate.current, memberId);
+    // console.log(teammate.current, memberId);
     setIsUpdate((prev) => !prev);
   };
 
@@ -168,13 +168,13 @@ const SubmissionPage = (props: any) => {
           const counsellings = await callGetDocumentCounselling(
             currentAssignment.relatedDocumentId,
           );
-          console.log("check fetch counselling: ", counsellings);
+          // console.log("check fetch counselling: ", counsellings);
           if (counsellings?.length > 0) {
             await setCounsellingsList(counsellings);
           }
         }
 
-        console.log("check document", linkedDocument);
+        // console.log("check document", linkedDocument);
       }
       // console.log(currentAssignment);
       dispatch(getCurrentAssignment(currentAssignment));
@@ -236,20 +236,51 @@ const SubmissionPage = (props: any) => {
       );
     }
 
-    console.log("check files: ", files.length);
-    for (let i = 0; i < files.length; i++) {
-      formDataWithFiles.append("files", files[i]);
+    console.log("check files: ", files.length, files);
+    if (files[0]?.name) {
+      files?.map((file) => {
+        formDataWithFiles.append("files", file);
+      });
     }
+
+    // if (files[0]?.name) {
+    //   console.log("files length > 0");
+    //   for (let i = 0; i < files.length; i++) {
+    //     formDataWithFiles.append("files", files[i]);
+    //   }
+    // }
+
     console.log(formDataWithFiles);
     const res = await callSubmitAssignment(assignmentId, formDataWithFiles);
-    if (res.status === 'ok') {
+
+    console.log("check submit: ", res.headers);
+
+    // axios
+    //   .post(
+    //     `http://densach.edu.vn/api/v1/assignments/${assignmentId}/post`,
+    //     formDataWithFiles,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //     },
+    //   )
+    //   .then((res) => {
+    //     console.log("check res: ", res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    if (res.status === "ok") {
       setSuccessModalVisible(true);
     } else {
-      let errorMessage = ""
+      let errorMessage = "";
       if (res.message) {
-        errorMessage = res.message
+        errorMessage = res.message;
       } else if (res.detail) {
-        errorMessage = res.detail
+        errorMessage = res.detail;
       }
 
       alert("Nộp bài không thành công. " + errorMessage);
@@ -275,13 +306,13 @@ const SubmissionPage = (props: any) => {
     if (res?.id) {
       setDocument(res);
       const counsellings = await callGetDocumentCounselling(res?.id);
-      console.log("check fetch counselling: ", counsellings);
+      // console.log("check fetch counselling: ", counsellings);
       if (counsellings?.length > 0) {
         await setCounsellingsList(counsellings);
       }
     }
 
-    console.log("check document", res);
+    // console.log("check document", res);
   };
 
   const items: MenuProps["items"] = membersMenu.map((member) => ({
@@ -311,7 +342,7 @@ const SubmissionPage = (props: any) => {
     );
   };
 
-  console.log("check items: ", counsellingItems);
+  // console.log("check items: ", counsellingItems);
 
   return (
     <>

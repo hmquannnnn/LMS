@@ -8,6 +8,7 @@ const AdminPage = () => {
 
   return (
     <div className={"flex flex-col"}>
+      <div className={"h-14"}></div>
       <h1>Hello admin</h1>
       <div className={"flex flex-col min-h-[59vh]"}>
         <button
