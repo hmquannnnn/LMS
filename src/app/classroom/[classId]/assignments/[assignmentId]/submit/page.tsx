@@ -55,7 +55,7 @@ type Teammate = {
 };
 
 const initalCounselling = {
-  id: 0,
+  id: null,
   title: "",
   content: "",
   createAt: "",
@@ -227,24 +227,39 @@ const SubmissionPage = (props: any) => {
     formDataWithFiles.append("title", title);
     formDataWithFiles.append("caption", caption);
     formDataWithFiles.append("orientation", orientation);
-    formDataWithFiles.append("counselling-id", counselling.id);
+    if (counselling.id != null) {
+      formDataWithFiles.append("counselling-id", counselling.id);
+    }
     if (currentAssignment.isForGroup) {
       teammate.current.map((member, index) =>
         formDataWithFiles.append("member-ids", member.id),
       );
     }
 
+    console.log("check files: ", files.length);
     for (let i = 0; i < files.length; i++) {
       formDataWithFiles.append("files", files[i]);
     }
     console.log(formDataWithFiles);
     const res = await callSubmitAssignment(assignmentId, formDataWithFiles);
-    setSuccessModalVisible(true);
+    if (res.status === 'ok') {
+      setSuccessModalVisible(true);
+    } else {
+      let errorMessage = ""
+      if (res.message) {
+        errorMessage = res.message
+      } else if (res.detail) {
+        errorMessage = res.detail
+      }
+
+      alert("Nộp bài không thành công. " + errorMessage);
+    }
   };
 
   const handleSuccessModalClose = () => {
     setSuccessModalVisible(false);
-    document.getElementById("submitForm").reset();
+    // document.getElementById("submitForm").reset();
+
     if (editorRef.current) {
       editorRef.current.setContent("<p>Nhập nội dung ở đây</p>");
     }
