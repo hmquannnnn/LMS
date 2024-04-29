@@ -39,7 +39,7 @@ const initialTestHistory = {
 };
 
 const TestHistory = ({ params }) => {
-  const historyId = params.historyId;
+  const historyId = params.testHistoryId;
   const [testHistory, setTestHistory] = useState(initialTestHistory);
   const [submitter, setSubmitter] = useState({});
   const router = useRouter();

@@ -318,17 +318,12 @@ const DocumentIdPage = ({ params }) => {
               className={
                 "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
               }
-              onClick={() => router.push(`/library/${documentId}/counsellings`)}
-            >
-              Hướng nghiệp
-            </Button>
-            <Button
-              className={
-                "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
-              }
               onClick={() => handleDirectToTest("READING")}
             >
-              {currentDocument?.type !== "AUDIO" && currentDocument?.type !== "VIDEO" ? "Đọc hiểu" : "Nói và nghe"}
+              {currentDocument?.type !== "AUDIO" &&
+              currentDocument?.type !== "VIDEO"
+                ? "Đọc hiểu"
+                : "Nói và nghe"}
             </Button>
             <Button
               className={
@@ -337,6 +332,14 @@ const DocumentIdPage = ({ params }) => {
               onClick={() => handleDirectToTest("WRITING")}
             >
               Viết
+            </Button>
+            <Button
+              className={
+                "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
+              }
+              onClick={() => router.push(`/library/${documentId}/counsellings`)}
+            >
+              Hướng nghiệp
             </Button>
           </div>
         </div>
@@ -351,8 +354,8 @@ const DocumentIdPage = ({ params }) => {
             onClick={() => {
               window.open(
                 "https://www.facebook.com/sharer/sharer.php?u=" +
-                NEXT_PUBLIC_FRONTEND_URL +
-                pathName,
+                  NEXT_PUBLIC_FRONTEND_URL +
+                  pathName,
                 "facebook-share-dialog",
                 "width=600,height=600",
               );
@@ -362,8 +365,8 @@ const DocumentIdPage = ({ params }) => {
             onClick={() => {
               window.open(
                 "https://twitter.com/intent/tweet?url=" +
-                NEXT_PUBLIC_FRONTEND_URL +
-                pathName,
+                  NEXT_PUBLIC_FRONTEND_URL +
+                  pathName,
                 "twitter-share-dialog",
                 "width=600,height=600",
               );

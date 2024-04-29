@@ -96,7 +96,7 @@ const ClassMember = (props: any) => {
                 </p>
                 <div className={"flex flex-row items-center"}>
                   <FaCheck className={"text-green-500"} />
-                  <p className={"h-fit ml-4"}>Đạt</p>
+                  <p className={"h-fit ml-4"}>Hoàn thành</p>
                 </div>
                 <div className={"flex flex-row items-center"}>
                   <MdPending className={"text-yellow-400"} />
@@ -104,7 +104,7 @@ const ClassMember = (props: any) => {
                 </div>
                 <div className={"flex flex-row items-center"}>
                   <MdCancel className={"text-red-600"} />
-                  <p className={"h-fit ml-4"}>Chưa đạt</p>
+                  <p className={"h-fit ml-4"}>Chưa hoàn thành</p>
                 </div>
               </div>
               <table className={"font-normal max-w-full overflow-x-scroll"}>
