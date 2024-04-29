@@ -165,6 +165,7 @@ const StudentTestHistory: React.FC = ({ params }) => {
           : "Unknown",
         submitAt: FormatDateTime(item.submitAt),
         index: index + 1,
+        key: index,
         documentType: matchedDocument
           ? matchedDocument.documentType
           : "Unknown",
