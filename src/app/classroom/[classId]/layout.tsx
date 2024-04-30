@@ -57,13 +57,13 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
               <div className={"flex items-center mt-5 pl-10 mb-5"}>
                 <div className="flex items-center">
                   <FaChalkboardTeacher className={"h-10 w-10 mr-4"} />
-                  <p className={"text-2xl font-bold"}>{currentClass.name}</p>
+                  <p className={"text-xl font-bold"}>{currentClass.name}</p>
                 </div>
 
                 <div className="flex w-1/2 ml-[5vw] ">
                   <Tooltip
                     className={
-                      "flex justify-center px-[4vw]  hover:bg-slate-200 cursor-pointer py-1 "
+                      "flex justify-center px-[2vw]  hover:bg-slate-200 cursor-pointer py-1 "
                     }
                     placement="top"
                     title={"Thông báo"}
@@ -79,7 +79,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                   </Tooltip>
                   <Tooltip
                     className={
-                      "flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
+                      "flex justify-center px-[2vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
                     }
                     placement="top"
                     title={"Bài tập"}
@@ -95,7 +95,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                   </Tooltip>
                   <Tooltip
                     className={
-                      "flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
+                      "flex justify-center px-[2vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
                     }
                     placement="top"
                     title={"Danh sách"}
@@ -112,7 +112,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                   {user.role === ROLE_TEACHER && (
                     <Tooltip
                       className={
-                        "flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
+                        "flex justify-center px-[2vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
                       }
                       placement="top"
                       title={"Bài chờ duyệt"}
@@ -129,7 +129,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                   )}
                   <Tooltip
                     className={
-                      "flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
+                      "flex justify-center px-[2vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
                     }
                     placement="top"
                     title={"Định hướng"}
@@ -147,7 +147,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                     <>
                       <Tooltip
                         className={
-                          "flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
+                          "flex justify-center px-[2vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
                         }
                         placement="top"
                         title={"Tiêu chí kiểm tra đánh giá"}
@@ -163,7 +163,7 @@ const ClassroomLayout = ({ children }: { children: ReactNode }) => {
                       </Tooltip>
                       <Tooltip
                         className={
-                          "flex justify-center px-[4vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
+                          "flex justify-center px-[2vw] border-black border-l-[1px] hover:bg-slate-200 cursor-pointer py-1"
                         }
                         placement="top"
                         title={"Lịch sử làm bài của học sinh"}

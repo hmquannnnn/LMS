@@ -313,15 +313,15 @@ const DocumentIdPage = ({ params }) => {
 
             {data && <NotionRenderer blockMap={data} fullPage hideHeader />}
           </div>
-          <div className={"flex flex-row justify-end mb-5 mt-5"}>
+          <div className={"flex flex-row justify-end mb-5 mt-5 gap-5"}>
             <Button
               className={
-                "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
+                "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded"
               }
               onClick={() => handleDirectToTest("READING")}
             >
               {currentDocument?.type !== "AUDIO" &&
-              currentDocument?.type !== "VIDEO"
+                currentDocument?.type !== "VIDEO"
                 ? "Đọc hiểu"
                 : "Nói và nghe"}
             </Button>
@@ -335,7 +335,7 @@ const DocumentIdPage = ({ params }) => {
             </Button>
             <Button
               className={
-                "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded mr-5"
+                "bg-blue_9 text-white hover:bg-purple_1 font-semibold px-4 py-1 rounded"
               }
               onClick={() => router.push(`/library/${documentId}/counsellings`)}
             >
@@ -354,8 +354,8 @@ const DocumentIdPage = ({ params }) => {
             onClick={() => {
               window.open(
                 "https://www.facebook.com/sharer/sharer.php?u=" +
-                  NEXT_PUBLIC_FRONTEND_URL +
-                  pathName,
+                NEXT_PUBLIC_FRONTEND_URL +
+                pathName,
                 "facebook-share-dialog",
                 "width=600,height=600",
               );
@@ -365,8 +365,8 @@ const DocumentIdPage = ({ params }) => {
             onClick={() => {
               window.open(
                 "https://twitter.com/intent/tweet?url=" +
-                  NEXT_PUBLIC_FRONTEND_URL +
-                  pathName,
+                NEXT_PUBLIC_FRONTEND_URL +
+                pathName,
                 "twitter-share-dialog",
                 "width=600,height=600",
               );

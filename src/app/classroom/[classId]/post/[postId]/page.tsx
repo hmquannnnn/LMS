@@ -363,7 +363,7 @@ const PostDetails = (props: any) => {
         )}
         <div
           className={
-            "max-w-[800px] min-w-[30vw] h-[80vh] max-h-[80vh] w-max overflow-auto px-10 py-10 pr-20 post-detail flex flex-col"
+            "lg:max-w-[20%] max-w-[20%]  min-w-[30vw] h-[80vh] max-h-[80vh] w-max overflow-auto post-detail flex flex-col"
           }
         >
           <div
@@ -372,7 +372,7 @@ const PostDetails = (props: any) => {
           >
             <div
               className="flex items-center mb-2 text-lg"
-              // style={{ color: `${colors.green_3}` }}
+            // style={{ color: `${colors.green_3}` }}
             >
               {isManagementPost(post) ? (
                 author?.students?.length &&
@@ -402,7 +402,7 @@ const PostDetails = (props: any) => {
             </div>
             <h4
               className={"uppercase font-bold text-2xl text-center my-5"}
-              // style={{ color: `${colors.green_3}` }}
+            // style={{ color: `${colors.green_3}` }}
             >
               {post.title}
             </h4>
@@ -497,11 +497,11 @@ const PostDetails = (props: any) => {
 
               <div
                 className={"mb-7 flex w-full mt-auto items-end"}
-                // style={{
-                //   position: "absolute",
-                //   bottom: "2.5rem",
-                //   // right: "5rem",
-                // }}
+              // style={{
+              //   position: "absolute",
+              //   bottom: "2.5rem",
+              //   // right: "5rem",
+              // }}
               >
                 <Avatar
                   size={40}
@@ -528,8 +528,8 @@ const PostDetails = (props: any) => {
                         : "Thêm bình luận..."
                     }
                     onChange={(e) => handleChangeCommentInput(e)}
-                    // onKeyPress={}
-                    // onKeyDown={(e) => e.key === "Enter" && handleEnter(e)}
+                  // onKeyPress={}
+                  // onKeyDown={(e) => e.key === "Enter" && handleEnter(e)}
                   />
                   <FaRegPaperPlane
                     className={`w-8 h-8 ml-3 cursor-pointer text-{${theme[post.orientation]?.textColor}}`}
