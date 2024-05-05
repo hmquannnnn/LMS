@@ -1,0 +1,29 @@
+.post-detail {
+  overflow-y: scroll;
+
+  /* Tùy chỉnh màu sắc và độ rộng của thanh cuộn */
+  //scrollbar-color: red orange;
+  //scrollbar-width: thin;
+
+  /* Thiết lập kiểu scrollbar cho phần tử có lớp post-detail */
+  &::-webkit-scrollbar {
+    width: 15px;
+    position: relative;
+    right: 20px;
+  }
+
+  /* Thiết lập track */
+  &::-webkit-scrollbar-track {
+    border: 1px solid var(--orientation-color);
+    border-radius: 10px;
+    margin: 100px;
+    padding: 0 2px;
+  }
+
+  /* Thiết lập handle */
+  &::-webkit-scrollbar-thumb {
+    background: var(--orientation-color);
+    border-radius: 10px;
+    width: 90%;
+  }
+}

@@ -1,0 +1,47 @@
+.profile-user {
+  //grid-template-areas: "info avatar" "info-avatar" "info info";
+  height: 100%;
+  //border: 1px solid grey;
+
+  .user-info {
+    //grid-area: info;
+    height: 100%;
+    //border: 1px solid red;
+
+
+  }
+
+  .user-avatar {
+    //grid-area: avatar;
+    //border: 1px solid blue
+  }
+}
+
+#one {
+  margin: 10px;
+  width: 45px;
+  height: 75px;
+  //border: 2px solid #333;
+}
+
+#two {
+  float: left;
+  width: 35px;
+  height: 65px;
+  border-width: 2px;
+  border-style: solid;
+  margin: -2px 0 0 -2px;
+  //border-color: #FFF #333 #333 #FFF;
+}
+
+@media (max-width: 1600px) {
+  .user-avatar {
+    grid-template-rows: 45% 55%;
+  }
+}
+
+//@media (min-width: 1600px) {
+//  .user-avatar {
+//    grid-template-rows: 40% 60%;
+//  }
+//}
